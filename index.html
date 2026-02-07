@@ -3,175 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Master V4</title>
+    <title>Event Master V5 Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
             --bg-dark: #0f172a;
-            --card-glass: rgba(30, 41, 59, 0.7);
+            --card-glass: rgba(30, 41, 59, 0.65);
             --accent: #38bdf8;
             --text: #f8fafc;
             --danger: #ef4444;
-            --success: #22c55e;
-            --blur: 12px;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --blur: 16px;
         }
 
-        /* Light Theme overrides */
         [data-theme="light"] {
-            --bg-dark: #f1f5f9;
-            --card-glass: rgba(255, 255, 255, 0.8);
-            --accent: #0284c7;
-            --text: #0f172a;
+            --bg-dark: #e2e8f0;
+            --card-glass: rgba(255, 255, 255, 0.85);
+            --accent: #2563eb;
+            --text: #1e293b;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; transition: all 0.3s ease; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
         body {
             background-color: var(--bg-dark);
-            background-image: radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
-                              radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
-            background-attachment: fixed;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.08), transparent 25%), 
+                radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.08), transparent 25%);
             color: var(--text);
             min-height: 100vh;
-            padding-bottom: 100px;
+            padding-bottom: 120px;
+            overflow-x: hidden;
         }
 
         /* Navbar */
         nav {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 1.5rem 2rem; background: rgba(0,0,0,0.05); backdrop-filter: blur(10px);
-            position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 1.2rem 2rem; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px);
+            position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(255,255,255,0.08);
         }
-        .logo { font-size: 1.5rem; font-weight: 900; background: linear-gradient(45deg, var(--accent), #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo { 
+            font-size: 1.6rem; font-weight: 900; 
+            background: linear-gradient(135deg, var(--accent) 0%, #c084fc 100%); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            letter-spacing: -1px;
+        }
         
-        .nav-actions { display: flex; gap: 10px; }
-        .icon-btn { background: none; border: none; color: var(--text); font-size: 1.2rem; cursor: pointer; padding: 8px; border-radius: 50%; }
-        .icon-btn:hover { background: rgba(255,255,255,0.1); color: var(--accent); }
+        .nav-actions { display: flex; gap: 12px; }
+        .icon-btn { 
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); 
+            color: var(--text); font-size: 1.1rem; cursor: pointer; 
+            width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+        }
+        .icon-btn:hover { background: var(--accent); color: white; transform: translateY(-2px); border-color: transparent; }
 
         /* Dashboard Stats */
         .stats-bar {
-            display: flex; gap: 20px; overflow-x: auto; padding: 1rem 2rem;
-            scrollbar-width: none;
+            display: flex; gap: 15px; overflow-x: auto; padding: 1.5rem 2rem;
+            scrollbar-width: none; mask-image: linear-gradient(to right, transparent, black 2%, black 98%, transparent);
         }
         .stat-chip {
-            background: var(--card-glass); padding: 8px 16px; border-radius: 20px;
-            font-size: 0.9rem; white-space: nowrap; border: 1px solid rgba(255,255,255,0.05);
-            display: flex; align-items: center; gap: 8px; cursor: pointer;
+            background: var(--card-glass); padding: 10px 20px; border-radius: 16px;
+            font-size: 0.95rem; white-space: nowrap; border: 1px solid rgba(255,255,255,0.05);
+            display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 500;
         }
-        .stat-chip.active { border-color: var(--accent); background: rgba(56, 189, 248, 0.1); }
+        .stat-chip i { font-size: 1.1em; }
+        .stat-chip:hover { background: rgba(255,255,255,0.1); }
+        .stat-chip.active { border-color: var(--accent); background: linear-gradient(90deg, rgba(56, 189, 248, 0.1), transparent); color: var(--accent); }
 
         /* Grid */
         .grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px; padding: 1rem 2rem; max-width: 1600px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 30px; padding: 0.5rem 2rem; max-width: 1600px; margin: 0 auto;
         }
 
-        /* Card Design V4 */
+        /* Card Design V5 */
         .card {
-            background: var(--card-glass); border-radius: 24px; overflow: hidden;
-            position: relative; border: 1px solid rgba(255,255,255,0.05);
-            backdrop-filter: blur(var(--blur)); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            background: var(--card-glass); border-radius: 28px; overflow: hidden;
+            position: relative; border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(var(--blur)); 
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.2);
+            display: flex; flex-direction: column;
         }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); }
+        .card.pinned { border: 2px solid var(--accent); box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); }
+        .card:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); z-index: 2; }
 
         .card-bg {
-            height: 120px; width: 100%; background-size: cover; background-position: center;
-            position: relative;
+            height: 140px; width: 100%; background-size: cover; background-position: center;
+            position: relative; transition: height 0.3s;
         }
         .card-bg::after {
-            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, transparent, var(--card-glass));
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to bottom, rgba(15,23,42,0.1), var(--card-glass));
         }
 
-        .category-tag {
-            position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.6);
-            padding: 4px 12px; border-radius: 12px; font-size: 0.75rem; color: white; backdrop-filter: blur(4px);
+        .card-badges { position: absolute; top: 15px; left: 15px; display: flex; gap: 8px; z-index: 10; }
+        .badge {
+            background: rgba(15, 23, 42, 0.7); padding: 6px 14px; border-radius: 20px; 
+            font-size: 0.75rem; color: white; backdrop-filter: blur(8px); display: flex; align-items: center; gap: 6px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .card-body { padding: 0 20px 20px; position: relative; }
+        .card-body { padding: 0 24px 24px; position: relative; flex-grow: 1; display: flex; flex-direction: column; }
         
-        .card-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 5px; margin-top: -10px; z-index: 2; position: relative; }
-        .card-date { font-size: 0.85rem; opacity: 0.7; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; }
+        .card-header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-top: -20px; margin-bottom: 15px; z-index: 2; position: relative; }
+        .card-title { font-size: 1.5rem; font-weight: 800; line-height: 1.3; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        
+        .pin-btn { 
+            background: rgba(255,255,255,0.1); border: none; color: var(--text); 
+            width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+        .pin-btn.active { color: var(--warning); background: rgba(245, 158, 11, 0.15); }
 
-        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center; }
-        .timer-box { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 12px; }
-        .timer-num { font-size: 1.5rem; font-weight: 700; display: block; line-height: 1; color: var(--accent); }
-        .timer-label { font-size: 0.7rem; opacity: 0.7; margin-top: 5px; display: block; }
+        .timer-grid { 
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; text-align: center; 
+            background: rgba(0,0,0,0.15); padding: 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .timer-box { display: flex; flex-direction: column; align-items: center; }
+        .timer-num { font-size: 1.6rem; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
+        .timer-label { font-size: 0.75rem; opacity: 0.6; margin-top: 4px; font-weight: 500; }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-top: 20px; margin-bottom: 10px;
+        }
+        .progress-info { display: flex; justify-content: space-between; font-size: 0.75rem; opacity: 0.7; margin-bottom: 6px; }
+        .progress-track {
+            height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%; background: linear-gradient(90deg, var(--accent), #a855f7);
+            border-radius: 10px; width: 0%; transition: width 1s linear;
+        }
 
         .card-footer {
-            margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);
-            display: flex; justify-content: space-between; align-items: center;
+            margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex; gap: 8px; justify-content: flex-end;
         }
 
         .past-event { border-color: var(--success); }
         .past-event .timer-num { color: var(--success); }
+        .past-event .progress-fill { background: var(--success); }
 
         /* Floating Button */
         .fab {
-            position: fixed; bottom: 30px; left: 30px; width: 60px; height: 60px;
-            background: var(--accent); border-radius: 50%; color: white; display: flex;
-            align-items: center; justify-content: center; font-size: 1.5rem;
-            box-shadow: 0 10px 15px -3px rgba(56, 189, 248, 0.3); cursor: pointer; z-index: 90;
+            position: fixed; bottom: 35px; left: 35px; width: 65px; height: 65px;
+            background: linear-gradient(135deg, var(--accent), #2563eb); 
+            border-radius: 24px; color: white; display: flex;
+            align-items: center; justify-content: center; font-size: 1.8rem;
+            box-shadow: 0 20px 30px -10px rgba(56, 189, 248, 0.5); 
+            cursor: pointer; z-index: 90; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .fab:hover { transform: scale(1.1) rotate(90deg); }
 
-        /* Modal */
+        /* Modal & Dialogs */
         .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
             z-index: 100; display: none; align-items: center; justify-content: center;
         }
         .modal {
-            background: var(--bg-dark); width: 90%; max-width: 500px; padding: 2rem;
-            border-radius: 24px; border: 1px solid rgba(255,255,255,0.1);
-            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: #1e293b; width: 95%; max-width: 500px; padding: 2.5rem;
+            border-radius: 32px; border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
         .form-group { margin-bottom: 1.5rem; }
-        .form-label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; opacity: 0.9; }
+        .form-label { display: block; margin-bottom: 0.8rem; font-size: 0.95rem; font-weight: 500; color: var(--text); }
         .form-input {
-            width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px; color: var(--text); outline: none;
+            width: 100%; padding: 14px; background: rgba(0,0,0,0.2); border: 2px solid rgba(255,255,255,0.05);
+            border-radius: 16px; color: var(--text); outline: none; font-size: 1rem;
         }
-        .form-input:focus { border-color: var(--accent); }
+        .form-input:focus { border-color: var(--accent); background: rgba(0,0,0,0.3); }
 
-        .category-select { display: flex; gap: 10px; margin-top: 10px; }
+        .category-select { display: flex; gap: 10px; flex-wrap: wrap; }
         .cat-option {
-            padding: 8px 16px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
-            cursor: pointer; font-size: 0.8rem; opacity: 0.6;
+            padding: 10px 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer; font-size: 0.9rem; background: rgba(255,255,255,0.05);
+            display: flex; align-items: center; gap: 8px;
         }
-        .cat-option.selected { background: var(--accent); color: white; opacity: 1; border-color: var(--accent); }
+        .cat-option.selected { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 0 15px rgba(56, 189, 248, 0.3); }
+
+        .toggle-switch {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 15px; cursor: pointer;
+        }
+        .toggle-track {
+            width: 44px; height: 24px; background: rgba(255,255,255,0.2); border-radius: 20px;
+            position: relative; transition: 0.3s;
+        }
+        .toggle-thumb {
+            width: 18px; height: 18px; background: white; border-radius: 50%;
+            position: absolute; top: 3px; left: 3px; transition: 0.3s;
+        }
+        .toggle-active .toggle-track { background: var(--success); }
+        .toggle-active .toggle-thumb { left: 23px; }
+
+        /* QR Code Container */
+        #qrContainer img { border-radius: 12px; border: 5px solid white; margin: 10px auto; display: block; }
 
         /* Toast */
         .toast {
-            position: fixed; bottom: 20px; right: 20px; background: var(--bg-dark);
-            padding: 12px 24px; border-radius: 12px; border-left: 4px solid var(--accent);
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); transform: translateX(120%); z-index: 200;
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: #1e293b; color: white; padding: 12px 30px; border-radius: 50px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); z-index: 200; font-weight: 500;
+            display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.1);
+            opacity: 0; pointer-events: none;
         }
-        .toast.show { transform: translateX(0); }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo"><i class="fas fa-rocket"></i> EventMaster</div>
+        <div class="logo"><i class="fas fa-meteor"></i> EventMaster <span style="font-size:0.5em; opacity:0.6; vertical-align: top;">V5</span></div>
         <div class="nav-actions">
+            <button class="icon-btn" onclick="requestNotificationPermission()" title="تفعيل التنبيهات"><i class="fas fa-bell"></i></button>
             <button class="icon-btn" onclick="toggleTheme()" title="تغيير الثيم"><i class="fas fa-adjust"></i></button>
-            <button class="icon-btn" onclick="exportData()" title="نسخ احتياطي"><i class="fas fa-download"></i></button>
-            <button class="icon-btn" onclick="importData()" title="استعادة"><i class="fas fa-upload"></i></button>
+            <button class="icon-btn" onclick="exportData()" title="نسخ احتياطي"><i class="fas fa-file-export"></i></button>
+            <button class="icon-btn" onclick="importData()" title="استعادة"><i class="fas fa-file-import"></i></button>
         </div>
     </nav>
 
     <div class="stats-bar">
-        <div class="stat-chip active" onclick="filterEvents('all')"><i class="fas fa-layer-group"></i> الكل</div>
-        <div class="stat-chip" onclick="filterEvents('personal')"><i class="fas fa-user"></i> شخصي</div>
+        <div class="stat-chip active" onclick="filterEvents('all')"><i class="fas fa-th-large"></i> الكل</div>
+        <div class="stat-chip" onclick="filterEvents('personal')"><i class="fas fa-user-astronaut"></i> شخصي</div>
         <div class="stat-chip" onclick="filterEvents('work')"><i class="fas fa-briefcase"></i> عمل</div>
-        <div class="stat-chip" onclick="filterEvents('holiday')"><i class="fas fa-plane"></i> عطلات</div>
-        <div class="stat-chip" style="margin-right: auto; background: transparent; border:none;" onclick="showPresets()">
-            <i class="fas fa-magic" style="color: var(--accent)"></i> قوالب جاهزة
+        <div class="stat-chip" onclick="filterEvents('holiday')"><i class="fas fa-umbrella-beach"></i> عطلات</div>
+        <div class="stat-chip" style="margin-right: auto; background: rgba(56, 189, 248, 0.1); border-color: var(--accent); color: var(--accent);" onclick="showPresets()">
+            <i class="fas fa-wand-magic-sparkles"></i> إنشاء ذكي
         </div>
     </div>
 
@@ -182,56 +246,75 @@
 
     <div class="modal-overlay" id="addModal">
         <div class="modal">
-            <h2 style="margin-bottom: 20px">✨ حدث جديد</h2>
+            <h2 style="margin-bottom: 25px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-sparkles" style="color: var(--warning)"></i> حدث جديد
+            </h2>
             
             <div class="form-group">
                 <label class="form-label">عنوان الحدث</label>
-                <input type="text" class="form-input" id="inpTitle" placeholder="مثال: موعد إطلاق المشروع">
+                <input type="text" class="form-input" id="inpTitle" placeholder="مثال: رحلة الصيف، تسليم المشروع...">
             </div>
             
             <div class="form-group">
-                <label class="form-label">التاريخ والوقت</label>
+                <label class="form-label">موعد الحدث</label>
                 <input type="datetime-local" class="form-input" id="inpDate">
             </div>
 
             <div class="form-group">
                 <label class="form-label">التصنيف</label>
                 <div class="category-select" id="catSelect">
-                    <div class="cat-option selected" data-val="personal">شخصي</div>
-                    <div class="cat-option" data-val="work">عمل</div>
-                    <div class="cat-option" data-val="holiday">عطلة</div>
+                    <div class="cat-option selected" data-val="personal"><i class="fas fa-user"></i> شخصي</div>
+                    <div class="cat-option" data-val="work"><i class="fas fa-briefcase"></i> عمل</div>
+                    <div class="cat-option" data-val="holiday"><i class="fas fa-plane"></i> عطلة</div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">صورة (رابط اختياري)</label>
-                <input type="text" class="form-input" id="inpBg" placeholder="https://source.unsplash.com/...">
+            <div class="toggle-switch toggle-active" id="autoImgToggle" onclick="this.classList.toggle('toggle-active'); toggleImgInput()">
+                <div class="toggle-track"><div class="toggle-thumb"></div></div>
+                <span style="font-size: 0.9rem;">توليد صورة ذكي (AI) حسب العنوان</span>
             </div>
 
-            <div style="display: flex; gap: 10px; justify-content: flex-end;">
-                <button class="icon-btn" onclick="closeModal()">إلغاء</button>
-                <button class="stat-chip active" onclick="saveEvent()" style="justify-content: center; width: 100px;">حفظ</button>
+            <div class="form-group" id="imgInputGroup" style="display: none;">
+                <label class="form-label">رابط الصورة (اختياري)</label>
+                <input type="text" class="form-input" id="inpBg" placeholder="https://...">
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 30px;">
+                <button class="icon-btn" onclick="closeModal()" style="width: 50px; border-radius: 16px;"><i class="fas fa-times"></i></button>
+                <button class="stat-chip active" onclick="saveEvent()" style="flex-grow: 1; justify-content: center; height: 50px; font-size: 1.1rem;">حفظ الحدث</button>
             </div>
         </div>
     </div>
 
     <div class="modal-overlay" id="shareModal">
-        <div class="modal" style="text-align: center;">
-            <i class="fas fa-share-alt" style="font-size: 3rem; color: var(--accent); margin-bottom: 20px;"></i>
-            <h3>شارك هذا العد التنازلي</h3>
-            <p style="opacity: 0.7; margin: 10px 0 20px;">انسخ الرابط وأرسله لصديقك. سيتم إضافة الحدث لديه تلقائياً.</p>
-            <input type="text" class="form-input" id="shareInput" readonly onclick="this.select()">
-            <button class="stat-chip active" onclick="copyShareLink()" style="margin-top: 15px; width: 100%; justify-content: center;">نسخ الرابط</button>
-            <button class="icon-btn" onclick="document.getElementById('shareModal').style.display='none'" style="margin-top: 10px;">إغلاق</button>
+        <div class="modal" style="text-align: center; max-width: 400px;">
+            <div style="width: 80px; height: 80px; background: rgba(56, 189, 248, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i class="fas fa-share-alt" style="font-size: 2rem; color: var(--accent);"></i>
+            </div>
+            <h3>مشاركة الحدث</h3>
+            
+            <div id="qrContainer"></div> <p style="opacity: 0.7; margin: 15px 0; font-size: 0.9rem;">امسح الكود أو انسخ الرابط أدناه</p>
+            
+            <div style="position: relative;">
+                <input type="text" class="form-input" id="shareInput" readonly onclick="this.select()" style="text-align: left; direction: ltr; padding-right: 40px; font-size: 0.85rem;">
+                <i class="fas fa-link" style="position: absolute; right: 15px; top: 15px; opacity: 0.5;"></i>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="stat-chip active" onclick="copyShareLink()" style="flex: 1; justify-content: center;">نسخ</button>
+                <button class="icon-btn" onclick="document.getElementById('shareModal').style.display='none'" style="border-radius: 14px; width: 50px;"><i class="fas fa-times"></i></button>
+            </div>
         </div>
     </div>
 
-    <div class="toast" id="toast">تم الحفظ بنجاح!</div>
+    <div class="toast" id="toast"><i class="fas fa-check-circle" style="color: var(--success)"></i> <span id="toastMsg">تم الحفظ بنجاح</span></div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <script>
-        let events = JSON.parse(localStorage.getItem('masterEvents')) || [];
+        let events = JSON.parse(localStorage.getItem('masterEventsV5')) || [];
         let currentFilter = 'all';
+        let notifPermission = Notification.permission;
 
         // Init
         checkUrlForSharedEvent();
@@ -243,68 +326,101 @@
         function saveEvent() {
             const title = document.getElementById('inpTitle').value;
             const date = document.getElementById('inpDate').value;
-            const bg = document.getElementById('inpBg').value;
+            const useAutoImg = document.getElementById('autoImgToggle').classList.contains('toggle-active');
+            let bg = document.getElementById('inpBg').value;
             const cat = document.querySelector('.cat-option.selected').dataset.val;
 
-            if(!title || !date) return showToast('يرجى ملء البيانات', true);
+            if(!title || !date) return showToast('يرجى ملء البيانات المطلوبة', true);
+
+            // AI Smart Image Logic
+            if(useAutoImg || !bg) {
+                // Using a reliable keyword based image service
+                bg = `https://source.unsplash.com/800x600/?${encodeURIComponent(title)},${cat}`;
+            }
 
             const newEvent = {
                 id: Date.now(),
                 title, date, bg, cat,
-                created: Date.now()
+                created: Date.now(),
+                pinned: false,
+                notified: false
             };
 
-            events.push(newEvent);
+            events.unshift(newEvent); // Add to top
             save();
             renderEvents();
             closeModal();
             showToast('تمت إضافة الحدث بنجاح');
+            
+            // Trigger confetti if event is very close
+            if(new Date(date) - new Date() < 86400000) confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         }
 
         function deleteEvent(id) {
-            if(confirm('هل أنت متأكد؟')) {
+            if(confirm('حذف هذا الحدث نهائياً؟')) {
                 events = events.filter(e => e.id !== id);
+                save();
+                renderEvents();
+                showToast('تم الحذف', true);
+            }
+        }
+
+        function togglePin(id) {
+            const ev = events.find(e => e.id === id);
+            if(ev) {
+                ev.pinned = !ev.pinned;
                 save();
                 renderEvents();
             }
         }
 
         function save() {
-            localStorage.setItem('masterEvents', JSON.stringify(events));
+            localStorage.setItem('masterEventsV5', JSON.stringify(events));
         }
 
-        // --- Rendering & Logic ---
+        // --- Rendering & Advanced Logic ---
 
         function renderEvents() {
             const grid = document.getElementById('eventsGrid');
             grid.innerHTML = '';
             
-            const filtered = currentFilter === 'all' ? events : events.filter(e => e.cat === currentFilter);
+            // Sorting: Pinned first, then by date
+            let filtered = currentFilter === 'all' ? events : events.filter(e => e.cat === currentFilter);
+            filtered.sort((a,b) => {
+                if(a.pinned === b.pinned) return new Date(a.date) - new Date(b.date);
+                return a.pinned ? -1 : 1;
+            });
 
             if(filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; opacity: 0.5; margin-top: 50px;">
-                    <i class="fas fa-wind" style="font-size: 3rem; margin-bottom: 20px;"></i><br>لا توجد أحداث هنا
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; opacity: 0.5; margin-top: 80px;">
+                    <i class="fas fa-meteor" style="font-size: 4rem; margin-bottom: 20px; color: var(--accent);"></i><br>
+                    <h2>الفضاء فارغ...</h2>
+                    <p>أضف حدثك الأول الآن</p>
                 </div>`;
                 return;
             }
 
-            filtered.sort((a,b) => new Date(a.date) - new Date(b.date)).forEach(ev => {
+            filtered.forEach(ev => {
                 const isPast = new Date(ev.date) < new Date();
-                const defaultBg = ev.cat === 'work' ? 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=500' : 
-                                  ev.cat === 'holiday' ? 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=500' :
-                                  'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=500';
                 
+                // Fallback image if source.unsplash fails or loads slow
+                const bgImage = ev.bg || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800';
+
                 const card = document.createElement('div');
-                card.className = `card ${isPast ? 'past-event' : ''}`;
+                card.className = `card ${isPast ? 'past-event' : ''} ${ev.pinned ? 'pinned' : ''}`;
                 card.innerHTML = `
-                    <div class="card-bg" style="background-image: url('${ev.bg || defaultBg}')">
-                        <span class="category-tag"><i class="fas fa-tag"></i> ${getCatLabel(ev.cat)}</span>
+                    <div class="card-bg" style="background-image: url('${bgImage}')">
+                        <div class="card-badges">
+                            <span class="badge"><i class="fas fa-tag"></i> ${getCatLabel(ev.cat)}</span>
+                            ${ev.pinned ? '<span class="badge" style="background:var(--warning); color:black"><i class="fas fa-thumbtack"></i> مثبت</span>' : ''}
+                        </div>
                     </div>
                     <div class="card-body">
-                        <h3 class="card-title">${ev.title}</h3>
-                        <div class="card-date">
-                            <i class="far fa-calendar-alt"></i> ${new Date(ev.date).toLocaleDateString('ar-EG')} 
-                            ${isPast ? '<span style="color:var(--success)">(مضى)</span>' : ''}
+                        <div class="card-header-row">
+                            <h3 class="card-title">${ev.title}</h3>
+                            <button class="pin-btn ${ev.pinned ? 'active' : ''}" onclick="togglePin(${ev.id})" title="تثبيت">
+                                <i class="fas fa-thumbtack"></i>
+                            </button>
                         </div>
                         
                         <div class="timer-grid" id="timer-${ev.id}">
@@ -314,9 +430,21 @@
                             <div class="timer-box"><span class="timer-num s">0</span><span class="timer-label">ثانية</span></div>
                         </div>
 
+                        <div class="progress-container">
+                            <div class="progress-info">
+                                <span>البداية</span>
+                                <span id="prog-pct-${ev.id}">0%</span>
+                                <span>الهدف</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill" id="prog-fill-${ev.id}"></div>
+                            </div>
+                        </div>
+
                         <div class="card-footer">
-                            <button class="icon-btn" onclick="generateShareLink(${ev.id})" title="مشاركة"><i class="fas fa-share-nodes"></i></button>
-                            <button class="icon-btn" onclick="deleteEvent(${ev.id})" title="حذف" style="color: var(--danger)"><i class="fas fa-trash"></i></button>
+                            <button class="icon-btn" onclick="speakTime(${ev.id})" title="قراءة الوقت"><i class="fas fa-volume-up"></i></button>
+                            <button class="icon-btn" onclick="generateShareLink(${ev.id})" title="مشاركة و QR"><i class="fas fa-qrcode"></i></button>
+                            <button class="icon-btn" onclick="deleteEvent(${ev.id})" title="حذف" style="color: var(--danger)"><i class="fas fa-trash-alt"></i></button>
                         </div>
                     </div>
                 `;
@@ -327,16 +455,27 @@
 
         function tick() {
             const now = new Date().getTime();
+            
             events.forEach(ev => {
                 const el = document.getElementById(`timer-${ev.id}`);
                 if(!el) return;
 
                 const target = new Date(ev.date).getTime();
+                const start = ev.created || (target - 86400000); // Fallback start
                 let diff = target - now;
+
+                // Notifications Logic
+                if (diff <= 0 && diff > -5000 && !ev.notified) {
+                    sendNotification(ev.title);
+                    ev.notified = true;
+                    save(); // Update state so we don't spam
+                    confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+                }
                 
-                // Count UP logic for past events
+                // Past Logic
                 if (diff < 0) diff = Math.abs(diff);
 
+                // Update Timer UI
                 const d = Math.floor(diff / (1000 * 60 * 60 * 24));
                 const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -346,20 +485,75 @@
                 el.querySelector('.h').innerText = h < 10 ? '0'+h : h;
                 el.querySelector('.m').innerText = m < 10 ? '0'+m : m;
                 el.querySelector('.s').innerText = s < 10 ? '0'+s : s;
+
+                // Update Progress Bar
+                const totalDuration = target - start;
+                const elapsed = now - start;
+                let pct = (elapsed / totalDuration) * 100;
+                
+                if (now > target) pct = 100; 
+                if (pct < 0) pct = 0;
+
+                const fill = document.getElementById(`prog-fill-${ev.id}`);
+                const pctText = document.getElementById(`prog-pct-${ev.id}`);
+                
+                if(fill) fill.style.width = `${pct}%`;
+                if(pctText) pctText.innerText = Math.floor(pct) + '%';
             });
         }
 
-        // --- Sharing Feature (Advanced) ---
+        // --- Advanced Features ---
+
+        function requestNotificationPermission() {
+            Notification.requestPermission().then(permission => {
+                notifPermission = permission;
+                if (permission === "granted") showToast("تم تفعيل التنبيهات");
+            });
+        }
+
+        function sendNotification(title) {
+            if (notifPermission === "granted") {
+                new Notification("حان الوقت! 🚀", {
+                    body: `الحدث "${title}" قد وصل موعده الآن!`,
+                    icon: "https://cdn-icons-png.flaticon.com/512/3233/3233497.png"
+                });
+                const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3');
+                audio.play();
+            }
+        }
+
+        function speakTime(id) {
+            const ev = events.find(e => e.id === id);
+            const now = new Date();
+            const target = new Date(ev.date);
+            const diff = target - now;
+            
+            let msg = "";
+            if(diff < 0) {
+                msg = `الحدث ${ev.title} قد انتهى`;
+            } else {
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                msg = `باقي على ${ev.title}، ${d} يوم و ${h} ساعة`;
+            }
+
+            const speech = new SpeechSynthesisUtterance(msg);
+            speech.lang = 'ar-SA';
+            window.speechSynthesis.speak(speech);
+        }
 
         function generateShareLink(id) {
             const ev = events.find(e => e.id === id);
-            // Encode data to base64 to put in URL
             const dataStr = JSON.stringify({t: ev.title, d: ev.date, c: ev.cat, b: ev.bg});
-            const encoded = btoa(unescape(encodeURIComponent(dataStr))); // Handle unicode strings
-            
+            const encoded = btoa(unescape(encodeURIComponent(dataStr)));
             const url = window.location.origin + window.location.pathname + '?share=' + encoded;
             
             document.getElementById('shareInput').value = url;
+            
+            // Generate QR Code via API to avoid heavy libs
+            const qrContainer = document.getElementById('qrContainer');
+            qrContainer.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}" alt="QR Code">`;
+            
             document.getElementById('shareModal').style.display = 'flex';
         }
 
@@ -369,34 +563,26 @@
             if (shareData) {
                 try {
                     const decoded = JSON.parse(decodeURIComponent(escape(atob(shareData))));
-                    if(confirm(`هل تريد إضافة حدث مشترك: "${decoded.t}"؟`)) {
-                        events.push({
+                    if(confirm(`وصلك حدث جديد: "${decoded.t}". هل تريد إضافته؟`)) {
+                        events.unshift({
                             id: Date.now(),
                             title: decoded.t,
                             date: decoded.d,
                             cat: decoded.c || 'personal',
                             bg: decoded.b,
-                            created: Date.now()
+                            created: Date.now() - 100000, // Slightly in past for progress bar
+                            pinned: false
                         });
                         save();
-                        // Clean URL
                         window.history.replaceState({}, document.title, window.location.pathname);
                         showToast('تمت إضافة الحدث المشترك! 🎉');
+                        confetti();
                     }
-                } catch (e) {
-                    console.error("Invalid share link");
-                }
+                } catch (e) { console.error("Link Error"); }
             }
         }
 
-        function copyShareLink() {
-            const input = document.getElementById('shareInput');
-            input.select();
-            document.execCommand('copy');
-            showToast('تم نسخ الرابط!');
-        }
-
-        // --- Utilities ---
+        // --- UI Utils ---
         
         function filterEvents(cat) {
             currentFilter = cat;
@@ -412,7 +598,9 @@
 
         function openModal() {
             document.getElementById('addModal').style.display = 'flex';
-            // Setup Category Select
+            document.getElementById('inpDate').value = new Date().toISOString().slice(0,16);
+            
+            // Setup Cat Select
             document.querySelectorAll('.cat-option').forEach(opt => {
                 opt.onclick = () => {
                     document.querySelectorAll('.cat-option').forEach(o => o.classList.remove('selected'));
@@ -422,67 +610,75 @@
         }
         function closeModal() { document.getElementById('addModal').style.display = 'none'; }
         
+        function toggleImgInput() {
+            const isActive = document.getElementById('autoImgToggle').classList.contains('toggle-active');
+            document.getElementById('imgInputGroup').style.display = isActive ? 'none' : 'block';
+        }
+
         function showPresets() {
             const presets = [
-                {t: 'رمضان المبارك', d: '2025-02-28T00:00', c: 'holiday'},
-                {t: 'بداية السنة الجديدة', d: '2026-01-01T00:00', c: 'personal'},
-                {t: 'تسليم المشروع', d: new Date(Date.now() + 86400000*7).toISOString().slice(0,16), c: 'work'}
+                {t: '🌙 شهر رمضان', d: '2025-02-28T00:00', c: 'personal'},
+                {t: '💻 إطلاق الموقع', d: new Date(Date.now() + 86400000*3).toISOString().slice(0,16), c: 'work'},
+                {t: '✈️ إجازة الصيف', d: '2025-06-15T09:00', c: 'holiday'}
             ];
-            
-            const preset = presets[Math.floor(Math.random() * presets.length)];
-            document.getElementById('inpTitle').value = preset.t;
-            document.getElementById('inpDate').value = preset.d;
+            const p = presets[Math.floor(Math.random() * presets.length)];
+            document.getElementById('inpTitle').value = p.t;
+            document.getElementById('inpDate').value = p.d;
             openModal();
         }
 
         function toggleTheme() {
             const body = document.body;
-            body.setAttribute('data-theme', body.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+            const newTheme = body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
         }
+        // Load Saved Theme
+        if(localStorage.getItem('theme') === 'light') document.body.setAttribute('data-theme', 'light');
 
         function exportData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(events));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "countdown_backup.json");
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
+            const node = document.createElement('a');
+            node.href = dataStr;
+            node.download = `event_master_backup_${Date.now()}.json`;
+            node.click();
         }
 
         function importData() {
             const input = document.createElement('input');
             input.type = 'file';
             input.onchange = e => {
-                const file = e.target.files[0];
                 const reader = new FileReader();
-                reader.readAsText(file,'UTF-8');
-                reader.onload = readerEvent => {
+                reader.onload = r => {
                     try {
-                        const content = JSON.parse(readerEvent.target.result);
-                        events = content;
-                        save();
-                        renderEvents();
-                        showToast('تم استعادة البيانات بنجاح');
-                    } catch (err) { alert('ملف غير صالح'); }
-                }
+                        events = JSON.parse(r.target.result);
+                        save(); renderEvents(); showToast('تم استعادة النسخة الاحتياطية');
+                    } catch { showToast('ملف غير صالح', true); }
+                };
+                reader.readAsText(e.target.files[0]);
             }
             input.click();
         }
 
+        function copyShareLink() {
+            const input = document.getElementById('shareInput');
+            input.select();
+            document.execCommand('copy');
+            showToast('تم نسخ الرابط للحافظة');
+        }
+
         function showToast(msg, isError = false) {
             const t = document.getElementById('toast');
-            t.innerText = msg;
-            t.style.borderLeftColor = isError ? 'var(--danger)' : 'var(--accent)';
+            document.getElementById('toastMsg').innerText = msg;
+            t.style.border = isError ? '1px solid var(--danger)' : '1px solid var(--success)';
+            t.querySelector('i').className = isError ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
+            t.querySelector('i').style.color = isError ? 'var(--danger)' : 'var(--success)';
             t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 3000);
         }
 
-        // Close modal on outside click
         window.onclick = function(e) {
-            if(e.target.classList.contains('modal-overlay')) {
-                e.target.style.display = 'none';
-            }
+            if(e.target.classList.contains('modal-overlay')) e.target.style.display = 'none';
         }
     </script>
 </body>
