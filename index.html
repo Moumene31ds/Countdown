@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Master V4</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-glass: rgba(30, 41, 59, 0.7);
+            --accent: #38bdf8;
+            --text: #f8fafc;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --blur: 12px;
+        }
+
+        /* Light Theme overrides */
+        [data-theme="light"] {
+            --bg-dark: #f1f5f9;
+            --card-glass: rgba(255, 255, 255, 0.8);
+            --accent: #0284c7;
+            --text: #0f172a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; transition: all 0.3s ease; }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
+                              radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
+        /* Navbar */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.5rem 2rem; background: rgba(0,0,0,0.05); backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .logo { font-size: 1.5rem; font-weight: 900; background: linear-gradient(45deg, var(--accent), #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .nav-actions { display: flex; gap: 10px; }
+        .icon-btn { background: none; border: none; color: var(--text); font-size: 1.2rem; cursor: pointer; padding: 8px; border-radius: 50%; }
+        .icon-btn:hover { background: rgba(255,255,255,0.1); color: var(--accent); }
+
+        /* Dashboard Stats */
+        .stats-bar {
+            display: flex; gap: 20px; overflow-x: auto; padding: 1rem 2rem;
+            scrollbar-width: none;
+        }
+        .stat-chip {
+            background: var(--card-glass); padding: 8px 16px; border-radius: 20px;
+            font-size: 0.9rem; white-space: nowrap; border: 1px solid rgba(255,255,255,0.05);
+            display: flex; align-items: center; gap: 8px; cursor: pointer;
+        }
+        .stat-chip.active { border-color: var(--accent); background: rgba(56, 189, 248, 0.1); }
+
+        /* Grid */
+        .grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px; padding: 1rem 2rem; max-width: 1600px; margin: 0 auto;
+        }
+
+        /* Card Design V4 */
+        .card {
+            background: var(--card-glass); border-radius: 24px; overflow: hidden;
+            position: relative; border: 1px solid rgba(255,255,255,0.05);
+            backdrop-filter: blur(var(--blur)); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); }
+
+        .card-bg {
+            height: 120px; width: 100%; background-size: cover; background-position: center;
+            position: relative;
+        }
+        .card-bg::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--card-glass));
+        }
+
+        .category-tag {
+            position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.6);
+            padding: 4px 12px; border-radius: 12px; font-size: 0.75rem; color: white; backdrop-filter: blur(4px);
+        }
+
+        .card-body { padding: 0 20px 20px; position: relative; }
+        
+        .card-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 5px; margin-top: -10px; z-index: 2; position: relative; }
+        .card-date { font-size: 0.85rem; opacity: 0.7; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; }
+
+        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center; }
+        .timer-box { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 12px; }
+        .timer-num { font-size: 1.5rem; font-weight: 700; display: block; line-height: 1; color: var(--accent); }
+        .timer-label { font-size: 0.7rem; opacity: 0.7; margin-top: 5px; display: block; }
+
+        .card-footer {
+            margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .past-event { border-color: var(--success); }
+        .past-event .timer-num { color: var(--success); }
+
+        /* Floating Button */
+        .fab {
+            position: fixed; bottom: 30px; left: 30px; width: 60px; height: 60px;
+            background: var(--accent); border-radius: 50%; color: white; display: flex;
+            align-items: center; justify-content: center; font-size: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(56, 189, 248, 0.3); cursor: pointer; z-index: 90;
+        }
+        .fab:hover { transform: scale(1.1) rotate(90deg); }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+            z-index: 100; display: none; align-items: center; justify-content: center;
+        }
+        .modal {
+            background: var(--bg-dark); width: 90%; max-width: 500px; padding: 2rem;
+            border-radius: 24px; border: 1px solid rgba(255,255,255,0.1);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; opacity: 0.9; }
+        .form-input {
+            width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; color: var(--text); outline: none;
+        }
+        .form-input:focus { border-color: var(--accent); }
+
+        .category-select { display: flex; gap: 10px; margin-top: 10px; }
+        .cat-option {
+            padding: 8px 16px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer; font-size: 0.8rem; opacity: 0.6;
+        }
+        .cat-option.selected { background: var(--accent); color: white; opacity: 1; border-color: var(--accent); }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 20px; right: 20px; background: var(--bg-dark);
+            padding: 12px 24px; border-radius: 12px; border-left: 4px solid var(--accent);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); transform: translateX(120%); z-index: 200;
+        }
+        .toast.show { transform: translateX(0); }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo"><i class="fas fa-rocket"></i> EventMaster</div>
+        <div class="nav-actions">
+            <button class="icon-btn" onclick="toggleTheme()" title="تغيير الثيم"><i class="fas fa-adjust"></i></button>
+            <button class="icon-btn" onclick="exportData()" title="نسخ احتياطي"><i class="fas fa-download"></i></button>
+            <button class="icon-btn" onclick="importData()" title="استعادة"><i class="fas fa-upload"></i></button>
+        </div>
+    </nav>
+
+    <div class="stats-bar">
+        <div class="stat-chip active" onclick="filterEvents('all')"><i class="fas fa-layer-group"></i> الكل</div>
+        <div class="stat-chip" onclick="filterEvents('personal')"><i class="fas fa-user"></i> شخصي</div>
+        <div class="stat-chip" onclick="filterEvents('work')"><i class="fas fa-briefcase"></i> عمل</div>
+        <div class="stat-chip" onclick="filterEvents('holiday')"><i class="fas fa-plane"></i> عطلات</div>
+        <div class="stat-chip" style="margin-right: auto; background: transparent; border:none;" onclick="showPresets()">
+            <i class="fas fa-magic" style="color: var(--accent)"></i> قوالب جاهزة
+        </div>
+    </div>
+
+    <div class="grid" id="eventsGrid">
+        </div>
+
+    <div class="fab" onclick="openModal()"><i class="fas fa-plus"></i></div>
+
+    <div class="modal-overlay" id="addModal">
+        <div class="modal">
+            <h2 style="margin-bottom: 20px">✨ حدث جديد</h2>
+            
+            <div class="form-group">
+                <label class="form-label">عنوان الحدث</label>
+                <input type="text" class="form-input" id="inpTitle" placeholder="مثال: موعد إطلاق المشروع">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">التاريخ والوقت</label>
+                <input type="datetime-local" class="form-input" id="inpDate">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">التصنيف</label>
+                <div class="category-select" id="catSelect">
+                    <div class="cat-option selected" data-val="personal">شخصي</div>
+                    <div class="cat-option" data-val="work">عمل</div>
+                    <div class="cat-option" data-val="holiday">عطلة</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">صورة (رابط اختياري)</label>
+                <input type="text" class="form-input" id="inpBg" placeholder="https://source.unsplash.com/...">
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="icon-btn" onclick="closeModal()">إلغاء</button>
+                <button class="stat-chip active" onclick="saveEvent()" style="justify-content: center; width: 100px;">حفظ</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="shareModal">
+        <div class="modal" style="text-align: center;">
+            <i class="fas fa-share-alt" style="font-size: 3rem; color: var(--accent); margin-bottom: 20px;"></i>
+            <h3>شارك هذا العد التنازلي</h3>
+            <p style="opacity: 0.7; margin: 10px 0 20px;">انسخ الرابط وأرسله لصديقك. سيتم إضافة الحدث لديه تلقائياً.</p>
+            <input type="text" class="form-input" id="shareInput" readonly onclick="this.select()">
+            <button class="stat-chip active" onclick="copyShareLink()" style="margin-top: 15px; width: 100%; justify-content: center;">نسخ الرابط</button>
+            <button class="icon-btn" onclick="document.getElementById('shareModal').style.display='none'" style="margin-top: 10px;">إغلاق</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">تم الحفظ بنجاح!</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        let events = JSON.parse(localStorage.getItem('masterEvents')) || [];
+        let currentFilter = 'all';
+
+        // Init
+        checkUrlForSharedEvent();
+        renderEvents();
+        setInterval(tick, 1000);
+
+        // --- Core Functions ---
+
+        function saveEvent() {
+            const title = document.getElementById('inpTitle').value;
+            const date = document.getElementById('inpDate').value;
+            const bg = document.getElementById('inpBg').value;
+            const cat = document.querySelector('.cat-option.selected').dataset.val;
+
+            if(!title || !date) return showToast('يرجى ملء البيانات', true);
+
+            const newEvent = {
+                id: Date.now(),
+                title, date, bg, cat,
+                created: Date.now()
+            };
+
+            events.push(newEvent);
+            save();
+            renderEvents();
+            closeModal();
+            showToast('تمت إضافة الحدث بنجاح');
+        }
+
+        function deleteEvent(id) {
+            if(confirm('هل أنت متأكد؟')) {
+                events = events.filter(e => e.id !== id);
+                save();
+                renderEvents();
+            }
+        }
+
+        function save() {
+            localStorage.setItem('masterEvents', JSON.stringify(events));
+        }
+
+        // --- Rendering & Logic ---
+
+        function renderEvents() {
+            const grid = document.getElementById('eventsGrid');
+            grid.innerHTML = '';
+            
+            const filtered = currentFilter === 'all' ? events : events.filter(e => e.cat === currentFilter);
+
+            if(filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; opacity: 0.5; margin-top: 50px;">
+                    <i class="fas fa-wind" style="font-size: 3rem; margin-bottom: 20px;"></i><br>لا توجد أحداث هنا
+                </div>`;
+                return;
+            }
+
+            filtered.sort((a,b) => new Date(a.date) - new Date(b.date)).forEach(ev => {
+                const isPast = new Date(ev.date) < new Date();
+                const defaultBg = ev.cat === 'work' ? 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=500' : 
+                                  ev.cat === 'holiday' ? 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=500' :
+                                  'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=500';
+                
+                const card = document.createElement('div');
+                card.className = `card ${isPast ? 'past-event' : ''}`;
+                card.innerHTML = `
+                    <div class="card-bg" style="background-image: url('${ev.bg || defaultBg}')">
+                        <span class="category-tag"><i class="fas fa-tag"></i> ${getCatLabel(ev.cat)}</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">${ev.title}</h3>
+                        <div class="card-date">
+                            <i class="far fa-calendar-alt"></i> ${new Date(ev.date).toLocaleDateString('ar-EG')} 
+                            ${isPast ? '<span style="color:var(--success)">(مضى)</span>' : ''}
+                        </div>
+                        
+                        <div class="timer-grid" id="timer-${ev.id}">
+                            <div class="timer-box"><span class="timer-num d">0</span><span class="timer-label">يوم</span></div>
+                            <div class="timer-box"><span class="timer-num h">0</span><span class="timer-label">ساعة</span></div>
+                            <div class="timer-box"><span class="timer-num m">0</span><span class="timer-label">دقيقة</span></div>
+                            <div class="timer-box"><span class="timer-num s">0</span><span class="timer-label">ثانية</span></div>
+                        </div>
+
+                        <div class="card-footer">
+                            <button class="icon-btn" onclick="generateShareLink(${ev.id})" title="مشاركة"><i class="fas fa-share-nodes"></i></button>
+                            <button class="icon-btn" onclick="deleteEvent(${ev.id})" title="حذف" style="color: var(--danger)"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            tick(); // Update immediately
+        }
+
+        function tick() {
+            const now = new Date().getTime();
+            events.forEach(ev => {
+                const el = document.getElementById(`timer-${ev.id}`);
+                if(!el) return;
+
+                const target = new Date(ev.date).getTime();
+                let diff = target - now;
+                
+                // Count UP logic for past events
+                if (diff < 0) diff = Math.abs(diff);
+
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+                el.querySelector('.d').innerText = d;
+                el.querySelector('.h').innerText = h < 10 ? '0'+h : h;
+                el.querySelector('.m').innerText = m < 10 ? '0'+m : m;
+                el.querySelector('.s').innerText = s < 10 ? '0'+s : s;
+            });
+        }
+
+        // --- Sharing Feature (Advanced) ---
+
+        function generateShareLink(id) {
+            const ev = events.find(e => e.id === id);
+            // Encode data to base64 to put in URL
+            const dataStr = JSON.stringify({t: ev.title, d: ev.date, c: ev.cat, b: ev.bg});
+            const encoded = btoa(unescape(encodeURIComponent(dataStr))); // Handle unicode strings
+            
+            const url = window.location.origin + window.location.pathname + '?share=' + encoded;
+            
+            document.getElementById('shareInput').value = url;
+            document.getElementById('shareModal').style.display = 'flex';
+        }
+
+        function checkUrlForSharedEvent() {
+            const params = new URLSearchParams(window.location.search);
+            const shareData = params.get('share');
+            if (shareData) {
+                try {
+                    const decoded = JSON.parse(decodeURIComponent(escape(atob(shareData))));
+                    if(confirm(`هل تريد إضافة حدث مشترك: "${decoded.t}"؟`)) {
+                        events.push({
+                            id: Date.now(),
+                            title: decoded.t,
+                            date: decoded.d,
+                            cat: decoded.c || 'personal',
+                            bg: decoded.b,
+                            created: Date.now()
+                        });
+                        save();
+                        // Clean URL
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                        showToast('تمت إضافة الحدث المشترك! 🎉');
+                    }
+                } catch (e) {
+                    console.error("Invalid share link");
+                }
+            }
+        }
+
+        function copyShareLink() {
+            const input = document.getElementById('shareInput');
+            input.select();
+            document.execCommand('copy');
+            showToast('تم نسخ الرابط!');
+        }
+
+        // --- Utilities ---
+        
+        function filterEvents(cat) {
+            currentFilter = cat;
+            document.querySelectorAll('.stat-chip').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            renderEvents();
+        }
+
+        function getCatLabel(cat) {
+            const labels = { 'personal': 'شخصي', 'work': 'عمل', 'holiday': 'عطلة' };
+            return labels[cat] || 'عام';
+        }
+
+        function openModal() {
+            document.getElementById('addModal').style.display = 'flex';
+            // Setup Category Select
+            document.querySelectorAll('.cat-option').forEach(opt => {
+                opt.onclick = () => {
+                    document.querySelectorAll('.cat-option').forEach(o => o.classList.remove('selected'));
+                    opt.classList.add('selected');
+                }
+            });
+        }
+        function closeModal() { document.getElementById('addModal').style.display = 'none'; }
+        
+        function showPresets() {
+            const presets = [
+                {t: 'رمضان المبارك', d: '2025-02-28T00:00', c: 'holiday'},
+                {t: 'بداية السنة الجديدة', d: '2026-01-01T00:00', c: 'personal'},
+                {t: 'تسليم المشروع', d: new Date(Date.now() + 86400000*7).toISOString().slice(0,16), c: 'work'}
+            ];
+            
+            const preset = presets[Math.floor(Math.random() * presets.length)];
+            document.getElementById('inpTitle').value = preset.t;
+            document.getElementById('inpDate').value = preset.d;
+            openModal();
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            body.setAttribute('data-theme', body.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(events));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "countdown_backup.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.onchange = e => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.readAsText(file,'UTF-8');
+                reader.onload = readerEvent => {
+                    try {
+                        const content = JSON.parse(readerEvent.target.result);
+                        events = content;
+                        save();
+                        renderEvents();
+                        showToast('تم استعادة البيانات بنجاح');
+                    } catch (err) { alert('ملف غير صالح'); }
+                }
+            }
+            input.click();
+        }
+
+        function showToast(msg, isError = false) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.borderLeftColor = isError ? 'var(--danger)' : 'var(--accent)';
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // Close modal on outside click
+        window.onclick = function(e) {
+            if(e.target.classList.contains('modal-overlay')) {
+                e.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
