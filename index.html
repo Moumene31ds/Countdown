@@ -2,154 +2,152 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Master V6 Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Event Master V7 Mobile</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☄️</text></svg>">
     
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
             --bg-dark: #0f172a;
-            --card-glass: rgba(30, 41, 59, 0.7);
+            --card-glass: rgba(30, 41, 59, 0.85);
             --accent: #38bdf8;
             --text: #f8fafc;
             --danger: #ef4444;
             --success: #10b981;
             --warning: #f59e0b;
-            --blur: 20px;
+            --blur: 12px;
         }
 
         [data-theme="light"] {
-            --bg-dark: #e2e8f0;
-            --card-glass: rgba(255, 255, 255, 0.85);
+            --bg-dark: #f8fafc;
+            --card-glass: rgba(255, 255, 255, 0.95);
             --accent: #2563eb;
             --text: #1e293b;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; -webkit-tap-highlight-color: transparent; }
 
         body {
             background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(circle at 10% 40%, rgba(56, 189, 248, 0.1), transparent 30%), 
-                radial-gradient(circle at 90% 60%, rgba(168, 85, 247, 0.1), transparent 30%);
+                radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.15), transparent 40%), 
+                radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.15), transparent 40%);
             color: var(--text);
             min-height: 100vh;
-            padding-bottom: 120px;
+            padding-bottom: 100px;
             overflow-x: hidden;
         }
 
-        /* Navbar */
+        /* --- Navbar --- */
         nav {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 1.2rem 2rem; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px);
+            padding: 1rem 1.2rem; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(15px);
             position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(255,255,255,0.08);
         }
         .logo { 
-            font-size: 1.6rem; font-weight: 900; 
-            background: linear-gradient(135deg, var(--accent) 0%, #c084fc 100%); 
+            font-size: 1.3rem; font-weight: 900; 
+            background: linear-gradient(135deg, var(--accent), #c084fc); 
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-            letter-spacing: -1px; display: flex; align-items: center; gap: 10px;
+            display: flex; align-items: center; gap: 8px;
         }
         
-        .nav-actions { display: flex; gap: 12px; }
+        .nav-actions { display: flex; gap: 8px; }
         .icon-btn { 
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); 
+            background: rgba(255,255,255,0.05); border: none; 
             color: var(--text); font-size: 1.1rem; cursor: pointer; 
-            width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            width: 38px; height: 38px; border-radius: 12px; 
+            display: flex; align-items: center; justify-content: center;
+            transition: 0.2s;
         }
-        .icon-btn:hover { background: var(--accent); color: white; transform: translateY(-2px); border-color: transparent; }
+        .icon-btn:active { transform: scale(0.95); background: var(--accent); color: white; }
 
-        /* Dashboard Stats */
+        /* --- Stats Bar (Scrollable) --- */
         .stats-bar {
-            display: flex; gap: 15px; overflow-x: auto; padding: 1.5rem 2rem;
-            scrollbar-width: none; mask-image: linear-gradient(to right, transparent, black 2%, black 98%, transparent);
+            display: flex; gap: 10px; overflow-x: auto; padding: 1rem 1.2rem;
+            scrollbar-width: none; -ms-overflow-style: none;
         }
+        .stats-bar::-webkit-scrollbar { display: none; }
+        
         .stat-chip {
-            background: var(--card-glass); padding: 10px 20px; border-radius: 16px;
-            font-size: 0.95rem; white-space: nowrap; border: 1px solid rgba(255,255,255,0.05);
-            display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 500;
+            background: var(--card-glass); padding: 8px 16px; border-radius: 50px;
+            font-size: 0.85rem; white-space: nowrap; border: 1px solid rgba(255,255,255,0.05);
+            display: flex; align-items: center; gap: 8px; cursor: pointer; flex-shrink: 0;
+            transition: 0.3s;
         }
-        .stat-chip i { font-size: 1.1em; }
-        .stat-chip:hover { background: rgba(255,255,255,0.1); }
-        .stat-chip.active { border-color: var(--accent); background: linear-gradient(90deg, rgba(56, 189, 248, 0.1), transparent); color: var(--accent); }
+        .stat-chip.active { border-color: var(--accent); background: rgba(56, 189, 248, 0.15); color: var(--accent); font-weight: 700; }
 
-        /* Grid */
+        /* --- Responsive Grid --- */
         .grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 30px; padding: 0.5rem 2rem; max-width: 1600px; margin: 0 auto;
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px; padding: 0.5rem 1.2rem; max-width: 1400px; margin: 0 auto;
         }
 
-        /* Card Design V6 */
+        @media (max-width: 600px) {
+            .grid { 
+                grid-template-columns: 1fr; /* Full width on mobile */
+                gap: 15px;
+            }
+            .modal { width: 95% !important; padding: 1.5rem !important; }
+        }
+
+        /* --- Card Design --- */
         .card {
-            background: var(--card-glass); border-radius: 28px; overflow: hidden;
+            background: var(--card-glass); border-radius: 24px; overflow: hidden;
             position: relative; border: 1px solid rgba(255,255,255,0.08);
-            backdrop-filter: blur(var(--blur)); 
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.2);
-            display: flex; flex-direction: column;
+            box-shadow: 0 4px 15px -1px rgba(0, 0, 0, 0.1);
+            display: flex; flex-direction: column; transition: transform 0.3s;
         }
-        .card.pinned { border: 2px solid var(--accent); box-shadow: 0 0 25px rgba(56, 189, 248, 0.25); }
-        /* New: Urgent state */
-        .card.urgent:not(.past-event) { border-color: var(--danger); box-shadow: 0 0 30px rgba(239, 68, 68, 0.3); animation: pulseUrgent 2s infinite; }
-        @keyframes pulseUrgent { 0%, 100% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.3); } 50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.5); } }
-
-        .card:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.3); z-index: 2; }
+        .card.pinned { border: 2px solid var(--accent); }
+        .card.urgent:not(.past-event) { border-color: var(--danger); animation: pulseUrgent 2s infinite; }
+        @keyframes pulseUrgent { 50% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.3); } }
 
         .card-bg {
-            height: 150px; width: 100%; background-size: cover; background-position: center;
-            position: relative; transition: height 0.3s;
+            height: 140px; width: 100%; background-size: cover; background-position: center;
+            position: relative;
         }
         .card-bg::after {
             content: ''; position: absolute; inset: 0;
-            background: linear-gradient(to bottom, rgba(15,23,42,0.2), var(--card-glass));
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), var(--card-glass));
         }
 
-        .card-badges { position: absolute; top: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between; z-index: 10; pointer-events: none; }
-        .badges-left { display: flex; gap: 8px; }
+        .card-badges { position: absolute; top: 12px; left: 12px; right: 12px; display: flex; justify-content: space-between; z-index: 10; pointer-events: none; }
         .badge {
-            background: rgba(15, 23, 42, 0.75); padding: 6px 12px; border-radius: 20px; 
-            font-size: 0.75rem; color: white; backdrop-filter: blur(8px); display: flex; align-items: center; gap: 6px;
-            border: 1px solid rgba(255,255,255,0.1); font-weight: 700; pointer-events: auto;
+            background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 10px; 
+            font-size: 0.75rem; color: white; backdrop-filter: blur(4px); display: flex; align-items: center; gap: 5px;
+            pointer-events: auto; font-weight: 500;
         }
 
-        .card-body { padding: 0 24px 24px; position: relative; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-body { padding: 0 20px 20px; position: relative; flex-grow: 1; display: flex; flex-direction: column; }
         
-        .card-header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-top: -25px; margin-bottom: 15px; z-index: 2; position: relative; }
-        .card-title { font-size: 1.5rem; font-weight: 900; line-height: 1.3; text-shadow: 0 4px 10px rgba(0,0,0,0.3); flex: 1; }
+        .card-header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-top: -20px; margin-bottom: 10px; z-index: 2; position: relative; }
+        .card-title { font-size: 1.5rem; font-weight: 800; line-height: 1.2; text-shadow: 0 2px 5px rgba(0,0,0,0.2); flex: 1; word-wrap: break-word; }
         
         .pin-btn { 
             background: rgba(255,255,255,0.15); border: none; color: var(--text); 
-            width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            backdrop-filter: blur(5px);
+            width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px);
         }
         .pin-btn.active { color: var(--warning); background: rgba(245, 158, 11, 0.2); }
         
-        /* New: Notes indicator */
-        .notes-indicator { font-size: 0.85rem; color: var(--accent); margin-top: 5px; display: flex; align-items: center; gap: 5px; opacity: 0.8; cursor: help; }
+        .notes-indicator { font-size: 0.8rem; color: var(--accent); margin-top: 5px; display: flex; align-items: center; gap: 5px; opacity: 0.8; }
 
+        /* Timer */
         .timer-grid { 
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center; 
-            background: rgba(0,0,0,0.2); padding: 15px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.08);
-            margin-top: 10px;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; text-align: center; 
+            background: rgba(0,0,0,0.2); padding: 12px; border-radius: 18px;
+            margin-top: 15px; border: 1px solid rgba(255,255,255,0.05);
         }
         .timer-box { display: flex; flex-direction: column; align-items: center; }
-        .timer-num { font-size: 1.7rem; font-weight: 900; color: var(--accent); font-variant-numeric: tabular-nums; line-height: 1; }
-        .timer-label { font-size: 0.7rem; opacity: 0.6; margin-top: 6px; font-weight: 700; letter-spacing: 0.5px; }
+        .timer-num { font-size: 1.6rem; font-weight: 800; color: var(--accent); line-height: 1; }
+        .timer-label { font-size: 0.65rem; opacity: 0.6; margin-top: 4px; }
 
         /* Progress Bar */
-        .progress-container {
-            margin-top: 20px; margin-bottom: 10px;
-        }
-        .progress-info { display: flex; justify-content: space-between; font-size: 0.75rem; opacity: 0.7; margin-bottom: 8px; font-weight: 500; }
-        .progress-track {
-            height: 10px; background: rgba(0,0,0,0.2); border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);
-        }
-        .progress-fill {
-            height: 100%; background: linear-gradient(90deg, var(--accent), #a855f7);
-            border-radius: 10px; width: 0%; transition: width 1s linear;
-        }
+        .progress-container { margin-top: 15px; margin-bottom: 10px; }
+        .progress-track { height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 1s linear; }
 
         .card-footer {
             margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.08);
@@ -159,118 +157,112 @@
         .past-event { border-color: var(--success); }
         .past-event .timer-num { color: var(--success); }
         .past-event .progress-fill { background: var(--success); }
-        .past-event .card-bg { filter: grayscale(0.5); }
 
         /* Floating Button */
         .fab {
-            position: fixed; bottom: 35px; left: 35px; width: 65px; height: 65px;
-            background: linear-gradient(135deg, var(--accent), #2563eb); 
-            border-radius: 24px; color: white; display: flex;
-            align-items: center; justify-content: center; font-size: 1.8rem;
-            box-shadow: 0 20px 40px -10px rgba(56, 189, 248, 0.6); 
-            cursor: pointer; z-index: 90; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: fixed; bottom: 30px; left: 30px; width: 60px; height: 60px;
+            background: var(--accent); border-radius: 20px; color: white; display: flex;
+            align-items: center; justify-content: center; font-size: 1.5rem;
+            box-shadow: 0 15px 30px -5px rgba(56, 189, 248, 0.5); 
+            cursor: pointer; z-index: 90; transition: transform 0.2s;
         }
-        .fab:hover { transform: scale(1.1) rotate(90deg); }
+        .fab:hover { transform: scale(1.05); }
 
-        /* Modal & Dialogs */
+        /* --- Modals --- */
         .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(12px);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
             z-index: 100; display: none; align-items: center; justify-content: center;
-            padding: 20px;
+            padding: 1rem;
         }
         .modal {
-            background: #1e293b; width: 100%; max-width: 550px; padding: 2.5rem;
-            border-radius: 36px; border: 1px solid rgba(255,255,255,0.15);
-            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.6);
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            background: #1e293b; width: 100%; max-width: 500px; padding: 2rem;
+            border-radius: 28px; border: 1px solid rgba(255,255,255,0.1);
             max-height: 90vh; overflow-y: auto;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        @keyframes slideUp { from { transform: translateY(50px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+        @keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .form-group { margin-bottom: 1.5rem; }
-        .form-label { display: block; margin-bottom: 0.8rem; font-size: 0.95rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 700; opacity: 0.9; }
         .form-input, .form-textarea, .form-select {
-            width: 100%; padding: 14px; background: rgba(0,0,0,0.25); border: 2px solid rgba(255,255,255,0.08);
-            border-radius: 18px; color: var(--text); outline: none; font-size: 1rem; font-family: inherit;
+            width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px; color: var(--text); outline: none; font-size: 16px; /* Prevents zoom on iOS */
         }
-        .form-textarea { resize: vertical; height: 100px; }
-        .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--accent); background: rgba(0,0,0,0.35); }
-        .form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: left 15px center; }
+        .form-textarea { resize: none; height: 80px; }
+        .form-select { appearance: none; }
 
-        .category-select { display: flex; gap: 10px; flex-wrap: wrap; }
+        .category-select { display: flex; gap: 8px; flex-wrap: wrap; }
         .cat-option {
-            padding: 12px 24px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);
-            cursor: pointer; font-size: 0.9rem; background: rgba(255,255,255,0.05);
-            display: flex; align-items: center; gap: 8px; font-weight: 500;
+            padding: 10px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer; font-size: 0.85rem; background: rgba(255,255,255,0.05); flex: 1; text-align: center;
         }
-        .cat-option.selected { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 5px 15px rgba(56, 189, 248, 0.3); }
+        .cat-option.selected { background: var(--accent); color: white; border-color: transparent; font-weight: bold; }
 
         .toggle-switch {
             display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; cursor: pointer;
-            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.05); padding: 12px; border-radius: 14px;
         }
         .toggle-track {
-            width: 50px; height: 28px; background: rgba(0,0,0,0.3); border-radius: 20px;
-            position: relative; transition: 0.3s; border: 2px solid transparent;
+            width: 44px; height: 24px; background: rgba(0,0,0,0.3); border-radius: 20px;
+            position: relative; transition: 0.3s;
         }
         .toggle-thumb {
-            width: 20px; height: 20px; background: white; border-radius: 50%;
-            position: absolute; top: 2px; left: 2px; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 18px; height: 18px; background: white; border-radius: 50%;
+            position: absolute; top: 3px; left: 3px; transition: 0.3s;
         }
-        .toggle-active .toggle-track { background: var(--success); border-color: var(--success); }
-        .toggle-active .toggle-thumb { left: 24px; }
+        .toggle-active .toggle-track { background: var(--success); }
+        .toggle-active .toggle-thumb { left: 23px; }
 
-        /* QR Code Container */
-        #qrContainer img { border-radius: 16px; border: 5px solid white; margin: 15px auto; display: block; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-
-        /* Toast */
+        /* QR & Toast */
+        #qrContainer img { border-radius: 12px; border: 4px solid white; margin: 15px auto; display: block; max-width: 100%; }
+        
         .toast {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
-            background: #1e293b; color: white; padding: 16px 35px; border-radius: 50px;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); z-index: 200; font-weight: 700;
-            display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.1);
-            opacity: 0; pointer-events: none;
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: #1e293b; color: white; padding: 12px 24px; border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 200; font-size: 0.9rem; font-weight: 500;
+            display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.1);
+            width: 90%; max-width: 350px; justify-content: center;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast.show { transform: translateX(-50%) translateY(0); }
 
-        /* Dropdown Menu for extra actions */
-        .dropdown { position: relative; display: inline-block; }
+        /* Dropdown */
+        .dropdown { position: relative; }
         .dropdown-content {
-            display: none; position: absolute; left: 0; bottom: 100%; margin-bottom: 10px;
-            background: var(--bg-dark); min-width: 180px; border-radius: 18px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1);
-            z-index: 10; overflow: hidden; padding: 8px;
+            display: none; position: absolute; left: 0; bottom: 100%; margin-bottom: 5px;
+            background: var(--bg-dark); min-width: 150px; border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);
+            z-index: 20; padding: 5px;
         }
-        .dropdown:hover .dropdown-content { display: block; animation: slideUp 0.2s ease-out; }
+        .dropdown:focus-within .dropdown-content { display: block; }
         .dropdown-btn { 
-            width: 100%; text-align: right; padding: 12px 16px; border-radius: 12px;
+            width: 100%; text-align: right; padding: 12px; border-radius: 8px;
             background: transparent; border: none; color: var(--text); cursor: pointer;
-            display: flex; align-items: center; gap: 10px; font-size: 0.9rem;
+            display: flex; align-items: center; gap: 8px; font-size: 0.9rem;
         }
-        .dropdown-btn:hover { background: rgba(255,255,255,0.08); }
+        .dropdown-btn:hover { background: rgba(255,255,255,0.1); }
 
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo"><i class="fas fa-meteor fa-lg"></i> EventMaster <span style="font-size:0.6em; opacity:0.7; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 8px;">V6 PRO</span></div>
+        <div class="logo"><i class="fas fa-meteor"></i> EventMaster</div>
         <div class="nav-actions">
-            <button class="icon-btn" onclick="requestNotificationPermission()" title="تفعيل التنبيهات"><i class="fas fa-bell"></i></button>
-            <button class="icon-btn" onclick="toggleTheme()" title="تغيير الثيم"><i class="fas fa-adjust"></i></button>
+            <button class="icon-btn" onclick="requestNotificationPermission()" title="تنبيهات"><i class="fas fa-bell"></i></button>
+            <button class="icon-btn" onclick="toggleTheme()" title="ثيم"><i class="fas fa-adjust"></i></button>
             <button class="icon-btn" onclick="exportData()" title="نسخ احتياطي"><i class="fas fa-file-export"></i></button>
             <button class="icon-btn" onclick="importData()" title="استعادة"><i class="fas fa-file-import"></i></button>
         </div>
     </nav>
 
     <div class="stats-bar">
-        <div class="stat-chip active" onclick="filterEvents('all')"><i class="fas fa-th-large"></i> الكل</div>
-        <div class="stat-chip" onclick="filterEvents('personal')"><i class="fas fa-user-astronaut"></i> شخصي</div>
-        <div class="stat-chip" onclick="filterEvents('work')"><i class="fas fa-briefcase"></i> عمل</div>
-        <div class="stat-chip" onclick="filterEvents('holiday')"><i class="fas fa-umbrella-beach"></i> عطلات</div>
-        <div class="stat-chip" style="margin-right: auto; background: rgba(56, 189, 248, 0.1); border-color: var(--accent); color: var(--accent);" onclick="showPresets()">
-            <i class="fas fa-wand-magic-sparkles"></i> نماذج جاهزة
+        <div class="stat-chip active" onclick="filterEvents('all')">الكل</div>
+        <div class="stat-chip" onclick="filterEvents('personal')">شخصي</div>
+        <div class="stat-chip" onclick="filterEvents('work')">عمل</div>
+        <div class="stat-chip" onclick="filterEvents('holiday')">عطلات</div>
+        <div class="stat-chip" style="margin-right: auto; color: var(--accent); border-color: var(--accent);" onclick="showPresets()">
+            <i class="fas fa-magic"></i>
         </div>
     </div>
 
@@ -281,108 +273,99 @@
 
     <div class="modal-overlay" id="addModal">
         <div class="modal">
-            <h2 id="modalTitle" style="margin-bottom: 30px; display: flex; align-items: center; gap: 12px; font-size: 1.8rem;">
-                <i class="fas fa-calendar-plus" style="color: var(--accent)"></i> حدث جديد
-            </h2>
+            <h2 id="modalTitle" style="margin-bottom: 20px; font-size: 1.5rem;">حدث جديد</h2>
             
             <div class="form-group">
-                <label class="form-label"><i class="fas fa-heading"></i> عنوان الحدث</label>
-                <input type="text" class="form-input" id="inpTitle" placeholder="مثال: رحلة الصيف، اجتماع سنوي...">
+                <label class="form-label">عنوان الحدث</label>
+                <input type="text" class="form-input" id="inpTitle" placeholder="أدخل العنوان...">
             </div>
 
-            <div class="form-row">
-                 <div class="form-group">
-                    <label class="form-label"><i class="fas fa-clock"></i> موعد الحدث</label>
-                    <input type="datetime-local" class="form-input" id="inpDate">
-                </div>
-                 <div class="form-group">
-                    <label class="form-label"><i class="fas fa-sync-alt"></i> التكرار (جديد)</label>
-                    <select class="form-select" id="inpRecur">
-                        <option value="none">بدون تكرار</option>
-                        <option value="annual">سنوي (كل عام)</option>
-                        <option value="monthly">شهري (كل شهر)</option>
+            <div class="form-group">
+                <label class="form-label">التاريخ والوقت</label>
+                <input type="datetime-local" class="form-input" id="inpDate">
+            </div>
+
+            <div class="form-group" style="display: flex; gap: 10px;">
+                 <div style="flex:1">
+                    <label class="form-label">التكرار</label>
+                    <select class="form-select form-input" id="inpRecur">
+                        <option value="none">مرة واحدة</option>
+                        <option value="annual">سنوي</option>
+                        <option value="monthly">شهري</option>
                     </select>
                 </div>
             </div>
             
             <div class="form-group">
-                <label class="form-label"><i class="fas fa-tags"></i> التصنيف</label>
+                <label class="form-label">التصنيف</label>
                 <div class="category-select" id="catSelect">
-                    <div class="cat-option selected" data-val="personal"><i class="fas fa-user"></i> شخصي</div>
-                    <div class="cat-option" data-val="work"><i class="fas fa-briefcase"></i> عمل</div>
-                    <div class="cat-option" data-val="holiday"><i class="fas fa-plane"></i> عطلة</div>
+                    <div class="cat-option selected" data-val="personal">شخصي</div>
+                    <div class="cat-option" data-val="work">عمل</div>
+                    <div class="cat-option" data-val="holiday">عطلة</div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="form-label"><i class="fas fa-align-right"></i> ملاحظات / وصف (اختياري)</label>
-                <textarea class="form-textarea" id="inpNotes" placeholder="أضف تفاصيل، روابط، أو قائمة مهام..."></textarea>
+                <label class="form-label">ملاحظات (اختياري)</label>
+                <textarea class="form-textarea" id="inpNotes" placeholder="تفاصيل إضافية..."></textarea>
             </div>
 
             <div class="toggle-switch toggle-active" id="autoImgToggle" onclick="this.classList.toggle('toggle-active'); toggleImgInput()">
-                <span style="font-size: 1rem; font-weight: 600;"><i class="fas fa-magic"></i> صورة ذكية (AI)</span>
+                <span style="font-size: 0.9rem;">صورة تلقائية (AI)</span>
                 <div class="toggle-track"><div class="toggle-thumb"></div></div>
             </div>
 
             <div class="form-group" id="imgInputGroup" style="display: none;">
-                <label class="form-label"><i class="fas fa-image"></i> رابط الصورة (اختياري)</label>
-                <input type="text" class="form-input" id="inpBg" placeholder="https://...">
+                <input type="text" class="form-input" id="inpBg" placeholder="رابط الصورة">
             </div>
 
-            <div style="display: flex; gap: 15px; margin-top: 35px;">
-                <button class="icon-btn" onclick="closeModal()" style="width: 60px; height: 55px; border-radius: 18px; background: rgba(255,255,255,0.1);"><i class="fas fa-times fa-lg"></i></button>
-                <button id="saveBtn" class="stat-chip active" onclick="saveEvent()" style="flex-grow: 1; justify-content: center; height: 55px; font-size: 1.2rem; border-radius: 18px;">حفظ الحدث</button>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="icon-btn" onclick="closeModal()" style="width: 50px; background: rgba(255,255,255,0.1);"><i class="fas fa-times"></i></button>
+                <button id="saveBtn" class="stat-chip active" onclick="saveEvent()" style="flex-grow: 1; justify-content: center; height: 45px; font-size: 1rem;">حفظ</button>
             </div>
         </div>
     </div>
 
     <div class="modal-overlay" id="shareModal">
-        <div class="modal" style="text-align: center; max-width: 420px;">
-            <div style="width: 90px; height: 90px; background: rgba(56, 189, 248, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px; border: 2px solid var(--accent);">
-                <i class="fas fa-share-alt" style="font-size: 2.5rem; color: var(--accent);"></i>
-            </div>
-            <h3>مشاركة الحدث</h3>
-            
+        <div class="modal" style="text-align: center;">
+            <i class="fas fa-share-alt" style="font-size: 2rem; color: var(--accent); margin-bottom: 15px;"></i>
+            <h3 style="margin-bottom: 10px;">مشاركة الحدث</h3>
             <div id="qrContainer"></div>
-            
-            <p style="opacity: 0.7; margin: 20px 0; font-size: 0.95rem;">امسح الكود أو انسخ الرابط أدناه لمشاركته مع الأصدقاء</p>
-            
-            <div style="position: relative; margin-bottom: 25px;">
-                <input type="text" class="form-input" id="shareInput" readonly onclick="this.select()" style="text-align: left; direction: ltr; padding-right: 45px; font-size: 0.9rem; background: rgba(0,0,0,0.4);">
-                <button class="icon-btn" onclick="copyShareLink()" style="position: absolute; right: 6px; top: 6px; height: 38px; width: 38px; border-radius: 12px;"><i class="fas fa-copy"></i></button>
-            </div>
-
-             <button class="icon-btn" onclick="document.getElementById('shareModal').style.display='none'" style="width: 100%; height: 50px; border-radius: 16px; background: rgba(255,255,255,0.08);">إغلاق</button>
+            <p style="margin: 10px 0; opacity: 0.7; font-size: 0.8rem;">امسح الكود أو انسخ الرابط</p>
+            <input type="text" class="form-input" id="shareInput" readonly onclick="this.select()" style="margin-bottom: 15px; text-align: center; direction: ltr;">
+            <button class="stat-chip active" onclick="copyShareLink()" style="width: 100%; justify-content: center;">نسخ الرابط</button>
+            <button class="icon-btn" onclick="document.getElementById('shareModal').style.display='none'" style="width: 100%; margin-top: 10px; border-radius: 12px; justify-content: center;">إغلاق</button>
         </div>
     </div>
 
-    <div class="toast" id="toast"><i class="fas fa-check-circle fa-lg" style="color: var(--success)"></i> <span id="toastMsg">تم الحفظ بنجاح</span></div>
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">تم</span></div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <script>
-        let events = JSON.parse(localStorage.getItem('masterEventsV6')) || [];
-        // Migration from V5 if exists
-        if(localStorage.getItem('masterEventsV5')) {
-            const v5Events = JSON.parse(localStorage.getItem('masterEventsV5'));
-            events = v5Events.map(e => ({...e, notes: '', recurrence: 'none'})).concat(events);
-            localStorage.removeItem('masterEventsV5');
-            save();
+        // --- Data & Initialization ---
+        let events = JSON.parse(localStorage.getItem('masterEventsV7')) || [];
+        
+        // Migrate old data if needed
+        if(localStorage.getItem('masterEventsV6')) {
+            try {
+                const old = JSON.parse(localStorage.getItem('masterEventsV6'));
+                events = old.concat(events);
+                localStorage.removeItem('masterEventsV6');
+                save();
+            } catch(e){}
         }
 
         let currentFilter = 'all';
+        let editingId = null;
         let notifPermission = Notification.permission;
-        let editingId = null; // Track which event is being edited
 
-        // Init
+        // Start Up
         checkUrlForSharedEvent();
         renderEvents();
-        // Ticking every second
-        setInterval(() => {
-            tick();
-        }, 1000);
+        setInterval(tick, 1000);
 
-        // --- Core Functions ---
+        // --- Core Logic ---
 
         function saveEvent() {
             const title = document.getElementById('inpTitle').value.trim();
@@ -393,53 +376,49 @@
             let bg = document.getElementById('inpBg').value.trim();
             const cat = document.querySelector('.cat-option.selected').dataset.val;
 
-            if(!title || !dateVal) return showToast('يرجى إدخال العنوان والتاريخ', true);
+            if(!title || !dateVal) return showToast('أدخل العنوان والتاريخ', true);
 
-            // AI Smart Image Logic
+            // AI Image Logic
             if(useAutoImg || !bg) {
-                // Using unsplash source for easy thematic images
-                bg = `https://source.unsplash.com/800x600/?${encodeURIComponent(title)},${cat}, atmospheric`;
+                bg = `https://source.unsplash.com/600x400/?${encodeURIComponent(title)},${cat}`;
             }
 
             if(editingId) {
-                // Update existing event
-                const evIndex = events.findIndex(e => e.id === editingId);
-                if(evIndex > -1) {
-                    events[evIndex] = { 
-                        ...events[evIndex], 
-                        title, date: dateVal, bg, cat, notes, recurrence,
-                        notified: events[evIndex].date === dateVal ? events[evIndex].notified : false // Reset notif if date changed
+                // Update
+                const idx = events.findIndex(e => e.id === editingId);
+                if(idx > -1) {
+                    events[idx] = { 
+                        ...events[idx], title, date: dateVal, bg, cat, notes, recurrence,
+                        notified: (events[idx].date === dateVal) ? events[idx].notified : false 
                     };
-                    showToast('تم تعديل الحدث بنجاح');
                 }
             } else {
-                // Create new event
-                const newEvent = {
+                // Create New
+                events.unshift({
                     id: Date.now(),
                     title, date: dateVal, bg, cat, notes, recurrence,
                     created: Date.now(),
                     pinned: false,
                     notified: false
-                };
-                events.unshift(newEvent);
-                showToast('تمت إضافة الحدث بنجاح');
-                 // Trigger confetti if event is very close (less than 24h)
+                });
+                
+                // Confetti if event is soon
                 if(new Date(dateVal) - new Date() < 86400000 && new Date(dateVal) > new Date()) {
-                     confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
                 }
             }
 
             save();
             renderEvents();
             closeModal();
+            showToast('تم الحفظ بنجاح');
         }
 
         function deleteEvent(id) {
-            if(confirm('هل أنت متأكد من حذف هذا الحدث نهائياً؟')) {
+            if(confirm('هل أنت متأكد من الحذف؟')) {
                 events = events.filter(e => e.id !== id);
                 save();
                 renderEvents();
-                showToast('تم الحذف', true);
             }
         }
 
@@ -453,27 +432,26 @@
         }
 
         function save() {
-            localStorage.setItem('masterEventsV6', JSON.stringify(events));
+            localStorage.setItem('masterEventsV7', JSON.stringify(events));
         }
 
-        // --- Rendering & Advanced Logic ---
+        // --- Rendering ---
 
         function renderEvents() {
             const grid = document.getElementById('eventsGrid');
             grid.innerHTML = '';
             
-            // Sorting: Pinned first, then by date
             let filtered = currentFilter === 'all' ? events : events.filter(e => e.cat === currentFilter);
+            
+            // Sort: Pinned first, then by date
             filtered.sort((a,b) => {
                 if(a.pinned === b.pinned) return new Date(a.date) - new Date(b.date);
                 return a.pinned ? -1 : 1;
             });
 
             if(filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; opacity: 0.6; margin-top: 100px; display: flex; flex-direction: column; align-items: center;">
-                    <i class="fas fa-meteor" style="font-size: 5rem; margin-bottom: 25px; color: var(--accent); filter: drop-shadow(0 0 20px var(--accent));"></i>
-                    <h2 style="font-size: 2rem; margin-bottom: 10px;">الفضاء فارغ...</h2>
-                    <p style="font-size: 1.1rem;">ابدأ بإضافة حدثك الأول الآن</p>
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; opacity: 0.5; margin-top: 60px;">
+                    <i class="fas fa-meteor" style="font-size: 3.5rem; margin-bottom: 15px;"></i><br>لا توجد أحداث حالياً
                 </div>`;
                 return;
             }
@@ -482,56 +460,43 @@
                 const now = new Date();
                 const targetDate = new Date(ev.date);
                 const isPast = targetDate < now;
-                const isUrgent = !isPast && (targetDate - now) < (24 * 60 * 60 * 1000); // Less than 24h
+                const isUrgent = !isPast && (targetDate - now) < (24 * 3600 * 1000); // Less than 24h
                 
-                // Fallback image
-                const bgImage = ev.bg || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800';
-                const recurIcon = ev.recurrence === 'annual' ? '<i class="fas fa-sync-alt" title="تكرار سنوي"></i>' : (ev.recurrence === 'monthly' ? '<i class="fas fa-redo-alt" title="تكرار شهري"></i>' : '');
+                const bgImage = ev.bg || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500';
+                const recurIcon = ev.recurrence === 'annual' ? '<i class="fas fa-sync"></i> سنوي' : (ev.recurrence === 'monthly' ? '<i class="fas fa-redo"></i> شهري' : '');
 
                 const card = document.createElement('div');
                 card.className = `card ${isPast ? 'past-event' : ''} ${ev.pinned ? 'pinned' : ''} ${isUrgent ? 'urgent' : ''}`;
                 card.innerHTML = `
                     <div class="card-bg" style="background-image: url('${bgImage}')">
                         <div class="card-badges">
-                            <div class="badges-left">
-                                <span class="badge">${getCatLabel(ev.cat)}</span>
-                                ${ev.recurrence !== 'none' ? `<span class="badge" style="background: var(--accent);">${recurIcon}</span>` : ''}
+                            <div style="display:flex; gap:5px;">
+                                <span class="badge"><i class="fas fa-circle" style="font-size:0.6em; color:var(--accent)"></i> ${getCatLabel(ev.cat)}</span>
+                                ${recurIcon ? `<span class="badge" style="background:var(--accent)">${recurIcon}</span>` : ''}
                             </div>
-                            ${ev.pinned ? '<span class="badge" style="background:var(--warning); color:black;"><i class="fas fa-thumbtack"></i> مثبت</span>' : ''}
+                            ${ev.pinned ? '<span class="badge" style="background:var(--warning); color:black"><i class="fas fa-thumbtack"></i></span>' : ''}
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="card-header-row">
                             <h3 class="card-title">${ev.title}</h3>
-                            <button class="pin-btn ${ev.pinned ? 'active' : ''}" onclick="togglePin(${ev.id})" title="تثبيت">
-                                <i class="fas fa-thumbtack"></i>
-                            </button>
+                            <button class="pin-btn ${ev.pinned ? 'active' : ''}" onclick="togglePin(${ev.id})"><i class="fas fa-thumbtack"></i></button>
                         </div>
                         
-                        ${ev.notes ? `<div class="notes-indicator" title="${ev.notes}"><i class="fas fa-align-left"></i> يوجد ملاحظات</div>` : ''}
+                        ${ev.notes ? `<div class="notes-indicator"><i class="fas fa-align-right"></i> ملاحظات</div>` : ''}
 
                         <div class="timer-grid" id="timer-${ev.id}">
                             <div class="timer-box"><span class="timer-num d">0</span><span class="timer-label">يوم</span></div>
-                            <div class="timer-box"><span class="timer-num h">0</span><span class="timer-label">ساعة</span></div>
-                            <div class="timer-box"><span class="timer-num m">0</span><span class="timer-label">دقيقة</span></div>
-                            <div class="timer-box"><span class="timer-num s">0</span><span class="timer-label">ثانية</span></div>
+                            <div class="timer-box"><span class="timer-num h">0</span><span class="timer-label">س</span></div>
+                            <div class="timer-box"><span class="timer-num m">0</span><span class="timer-label">د</span></div>
+                            <div class="timer-box"><span class="timer-num s">0</span><span class="timer-label">ث</span></div>
                         </div>
 
-                        <div class="progress-container">
-                            <div class="progress-info">
-                                <span>البداية</span>
-                                <span id="prog-pct-${ev.id}">0%</span>
-                                <span>الهدف</span>
-                            </div>
-                            <div class="progress-track">
-                                <div class="progress-fill" id="prog-fill-${ev.id}"></div>
-                            </div>
-                        </div>
+                        <div class="progress-container"><div class="progress-track"><div class="progress-fill" id="prog-fill-${ev.id}"></div></div></div>
 
                         <div class="card-footer">
-                            <button class="icon-btn" onclick="speakTime(${ev.id})" title="قراءة الوقت"><i class="fas fa-volume-up"></i></button>
-                            <button class="icon-btn" onclick="editEvent(${ev.id})" title="تعديل"><i class="fas fa-edit"></i></button>
-                            
+                            <button class="icon-btn" onclick="speakTime(${ev.id})"><i class="fas fa-volume-up"></i></button>
+                            <button class="icon-btn" onclick="editEvent(${ev.id})"><i class="fas fa-edit"></i></button>
                             <div class="dropdown">
                                 <button class="icon-btn"><i class="fas fa-ellipsis-v"></i></button>
                                 <div class="dropdown-content">
@@ -544,97 +509,77 @@
                 `;
                 grid.appendChild(card);
             });
-            tick(); // Update immediately
+            tick();
         }
+
+        // --- Ticking & Logic ---
 
         function tick() {
             const now = new Date().getTime();
             let needsRerender = false;
-            
+
             events.forEach(ev => {
                 const el = document.getElementById(`timer-${ev.id}`);
                 if(!el) return;
-
-                let targetDate = new Date(ev.date);
-                let target = targetDate.getTime();
-                const start = ev.created || (target - 86400000); 
+                
+                let target = new Date(ev.date).getTime();
                 let diff = target - now;
 
-                // --- Recurring Logic (New V6) ---
-                if (diff <= 0 && ev.recurrence !== 'none' && !ev.isRecycled) {
-                    let newDate = new Date(targetDate);
-                    if(ev.recurrence === 'annual') {
-                        newDate.setFullYear(newDate.getFullYear() + 1);
-                    } else if (ev.recurrence === 'monthly') {
-                        newDate.setMonth(newDate.getMonth() + 1);
-                    }
+                // 1. Recurrence Logic
+                if (diff <= 0 && ev.recurrence && ev.recurrence !== 'none' && !ev.isRecycled) {
+                    let d = new Date(ev.date);
+                    if(ev.recurrence === 'annual') d.setFullYear(d.getFullYear() + 1);
+                    if(ev.recurrence === 'monthly') d.setMonth(d.getMonth() + 1);
                     
-                    // Update event data
-                    ev.date = newDate.toISOString().slice(0,16);
-                    ev.created = now; // Reset progress bar baseline
-                    ev.notified = false; // Reset notification flag
-                    ev.isRecycled = true; // Prevent multiple triggers in same second
-                    
+                    ev.date = d.toISOString().slice(0,16);
+                    ev.isRecycled = true; // Prevent loop
+                    ev.notified = false;
                     save();
                     needsRerender = true;
-                    showToast(`تم تكرار الحدث: ${ev.title} للموعد القادم 🔄`);
-                    return; // Skip rest of tick for this event
+                    showToast(`تم تكرار الحدث: ${ev.title} 🔄`);
+                    return;
                 }
-                // Reset recycled flag if diff is positive again
+                // Reset recycle flag
                 if(diff > 0 && ev.isRecycled) ev.isRecycled = false;
 
-
-                // Notifications Logic
-                if (diff <= 0 && diff > -5000 && !ev.notified && ev.recurrence === 'none') {
+                // 2. Notification Logic
+                if (diff <= 0 && diff > -5000 && !ev.notified && (!ev.recurrence || ev.recurrence === 'none')) {
                     sendNotification(ev.title);
                     ev.notified = true;
                     save();
-                    confetti({ particleCount: 200, spread: 120, origin: { y: 0.6 }, colors: ['#38bdf8', '#a855f7'] });
                 }
-                
-                // Past Logic for display
-                if (diff < 0) diff = Math.abs(diff);
 
-                // Update Timer UI
-                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((diff % (1000 * 60)) / 1000);
+                // 3. Timer UI
+                if (diff < 0) diff = Math.abs(diff);
+                const d = Math.floor(diff / (86400000));
+                const h = Math.floor((diff % 86400000) / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
 
                 el.querySelector('.d').innerText = d;
                 el.querySelector('.h').innerText = h < 10 ? '0'+h : h;
                 el.querySelector('.m').innerText = m < 10 ? '0'+m : m;
                 el.querySelector('.s').innerText = s < 10 ? '0'+s : s;
 
-                // Update Progress Bar
-                const totalDuration = target - start;
-                const elapsed = now - start;
-                let pct = (elapsed / totalDuration) * 100;
+                // 4. Progress Bar
+                const start = ev.created || (target - 86400000);
+                let pct = ((now - start) / (target - start)) * 100;
+                if(pct > 100) pct = 100; if(pct < 0) pct = 0;
                 
-                if (now > target && ev.recurrence === 'none') pct = 100; 
-                if (pct < 0) pct = 0;
-                if (pct > 100) pct = 100; // Cap at 100 for recurring right before reset
-
                 const fill = document.getElementById(`prog-fill-${ev.id}`);
-                const pctText = document.getElementById(`prog-pct-${ev.id}`);
-                
                 if(fill) fill.style.width = `${pct}%`;
-                if(pctText) pctText.innerText = Math.floor(pct) + '%';
             });
 
             if(needsRerender) renderEvents();
         }
 
-        // --- Advanced Features ---
+        // --- Helpers ---
 
         function editEvent(id) {
             const ev = events.find(e => e.id === id);
-            if(!ev) return;
-
-            editingId = id; // Set editing mode
+            editingId = id;
             
-            // Populate Modal
-            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-edit" style="color: var(--accent)"></i> تعديل الحدث';
+            document.getElementById('modalTitle').innerText = 'تعديل الحدث';
             document.getElementById('saveBtn').innerText = 'حفظ التعديلات';
             document.getElementById('inpTitle').value = ev.title;
             document.getElementById('inpDate').value = ev.date;
@@ -642,167 +587,46 @@
             document.getElementById('inpNotes').value = ev.notes || '';
             document.getElementById('inpBg').value = ev.bg || '';
             
-            // Set Category
+            // Cat
             document.querySelectorAll('.cat-option').forEach(o => o.classList.remove('selected'));
             document.querySelector(`.cat-option[data-val="${ev.cat}"]`).classList.add('selected');
-
-            // Handle Image Toggle state
-            const autoImgToggle = document.getElementById('autoImgToggle');
-            const imgInputGroup = document.getElementById('imgInputGroup');
+            
+            // Image toggle state
             if(ev.bg && !ev.bg.includes('source.unsplash.com')) {
-                 // If has custom non-AI image, show input turned off AI
-                 autoImgToggle.classList.remove('toggle-active');
-                 imgInputGroup.style.display = 'block';
+                document.getElementById('autoImgToggle').classList.remove('toggle-active');
+                document.getElementById('imgInputGroup').style.display = 'block';
             } else {
-                // AI active
-                 autoImgToggle.classList.add('toggle-active');
-                 imgInputGroup.style.display = 'none';
+                document.getElementById('autoImgToggle').classList.add('toggle-active');
+                document.getElementById('imgInputGroup').style.display = 'none';
             }
 
             document.getElementById('addModal').style.display = 'flex';
         }
 
-
-        function requestNotificationPermission() {
-            Notification.requestPermission().then(permission => {
-                notifPermission = permission;
-                if (permission === "granted") showToast("تم تفعيل التنبيهات 🔔");
-                else showToast("لم يتم منح إذن التنبيهات", true);
-            });
-        }
-
-        function sendNotification(title) {
-            if (notifPermission === "granted") {
-                new Notification("انتهى العد التنازلي! 🚀", {
-                    body: `الحدث "${title}" قد وصل موعده الآن!`,
-                    icon: "https://cdn-icons-png.flaticon.com/512/3233/3233497.png"
-                });
-                // Simple notification sound
-                try {
-                    const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
-                    audio.volume = 0.5;
-                    audio.play();
-                } catch(e) { console.log("Audio play failed"); }
-            }
-        }
-
-        function speakTime(id) {
-            const ev = events.find(e => e.id === id);
-            const now = new Date();
-            const target = new Date(ev.date);
-            const diff = target - now;
-            
-            let msg = "";
-            if(diff < 0) {
-                msg = `الحدث ${ev.title} قد انتهى`;
-            } else {
-                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                msg = `الوقت المتبقي على ${ev.title} هو ${d} أيام و ${h} ساعات`;
-            }
-
-            if ('speechSynthesis' in window) {
-                const speech = new SpeechSynthesisUtterance(msg);
-                speech.lang = 'ar-SA';
-                speech.rate = 0.9;
-                window.speechSynthesis.speak(speech);
-            } else {
-                showToast("جهازك لا يدعم القراءة الصوتية", true);
-            }
-        }
-
-        function generateShareLink(id) {
-            const ev = events.find(e => e.id === id);
-            // Share minimal data to keep url short
-            const dataStr = JSON.stringify({t: ev.title, d: ev.date, c: ev.cat, b: ev.bg, r: ev.recurrence});
-            const encoded = btoa(unescape(encodeURIComponent(dataStr)));
-            const url = window.location.href.split('?')[0] + '?share=' + encoded;
-            
-            document.getElementById('shareInput').value = url;
-            
-            // Generate QR Code
-            const qrContainer = document.getElementById('qrContainer');
-            qrContainer.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=10&data=${encodeURIComponent(url)}" alt="QR Code">`;
-            
-            document.getElementById('shareModal').style.display = 'flex';
-        }
-
-        function checkUrlForSharedEvent() {
-            const params = new URLSearchParams(window.location.search);
-            const shareData = params.get('share');
-            if (shareData) {
-                try {
-                    const decoded = JSON.parse(decodeURIComponent(escape(atob(shareData))));
-                    // Clean URL
-                    window.history.replaceState({}, document.title, window.location.href.split('?')[0]);
-                    
-                    if(confirm(`✨ وصلك حدث جديد:\n"${decoded.t}"\nبتاريخ: ${new Date(decoded.d).toLocaleDateString('ar-EG')}\n\nهل تريد إضافته لقائمتك؟`)) {
-                        events.unshift({
-                            id: Date.now(),
-                            title: decoded.t,
-                            date: decoded.d,
-                            cat: decoded.c || 'personal',
-                            bg: decoded.b,
-                            recurrence: decoded.r || 'none',
-                            notes: '',
-                            created: Date.now() - 60000,
-                            pinned: false
-                        });
-                        save();
-                        renderEvents();
-                        showToast('تمت إضافة الحدث المشترك! 🎉');
-                        confetti({ spread: 100 });
-                    }
-                } catch (e) { console.error("Share Link Error", e); showToast("رابط المشاركة غير صالح", true); }
-            }
-        }
-
-        // --- UI Utils ---
-        
-        function filterEvents(cat) {
-            currentFilter = cat;
-            document.querySelectorAll('.stat-chip').forEach(c => c.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            renderEvents();
-        }
-
-        function getCatLabel(cat) {
-            const labels = { 'personal': '<i class="fas fa-user"></i> شخصي', 'work': '<i class="fas fa-briefcase"></i> عمل', 'holiday': '<i class="fas fa-plane"></i> عطلة' };
-            return labels[cat] || 'عام';
-        }
-
         function openModal() {
-            editingId = null; // Reset editing mode to 'create new'
-            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-calendar-plus" style="color: var(--accent)"></i> حدث جديد';
-            document.getElementById('saveBtn').innerText = 'حفظ الحدث';
+            editingId = null;
+            document.getElementById('modalTitle').innerText = 'حدث جديد';
+            document.getElementById('saveBtn').innerText = 'حفظ';
             
-            // Reset inputs
+            // Reset
             document.getElementById('inpTitle').value = '';
-            document.getElementById('inpDate').value = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0,16);
+            // Default date: Now
+            const nowIso = new Date(Date.now() - new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
+            document.getElementById('inpDate').value = nowIso;
             document.getElementById('inpRecur').value = 'none';
             document.getElementById('inpNotes').value = '';
             document.getElementById('inpBg').value = '';
             
-            // Reset UI states
-            document.getElementById('autoImgToggle').classList.add('toggle-active');
-            document.getElementById('imgInputGroup').style.display = 'none';
-            document.querySelectorAll('.cat-option').forEach(o => o.classList.remove('selected'));
-            document.querySelector('.cat-option[data-val="personal"]').classList.add('selected');
-
             document.getElementById('addModal').style.display = 'flex';
             
-            // Setup Cat Select click handlers (do once)
-            if(!window.catSelectInit) {
-                 document.querySelectorAll('.cat-option').forEach(opt => {
-                    opt.onclick = () => {
-                        document.querySelectorAll('.cat-option').forEach(o => o.classList.remove('selected'));
-                        opt.classList.add('selected');
-                    }
-                });
-                window.catSelectInit = true;
-            }
+            // Cat Logic
+            document.querySelectorAll('.cat-option').forEach(opt => {
+                opt.onclick = () => {
+                    document.querySelectorAll('.cat-option').forEach(o => o.classList.remove('selected'));
+                    opt.classList.add('selected');
+                }
+            });
         }
-        
         function closeModal() { document.getElementById('addModal').style.display = 'none'; }
         
         function toggleImgInput() {
@@ -810,99 +634,108 @@
             document.getElementById('imgInputGroup').style.display = isActive ? 'none' : 'block';
         }
 
-        function showPresets() {
-            const presets = [
-                {t: '🌙 بداية رمضان 2025', d: '2025-02-28T18:00', c: 'personal', r: 'annual'},
-                {t: '🚀 تسليم المشروع النهائي', d: new Date(Date.now() + 86400000*7).toISOString().slice(0,16), c: 'work', r: 'none'},
-                {t: '🎂 عيد ميلاد', d: new Date(Date.now() + 86400000*30).toISOString().slice(0,16), c: 'personal', r: 'annual'},
-                {t: '🏝️ إجازة الصيف', d: '2025-06-15T09:00', c: 'holiday', r: 'none'}
-            ];
-            const p = presets[Math.floor(Math.random() * presets.length)];
-            
-            // Pre-fill modal with preset
-            openModal();
-            document.getElementById('inpTitle').value = p.t;
-            document.getElementById('inpDate').value = p.d;
-            document.getElementById('inpRecur').value = p.r;
-            document.querySelectorAll('.cat-option').forEach(o => o.classList.remove('selected'));
-            document.querySelector(`.cat-option[data-val="${p.c}"]`).classList.add('selected');
-            showToast('تم اختيار نموذج جاهز، يمكنك تعديله وحفظه');
-        }
-
         function toggleTheme() {
-            const body = document.body;
-            const newTheme = body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-            body.setAttribute('data-theme', newTheme);
-            localStorage.setItem('themeV6', newTheme);
+            const b = document.body;
+            const newTheme = b.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            b.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
         }
-        if(localStorage.getItem('themeV6') === 'light') document.body.setAttribute('data-theme', 'light');
-
-        function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(events));
-            const node = document.createElement('a');
-            node.href = dataStr;
-            node.download = `event_master_v6_backup_${new Date().toISOString().slice(0,10)}.json`;
-            node.click();
-            showToast('تم تحميل ملف النسخة الاحتياطية 📥');
+        if(localStorage.getItem('theme') === 'light') document.body.setAttribute('data-theme', 'light');
+        
+        function filterEvents(c) {
+            currentFilter = c;
+            document.querySelectorAll('.stat-chip').forEach(s => s.classList.remove('active'));
+            event.target.classList.add('active');
+            renderEvents();
         }
 
-        function importData() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            input.onchange = e => {
-                const file = e.target.files[0];
-                if(!file) return;
-                const reader = new FileReader();
-                reader.onload = r => {
-                    try {
-                        const imported = JSON.parse(r.target.result);
-                        if(Array.isArray(imported)) {
-                             // Merge strategy: keep existing, add new unique ones
-                            const existingIds = new Set(events.map(e => e.id));
-                            let addedCount = 0;
-                            imported.forEach(impEv => {
-                                if(!existingIds.has(impEv.id)) {
-                                    // Ensure V6 format structure
-                                    impEv.notes = impEv.notes || '';
-                                    impEv.recurrence = impEv.recurrence || 'none';
-                                    events.push(impEv);
-                                    addedCount++;
-                                }
-                            });
-                            save(); renderEvents(); 
-                            showToast(`تم استعادة ${addedCount} حدث بنجاح ✅`);
-                        } else throw new Error();
-                    } catch { showToast('خطأ: ملف غير صالح أو تالف', true); }
-                };
-                reader.readAsText(file);
+        function getCatLabel(c) { return {'personal':'شخصي','work':'عمل','holiday':'عطلة'}[c] || 'عام'; }
+
+        function showPresets() {
+            document.getElementById('inpTitle').value = 'رمضان 2025';
+            document.getElementById('inpDate').value = '2025-02-28T18:00';
+            document.getElementById('inpRecur').value = 'annual';
+            openModal();
+            showToast('تم اختيار نموذج جاهز');
+        }
+
+        function requestNotificationPermission() {
+            Notification.requestPermission().then(p => {
+                notifPermission = p;
+                if(p === 'granted') showToast('تم تفعيل التنبيهات 🔔');
+            });
+        }
+
+        function sendNotification(title) {
+            if(notifPermission === 'granted') {
+                new Notification('حان الموعد! 🚀', { body: `الحدث: ${title}` });
             }
-            input.click();
+        }
+
+        // Export/Import
+        function exportData() {
+            const a = document.createElement('a');
+            a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(events));
+            a.download = "Events_Backup.json"; a.click();
+        }
+        function importData() {
+            const i = document.createElement('input'); i.type='file';
+            i.onchange=e=>{
+                const r=new FileReader();
+                r.onload=ev=>{ try{events=JSON.parse(ev.target.result);save();renderEvents();showToast('تم الاستعادة');}catch{showToast('ملف خاطئ',true);} };
+                r.readAsText(e.target.files[0]);
+            }; i.click();
+        }
+
+        // Share & QR
+        function generateShareLink(id) {
+            const ev = events.find(e => e.id === id);
+            // Minimal data for short URL
+            const str = JSON.stringify({t:ev.title, d:ev.date, c:ev.cat});
+            const url = window.location.href.split('?')[0] + '?share=' + btoa(unescape(encodeURIComponent(str)));
+            
+            document.getElementById('shareInput').value = url;
+            document.getElementById('qrContainer').innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}">`;
+            document.getElementById('shareModal').style.display = 'flex';
         }
 
         function copyShareLink() {
-            const input = document.getElementById('shareInput');
-            input.select();
-            input.setSelectionRange(0, 99999); // For mobile
-            navigator.clipboard.writeText(input.value).then(() => {
-                 showToast('تم نسخ الرابط للحافظة 📋');
-            }).catch(() => showToast('فشل النسخ', true));
+            const i = document.getElementById('shareInput'); i.select(); i.setSelectionRange(0,99999);
+            document.execCommand('copy'); showToast('تم النسخ');
         }
 
-        function showToast(msg, isError = false) {
+        function checkUrlForSharedEvent() {
+            const p = new URLSearchParams(window.location.search);
+            if(p.get('share')) {
+                try {
+                    const d = JSON.parse(decodeURIComponent(escape(atob(p.get('share')))));
+                    if(confirm(`وصلك حدث جديد: ${d.t}\nهل تريد إضافته؟`)) {
+                        events.unshift({id:Date.now(), title:d.t, date:d.d, cat:d.c||'personal', created:Date.now(), pinned:false});
+                        save(); renderEvents(); window.history.replaceState({},document.title, window.location.pathname);
+                        showToast('تمت الإضافة 🎉');
+                    }
+                } catch(e){}
+            }
+        }
+
+        function speakTime(id) {
+            const ev = events.find(e => e.id === id);
+            const diff = new Date(ev.date) - new Date();
+            const d = Math.floor(diff/86400000);
+            const msg = new SpeechSynthesisUtterance(diff<0 ? `انتهى الحدث ${ev.title}` : `باقي ${d} يوم على ${ev.title}`);
+            msg.lang='ar-SA'; window.speechSynthesis.speak(msg);
+        }
+
+        function showToast(msg, err=false) {
             const t = document.getElementById('toast');
             document.getElementById('toastMsg').innerText = msg;
-            t.style.border = isError ? '1px solid var(--danger)' : '1px solid var(--success)';
-            t.querySelector('i').className = isError ? 'fas fa-exclamation-triangle fa-lg' : 'fas fa-check-circle fa-lg';
-            t.querySelector('i').style.color = isError ? 'var(--danger)' : 'var(--success)';
-            t.classList.add('show');
+            t.style.borderColor = err ? 'var(--danger)' : 'var(--success)';
+            t.classList.add('show'); 
             clearTimeout(window.toastTimeout);
-            window.toastTimeout = setTimeout(() => t.classList.remove('show'), 3000);
+            window.toastTimeout = setTimeout(()=>t.classList.remove('show'),3000);
         }
 
-        window.onclick = function(e) {
-            if(e.target.classList.contains('modal-overlay')) e.target.style.display = 'none';
-        }
+        window.onclick = function(e) { if(e.target.classList.contains('modal-overlay')) e.target.style.display='none'; }
     </script>
 </body>
 </html>
