@@ -3,506 +3,489 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Event Master V7 Mobile</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☄️</text></svg>">
+    <title>Event Master V7 Ultra</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪐</text></svg>">
     
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-dark: #0f172a;
-            --card-glass: rgba(30, 41, 59, 0.85);
-            --accent: #38bdf8;
+            --bg-dark: #020617;
+            --card-glass: rgba(30, 41, 59, 0.65);
+            --accent: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.5);
             --text: #f8fafc;
-            --danger: #ef4444;
+            --danger: #f43f5e;
             --success: #10b981;
             --warning: #f59e0b;
-            --blur: 12px;
+            --blur: 25px;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
         }
 
         [data-theme="light"] {
-            --bg-dark: #f8fafc;
-            --card-glass: rgba(255, 255, 255, 0.95);
-            --accent: #2563eb;
-            --text: #1e293b;
+            --bg-dark: #f1f5f9;
+            --card-glass: rgba(255, 255, 255, 0.9);
+            --accent: #4f46e5;
+            --text: #0f172a;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; -webkit-tap-highlight-color: transparent; }
-
+        
         body {
             background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.15), transparent 40%), 
+                radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.15), transparent 40%), 
                 radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.15), transparent 40%);
             color: var(--text);
             min-height: 100vh;
-            padding-bottom: 100px;
+            padding-bottom: 120px;
             overflow-x: hidden;
+            transition: background-color 0.5s;
         }
 
-        /* --- Navbar --- */
+        /* --- Navbar & Search --- */
         nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 1.2rem; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(15px);
-            position: sticky; top: 0; z-index: 50; border-bottom: 1px solid rgba(255,255,255,0.08);
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px;
+            padding: 1rem 2rem; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px);
+            position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .logo { 
-            font-size: 1.3rem; font-weight: 900; 
-            background: linear-gradient(135deg, var(--accent), #c084fc); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-            display: flex; align-items: center; gap: 8px;
+            font-size: 1.5rem; font-weight: 900; 
+            background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px;
         }
         
+        .search-container {
+            flex-grow: 1; max-width: 500px; position: relative; margin: 0 20px;
+        }
+        .search-input {
+            width: 100%; padding: 10px 45px 10px 15px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.2); color: var(--text); outline: none; transition: 0.3s;
+        }
+        .search-input:focus { background: rgba(0,0,0,0.4); border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
+        .search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
+
         .nav-actions { display: flex; gap: 8px; }
         .icon-btn { 
-            background: rgba(255,255,255,0.05); border: none; 
-            color: var(--text); font-size: 1.1rem; cursor: pointer; 
-            width: 38px; height: 38px; border-radius: 12px; 
-            display: flex; align-items: center; justify-content: center;
-            transition: 0.2s;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); 
+            color: var(--text); width: 38px; height: 38px; border-radius: 10px; 
+            display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;
         }
-        .icon-btn:active { transform: scale(0.95); background: var(--accent); color: white; }
+        .icon-btn:hover { background: var(--accent); color: white; transform: translateY(-2px); box-shadow: 0 5px 15px var(--accent-glow); }
 
-        /* --- Stats Bar (Scrollable) --- */
-        .stats-bar {
-            display: flex; gap: 10px; overflow-x: auto; padding: 1rem 1.2rem;
-            scrollbar-width: none; -ms-overflow-style: none;
+        /* --- Filters & View Switcher --- */
+        .controls-bar {
+            display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2rem 0.5rem;
+            flex-wrap: wrap; gap: 15px;
         }
-        .stats-bar::-webkit-scrollbar { display: none; }
-        
+        .stats-bar {
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;
+            scrollbar-width: none; mask-image: linear-gradient(to right, transparent, black 2%, black 98%, transparent);
+        }
         .stat-chip {
             background: var(--card-glass); padding: 8px 16px; border-radius: 50px;
             font-size: 0.85rem; white-space: nowrap; border: 1px solid rgba(255,255,255,0.05);
-            display: flex; align-items: center; gap: 8px; cursor: pointer; flex-shrink: 0;
-            transition: 0.3s;
+            display: flex; align-items: center; gap: 8px; cursor: pointer; transition: 0.3s;
         }
-        .stat-chip.active { border-color: var(--accent); background: rgba(56, 189, 248, 0.15); color: var(--accent); font-weight: 700; }
+        .stat-chip:hover, .stat-chip.active { background: var(--accent); color: white; border-color: transparent; }
 
-        /* --- Responsive Grid --- */
+        .view-switcher {
+            background: rgba(255,255,255,0.05); padding: 4px; border-radius: 12px; display: flex; gap: 4px;
+        }
+        .view-btn {
+            padding: 6px 12px; border-radius: 8px; border: none; background: transparent; color: var(--text); cursor: pointer; font-size: 0.9rem;
+        }
+        .view-btn.active { background: var(--card-glass); box-shadow: 0 2px 10px rgba(0,0,0,0.2); font-weight: bold; }
+
+        /* --- Grid & Card V7 --- */
+        .container-wrapper { padding: 0.5rem 2rem; max-width: 1600px; margin: 0 auto; }
+        
         .grid {
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px; padding: 0.5rem 1.2rem; max-width: 1400px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px; margin-top: 20px;
         }
 
-        @media (max-width: 600px) {
-            .grid { 
-                grid-template-columns: 1fr; /* Full width on mobile */
-                gap: 15px;
-            }
-            .modal { width: 95% !important; padding: 1.5rem !important; }
-        }
-
-        /* --- Card Design --- */
         .card {
             background: var(--card-glass); border-radius: 24px; overflow: hidden;
-            position: relative; border: 1px solid rgba(255,255,255,0.08);
-            box-shadow: 0 4px 15px -1px rgba(0, 0, 0, 0.1);
-            display: flex; flex-direction: column; transition: transform 0.3s;
+            position: relative; border: 1px solid rgba(255,255,255,0.05);
+            backdrop-filter: blur(var(--blur)); 
+            display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s;
         }
-        .card.pinned { border: 2px solid var(--accent); }
-        .card.urgent:not(.past-event) { border-color: var(--danger); animation: pulseUrgent 2s infinite; }
-        @keyframes pulseUrgent { 50% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.3); } }
+        /* Draggable style */
+        .sortable-ghost { opacity: 0.4; background: var(--accent); }
+        .sortable-drag { cursor: grabbing; opacity: 1; background: var(--card-glass); transform: scale(1.05); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+
+        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.3); border-color: rgba(255,255,255,0.15); }
+        .card.urgent { border: 1px solid var(--danger); box-shadow: 0 0 20px rgba(244, 63, 94, 0.2); }
 
         .card-bg {
-            height: 140px; width: 100%; background-size: cover; background-position: center;
+            height: 130px; width: 100%; background-size: cover; background-position: center;
             position: relative;
         }
         .card-bg::after {
             content: ''; position: absolute; inset: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.1), var(--card-glass));
+            background: linear-gradient(to bottom, rgba(2,6,23,0.1), var(--card-glass));
         }
 
-        .card-badges { position: absolute; top: 12px; left: 12px; right: 12px; display: flex; justify-content: space-between; z-index: 10; pointer-events: none; }
-        .badge {
-            background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 10px; 
-            font-size: 0.75rem; color: white; backdrop-filter: blur(4px); display: flex; align-items: center; gap: 5px;
-            pointer-events: auto; font-weight: 500;
-        }
-
-        .card-body { padding: 0 20px 20px; position: relative; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-body { padding: 0 20px 20px; flex-grow: 1; display: flex; flex-direction: column; }
         
-        .card-header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-top: -20px; margin-bottom: 10px; z-index: 2; position: relative; }
-        .card-title { font-size: 1.5rem; font-weight: 800; line-height: 1.2; text-shadow: 0 2px 5px rgba(0,0,0,0.2); flex: 1; word-wrap: break-word; }
+        .card-title-row { margin-top: -20px; margin-bottom: 10px; z-index: 2; position: relative; display: flex; justify-content: space-between; align-items: flex-start; }
+        .card-title { font-size: 1.35rem; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.5); line-height: 1.2; }
         
-        .pin-btn { 
-            background: rgba(255,255,255,0.15); border: none; color: var(--text); 
-            width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px);
+        .timer-strip { 
+            display: flex; justify-content: space-around; background: rgba(0,0,0,0.2); 
+            padding: 10px; border-radius: 16px; margin: 10px 0; border: 1px solid rgba(255,255,255,0.05);
         }
-        .pin-btn.active { color: var(--warning); background: rgba(245, 158, 11, 0.2); }
-        
-        .notes-indicator { font-size: 0.8rem; color: var(--accent); margin-top: 5px; display: flex; align-items: center; gap: 5px; opacity: 0.8; }
+        .ts-box { text-align: center; }
+        .ts-num { font-size: 1.2rem; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+        .ts-lbl { font-size: 0.6rem; opacity: 0.6; }
 
-        /* Timer */
-        .timer-grid { 
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; text-align: center; 
-            background: rgba(0,0,0,0.2); padding: 12px; border-radius: 18px;
-            margin-top: 15px; border: 1px solid rgba(255,255,255,0.05);
-        }
-        .timer-box { display: flex; flex-direction: column; align-items: center; }
-        .timer-num { font-size: 1.6rem; font-weight: 800; color: var(--accent); line-height: 1; }
-        .timer-label { font-size: 0.65rem; opacity: 0.6; margin-top: 4px; }
+        .progress-mini { height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin: 10px 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--gradient-1); width: 0%; transition: width 1s; }
 
-        /* Progress Bar */
-        .progress-container { margin-top: 15px; margin-bottom: 10px; }
-        .progress-track { height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 1s linear; }
+        /* Checklist Preview */
+        .checklist-preview { font-size: 0.8rem; margin: 10px 0; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 10px; }
+        .cp-item { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; opacity: 0.8; }
+        .cp-item.done { text-decoration: line-through; opacity: 0.4; }
 
         .card-footer {
-            margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.08);
-            display: flex; gap: 8px; justify-content: flex-end;
+            margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex; justify-content: space-between; align-items: center;
         }
 
-        .past-event { border-color: var(--success); }
-        .past-event .timer-num { color: var(--success); }
-        .past-event .progress-fill { background: var(--success); }
-
-        /* Floating Button */
-        .fab {
-            position: fixed; bottom: 30px; left: 30px; width: 60px; height: 60px;
-            background: var(--accent); border-radius: 20px; color: white; display: flex;
-            align-items: center; justify-content: center; font-size: 1.5rem;
-            box-shadow: 0 15px 30px -5px rgba(56, 189, 248, 0.5); 
-            cursor: pointer; z-index: 90; transition: transform 0.2s;
+        /* --- Calendar View --- */
+        #calendarView { display: none; background: var(--card-glass); border-radius: 24px; padding: 20px; margin-top: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; text-align: center; }
+        .cal-day-name { font-weight: bold; padding: 10px; color: var(--accent); }
+        .cal-day { 
+            min-height: 100px; background: rgba(255,255,255,0.03); border-radius: 12px; padding: 8px; 
+            display: flex; flex-direction: column; gap: 5px; border: 1px solid transparent; cursor: pointer;
         }
-        .fab:hover { transform: scale(1.05); }
+        .cal-day:hover { background: rgba(255,255,255,0.08); }
+        .cal-day.today { border-color: var(--accent); background: rgba(99, 102, 241, 0.1); }
+        .cal-num { font-weight: bold; font-size: 0.9rem; align-self: flex-end; margin-bottom: 5px; opacity: 0.7; }
+        .cal-dot { width: 100%; height: 6px; border-radius: 3px; background: var(--accent); font-size: 0; }
+        .cal-event-tiny { font-size: 0.7rem; background: var(--accent); color: white; padding: 2px 6px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* --- Modals --- */
+        /* --- Modals & Checklists --- */
         .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
-            z-index: 100; display: none; align-items: center; justify-content: center;
-            padding: 1rem;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+            z-index: 200; display: none; align-items: center; justify-content: center; padding: 15px;
         }
         .modal {
-            background: #1e293b; width: 100%; max-width: 500px; padding: 2rem;
-            border-radius: 28px; border: 1px solid rgba(255,255,255,0.1);
-            max-height: 90vh; overflow-y: auto;
-            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: #0f172a; width: 100%; max-width: 600px; padding: 2rem;
+            border-radius: 30px; border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            max-height: 90vh; overflow-y: auto; position: relative;
         }
-        @keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        .form-group { margin-bottom: 1.2rem; }
-        .form-label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 700; opacity: 0.9; }
-        .form-input, .form-textarea, .form-select {
-            width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 14px; color: var(--text); outline: none; font-size: 16px; /* Prevents zoom on iOS */
-        }
-        .form-textarea { resize: none; height: 80px; }
-        .form-select { appearance: none; }
-
-        .category-select { display: flex; gap: 8px; flex-wrap: wrap; }
-        .cat-option {
-            padding: 10px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
-            cursor: pointer; font-size: 0.85rem; background: rgba(255,255,255,0.05); flex: 1; text-align: center;
-        }
-        .cat-option.selected { background: var(--accent); color: white; border-color: transparent; font-weight: bold; }
-
-        .toggle-switch {
-            display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; cursor: pointer;
-            background: rgba(255,255,255,0.05); padding: 12px; border-radius: 14px;
-        }
-        .toggle-track {
-            width: 44px; height: 24px; background: rgba(0,0,0,0.3); border-radius: 20px;
-            position: relative; transition: 0.3s;
-        }
-        .toggle-thumb {
-            width: 18px; height: 18px; background: white; border-radius: 50%;
-            position: absolute; top: 3px; left: 3px; transition: 0.3s;
-        }
-        .toggle-active .toggle-track { background: var(--success); }
-        .toggle-active .toggle-thumb { left: 23px; }
-
-        /* QR & Toast */
-        #qrContainer img { border-radius: 12px; border: 4px solid white; margin: 15px auto; display: block; max-width: 100%; }
         
+        .checklist-container { margin-top: 20px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 18px; }
+        .cl-input-group { display: flex; gap: 10px; margin-bottom: 10px; }
+        .cl-list { max-height: 150px; overflow-y: auto; }
+        .cl-item { 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 8px 12px; background: rgba(255,255,255,0.05); margin-bottom: 6px; border-radius: 10px;
+        }
+        .cl-item.done span { text-decoration: line-through; opacity: 0.5; }
+        .cl-check { cursor: pointer; color: var(--success); }
+        .cl-del { cursor: pointer; color: var(--danger); font-size: 0.9rem; }
+
+        /* Inputs */
+        .form-input, .form-textarea, .form-select {
+            width: 100%; padding: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px; color: var(--text); outline: none; margin-bottom: 15px;
+        }
+        .form-input:focus { border-color: var(--accent); background: rgba(0,0,0,0.2); }
+        .input-with-mic { position: relative; }
+        .mic-btn { position: absolute; left: 10px; top: 12px; cursor: pointer; color: var(--accent); opacity: 0.7; }
+        .mic-btn.listening { color: var(--danger); animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed; bottom: 30px; left: 30px; width: 60px; height: 60px;
+            background: var(--gradient-1); border-radius: 20px; color: white; display: flex;
+            align-items: center; justify-content: center; font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4); cursor: pointer; z-index: 90;
+            transition: 0.3s;
+        }
+        .fab:hover { transform: scale(1.1) rotate(90deg); }
+
+        /* Toast */
         .toast {
-            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%) translateY(100px);
-            background: #1e293b; color: white; padding: 12px 24px; border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 200; font-size: 0.9rem; font-weight: 500;
-            display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.1);
-            width: 90%; max-width: 350px; justify-content: center;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: rgba(15, 23, 42, 0.95); color: white; padding: 14px 25px; border-radius: 50px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5); z-index: 300; display: flex; align-items: center; gap: 10px;
+            border: 1px solid rgba(255,255,255,0.1); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
         }
-        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        /* Dropdown */
-        .dropdown { position: relative; }
-        .dropdown-content {
-            display: none; position: absolute; left: 0; bottom: 100%; margin-bottom: 5px;
-            background: var(--bg-dark); min-width: 150px; border-radius: 14px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);
-            z-index: 20; padding: 5px;
+        @media (max-width: 600px) {
+            .grid { grid-template-columns: 1fr; }
+            .cal-day { min-height: 60px; font-size: 0.8rem; }
+            .search-container { display: none; } /* Hide search on very small screens or move it */
         }
-        .dropdown:focus-within .dropdown-content { display: block; }
-        .dropdown-btn { 
-            width: 100%; text-align: right; padding: 12px; border-radius: 8px;
-            background: transparent; border: none; color: var(--text); cursor: pointer;
-            display: flex; align-items: center; gap: 8px; font-size: 0.9rem;
-        }
-        .dropdown-btn:hover { background: rgba(255,255,255,0.1); }
-
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo"><i class="fas fa-meteor"></i> EventMaster</div>
+        <div class="logo"><i class="fas fa-meteor"></i> EventMaster <span style="font-size:0.5em; background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:6px; margin-right:5px;">V7 Ultra</span></div>
+        
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="بحث عن حدث، ملاحظة..." onkeyup="filterSearch()">
+        </div>
+
         <div class="nav-actions">
-            <button class="icon-btn" onclick="requestNotificationPermission()" title="تنبيهات"><i class="fas fa-bell"></i></button>
-            <button class="icon-btn" onclick="toggleTheme()" title="ثيم"><i class="fas fa-adjust"></i></button>
-            <button class="icon-btn" onclick="exportData()" title="نسخ احتياطي"><i class="fas fa-file-export"></i></button>
-            <button class="icon-btn" onclick="importData()" title="استعادة"><i class="fas fa-file-import"></i></button>
+            <button class="icon-btn" onclick="toggleView('grid')" id="btnViewGrid" title="عرض الشبكة"><i class="fas fa-th-large"></i></button>
+            <button class="icon-btn" onclick="toggleView('calendar')" id="btnViewCal" title="عرض التقويم"><i class="fas fa-calendar-alt"></i></button>
+            <button class="icon-btn" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
+            <button class="icon-btn" onclick="exportData()"><i class="fas fa-save"></i></button>
         </div>
     </nav>
 
-    <div class="stats-bar">
-        <div class="stat-chip active" onclick="filterEvents('all')">الكل</div>
-        <div class="stat-chip" onclick="filterEvents('personal')">شخصي</div>
-        <div class="stat-chip" onclick="filterEvents('work')">عمل</div>
-        <div class="stat-chip" onclick="filterEvents('holiday')">عطلات</div>
-        <div class="stat-chip" style="margin-right: auto; color: var(--accent); border-color: var(--accent);" onclick="showPresets()">
-            <i class="fas fa-magic"></i>
+    <div class="controls-bar">
+        <div class="stats-bar">
+            <div class="stat-chip active" onclick="filterCategory('all', this)"><i class="fas fa-layer-group"></i> الكل</div>
+            <div class="stat-chip" onclick="filterCategory('personal', this)"><i class="fas fa-user-astronaut"></i> شخصي</div>
+            <div class="stat-chip" onclick="filterCategory('work', this)"><i class="fas fa-briefcase"></i> عمل</div>
+            <div class="stat-chip" onclick="filterCategory('holiday', this)"><i class="fas fa-umbrella-beach"></i> عطلات</div>
+        </div>
+        <div style="font-size: 0.9rem; opacity: 0.7;">
+            <i class="fas fa-clock"></i> <span id="clockDisplay">00:00</span>
         </div>
     </div>
 
-    <div class="grid" id="eventsGrid">
+    <div class="container-wrapper">
+        <div class="grid" id="eventsGrid"></div>
+        
+        <div id="calendarView">
+            <div class="cal-header">
+                <button class="icon-btn" onclick="changeMonth(-1)"><i class="fas fa-chevron-right"></i></button>
+                <h3 id="calMonthTitle" style="font-size: 1.5rem; width: 200px; text-align: center;"></h3>
+                <button class="icon-btn" onclick="changeMonth(1)"><i class="fas fa-chevron-left"></i></button>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
         </div>
+    </div>
 
     <div class="fab" onclick="openModal()"><i class="fas fa-plus"></i></div>
 
     <div class="modal-overlay" id="addModal">
         <div class="modal">
-            <h2 id="modalTitle" style="margin-bottom: 20px; font-size: 1.5rem;">حدث جديد</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h2 id="modalTitle"><i class="fas fa-sparkles" style="color: var(--accent)"></i> حدث جديد</h2>
+                <button class="icon-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            </div>
             
-            <div class="form-group">
-                <label class="form-label">عنوان الحدث</label>
-                <input type="text" class="form-input" id="inpTitle" placeholder="أدخل العنوان...">
+            <div class="input-with-mic">
+                <input type="text" class="form-input" id="inpTitle" placeholder="عنوان الحدث (مثال: اجتماع، عيد ميلاد)">
+                <i class="fas fa-microphone mic-btn" onclick="startVoiceInput('inpTitle')" title="إملاء صوتي"></i>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">التاريخ والوقت</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <input type="datetime-local" class="form-input" id="inpDate">
+                <select class="form-select" id="inpRecur">
+                    <option value="none">بدون تكرار</option>
+                    <option value="annual">سنوي</option>
+                    <option value="monthly">شهري</option>
+                </select>
             </div>
 
-            <div class="form-group" style="display: flex; gap: 10px;">
-                 <div style="flex:1">
-                    <label class="form-label">التكرار</label>
-                    <select class="form-select form-input" id="inpRecur">
-                        <option value="none">مرة واحدة</option>
-                        <option value="annual">سنوي</option>
-                        <option value="monthly">شهري</option>
-                    </select>
+            <div class="form-select" style="display: flex; gap: 10px; padding: 5px; background: transparent; border: none;">
+                <button type="button" class="stat-chip active" id="catBtn-personal" onclick="selectCat('personal')">شخصي</button>
+                <button type="button" class="stat-chip" id="catBtn-work" onclick="selectCat('work')">عمل</button>
+                <button type="button" class="stat-chip" id="catBtn-holiday" onclick="selectCat('holiday')">عطلة</button>
+            </div>
+            <input type="hidden" id="inpCat" value="personal">
+
+            <div class="checklist-container">
+                <div style="font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-tasks"></i> قائمة المهام (Checklist)
                 </div>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">التصنيف</label>
-                <div class="category-select" id="catSelect">
-                    <div class="cat-option selected" data-val="personal">شخصي</div>
-                    <div class="cat-option" data-val="work">عمل</div>
-                    <div class="cat-option" data-val="holiday">عطلة</div>
+                <div class="cl-input-group">
+                    <input type="text" class="form-input" id="clInput" placeholder="أضف مهمة..." style="margin: 0;">
+                    <button class="icon-btn" onclick="addChecklistItem()"><i class="fas fa-plus"></i></button>
                 </div>
+                <div class="cl-list" id="clList">
+                    </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">ملاحظات (اختياري)</label>
-                <textarea class="form-textarea" id="inpNotes" placeholder="تفاصيل إضافية..."></textarea>
-            </div>
+            <textarea class="form-textarea" id="inpNotes" placeholder="ملاحظات إضافية..." style="margin-top: 15px;"></textarea>
 
-            <div class="toggle-switch toggle-active" id="autoImgToggle" onclick="this.classList.toggle('toggle-active'); toggleImgInput()">
-                <span style="font-size: 0.9rem;">صورة تلقائية (AI)</span>
-                <div class="toggle-track"><div class="toggle-thumb"></div></div>
-            </div>
-
-            <div class="form-group" id="imgInputGroup" style="display: none;">
-                <input type="text" class="form-input" id="inpBg" placeholder="رابط الصورة">
-            </div>
-
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button class="icon-btn" onclick="closeModal()" style="width: 50px; background: rgba(255,255,255,0.1);"><i class="fas fa-times"></i></button>
-                <button id="saveBtn" class="stat-chip active" onclick="saveEvent()" style="flex-grow: 1; justify-content: center; height: 45px; font-size: 1rem;">حفظ</button>
-            </div>
+            <button onclick="saveEvent()" style="width: 100%; padding: 15px; background: var(--gradient-1); color: white; border: none; border-radius: 16px; font-size: 1.1rem; font-weight: bold; cursor: pointer; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);">حفظ</button>
         </div>
     </div>
 
-    <div class="modal-overlay" id="shareModal">
-        <div class="modal" style="text-align: center;">
-            <i class="fas fa-share-alt" style="font-size: 2rem; color: var(--accent); margin-bottom: 15px;"></i>
-            <h3 style="margin-bottom: 10px;">مشاركة الحدث</h3>
-            <div id="qrContainer"></div>
-            <p style="margin: 10px 0; opacity: 0.7; font-size: 0.8rem;">امسح الكود أو انسخ الرابط</p>
-            <input type="text" class="form-input" id="shareInput" readonly onclick="this.select()" style="margin-bottom: 15px; text-align: center; direction: ltr;">
-            <button class="stat-chip active" onclick="copyShareLink()" style="width: 100%; justify-content: center;">نسخ الرابط</button>
-            <button class="icon-btn" onclick="document.getElementById('shareModal').style.display='none'" style="width: 100%; margin-top: 10px; border-radius: 12px; justify-content: center;">إغلاق</button>
-        </div>
-    </div>
-
-    <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">تم</span></div>
+    <div class="toast" id="toast"><i class="fas fa-check"></i> <span id="toastMsg">تم الحفظ</span></div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
     <script>
-        // --- Data & Initialization ---
+        // --- State Management ---
         let events = JSON.parse(localStorage.getItem('masterEventsV7')) || [];
         
-        // Migrate old data if needed
+        // Migration helper
         if(localStorage.getItem('masterEventsV6')) {
-            try {
-                const old = JSON.parse(localStorage.getItem('masterEventsV6'));
-                events = old.concat(events);
-                localStorage.removeItem('masterEventsV6');
-                save();
-            } catch(e){}
+            const old = JSON.parse(localStorage.getItem('masterEventsV6'));
+            events = old.map(e => ({...e, checklist: []})).concat(events);
+            localStorage.removeItem('masterEventsV6');
         }
 
         let currentFilter = 'all';
+        let currentView = 'grid'; // grid | calendar
         let editingId = null;
-        let notifPermission = Notification.permission;
+        let tempChecklist = [];
+        let calDate = new Date(); // For calendar navigation
 
-        // Start Up
-        checkUrlForSharedEvent();
-        renderEvents();
-        setInterval(tick, 1000);
+        // --- Init ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderEvents();
+            renderCalendar();
+            setInterval(tick, 1000);
+            updateClock();
+            
+            // Init Drag & Drop
+            new Sortable(document.getElementById('eventsGrid'), {
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                dragClass: 'sortable-drag',
+                delay: 200, // delay for touch devices to allow scroll
+                delayOnTouchOnly: true,
+                onEnd: function (evt) {
+                    // Reorder array based on DOM
+                    const items = evt.to.children;
+                    let newOrder = [];
+                    for(let item of items) {
+                        const id = parseInt(item.getAttribute('data-id'));
+                        const ev = events.find(e => e.id === id);
+                        if(ev) newOrder.push(ev);
+                    }
+                    // Keep filtered out events
+                    const hiddenEvents = events.filter(e => !newOrder.map(x=>x.id).includes(e.id));
+                    events = [...newOrder, ...hiddenEvents];
+                    save();
+                }
+            });
+        });
 
         // --- Core Logic ---
 
         function saveEvent() {
             const title = document.getElementById('inpTitle').value.trim();
-            const dateVal = document.getElementById('inpDate').value;
-            const recurrence = document.getElementById('inpRecur').value;
-            const notes = document.getElementById('inpNotes').value.trim();
-            const useAutoImg = document.getElementById('autoImgToggle').classList.contains('toggle-active');
-            let bg = document.getElementById('inpBg').value.trim();
-            const cat = document.querySelector('.cat-option.selected').dataset.val;
+            const date = document.getElementById('inpDate').value;
+            if(!title || !date) return showToast('يرجى ملء البيانات الأساسية', true);
 
-            if(!title || !dateVal) return showToast('أدخل العنوان والتاريخ', true);
-
-            // AI Image Logic
-            if(useAutoImg || !bg) {
-                bg = `https://source.unsplash.com/600x400/?${encodeURIComponent(title)},${cat}`;
-            }
+            const eventData = {
+                id: editingId || Date.now(),
+                title,
+                date,
+                cat: document.getElementById('inpCat').value,
+                recurrence: document.getElementById('inpRecur').value,
+                notes: document.getElementById('inpNotes').value,
+                checklist: tempChecklist,
+                bg: `https://source.unsplash.com/600x400/?${encodeURIComponent(title)},${document.getElementById('inpCat').value},abstract`,
+                created: editingId ? events.find(e=>e.id === editingId).created : Date.now(),
+                pinned: false
+            };
 
             if(editingId) {
-                // Update
                 const idx = events.findIndex(e => e.id === editingId);
-                if(idx > -1) {
-                    events[idx] = { 
-                        ...events[idx], title, date: dateVal, bg, cat, notes, recurrence,
-                        notified: (events[idx].date === dateVal) ? events[idx].notified : false 
-                    };
-                }
+                events[idx] = { ...events[idx], ...eventData }; // Merge to keep other props
             } else {
-                // Create New
-                events.unshift({
-                    id: Date.now(),
-                    title, date: dateVal, bg, cat, notes, recurrence,
-                    created: Date.now(),
-                    pinned: false,
-                    notified: false
-                });
-                
-                // Confetti if event is soon
-                if(new Date(dateVal) - new Date() < 86400000 && new Date(dateVal) > new Date()) {
-                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-                }
+                events.unshift(eventData);
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
             }
 
             save();
-            renderEvents();
             closeModal();
-            showToast('تم الحفظ بنجاح');
+            renderEvents();
+            renderCalendar();
+            showToast('تم الحفظ بنجاح 🚀');
         }
 
         function deleteEvent(id) {
-            if(confirm('هل أنت متأكد من الحذف؟')) {
+            if(confirm('حذف هذا الحدث؟')) {
                 events = events.filter(e => e.id !== id);
                 save();
                 renderEvents();
+                renderCalendar();
             }
-        }
-
-        function togglePin(id) {
-            const ev = events.find(e => e.id === id);
-            if(ev) {
-                ev.pinned = !ev.pinned;
-                save();
-                renderEvents();
-            }
-        }
-
-        function save() {
-            localStorage.setItem('masterEventsV7', JSON.stringify(events));
         }
 
         // --- Rendering ---
 
         function renderEvents() {
             const grid = document.getElementById('eventsGrid');
+            const term = document.getElementById('searchInput').value.toLowerCase();
+            
             grid.innerHTML = '';
             
-            let filtered = currentFilter === 'all' ? events : events.filter(e => e.cat === currentFilter);
-            
-            // Sort: Pinned first, then by date
-            filtered.sort((a,b) => {
-                if(a.pinned === b.pinned) return new Date(a.date) - new Date(b.date);
-                return a.pinned ? -1 : 1;
+            let filtered = events.filter(e => {
+                const matchCat = currentFilter === 'all' || e.cat === currentFilter;
+                const matchSearch = e.title.toLowerCase().includes(term) || (e.notes && e.notes.toLowerCase().includes(term));
+                return matchCat && matchSearch;
             });
 
+            // Sort logic: Pinned first, then date. If dragged, we rely on array order mostly but pinning overrides.
+            // Simplified: Rely on array order for V7 to support drag/drop fully, just float pinned to top visually or in array logic if needed.
+            // For now, let's respect array order but filter.
+
             if(filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; opacity: 0.5; margin-top: 60px;">
-                    <i class="fas fa-meteor" style="font-size: 3.5rem; margin-bottom: 15px;"></i><br>لا توجد أحداث حالياً
-                </div>`;
+                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px; opacity:0.5;">لا توجد أحداث مطابقة 🌌</div>';
                 return;
             }
 
             filtered.forEach(ev => {
                 const now = new Date();
-                const targetDate = new Date(ev.date);
-                const isPast = targetDate < now;
-                const isUrgent = !isPast && (targetDate - now) < (24 * 3600 * 1000); // Less than 24h
-                
-                const bgImage = ev.bg || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500';
-                const recurIcon = ev.recurrence === 'annual' ? '<i class="fas fa-sync"></i> سنوي' : (ev.recurrence === 'monthly' ? '<i class="fas fa-redo"></i> شهري' : '');
+                const target = new Date(ev.date);
+                const isPast = target < now;
+                const totalCheck = ev.checklist ? ev.checklist.length : 0;
+                const doneCheck = ev.checklist ? ev.checklist.filter(i=>i.done).length : 0;
+                const progress = totalCheck > 0 ? (doneCheck/totalCheck)*100 : 0;
 
                 const card = document.createElement('div');
-                card.className = `card ${isPast ? 'past-event' : ''} ${ev.pinned ? 'pinned' : ''} ${isUrgent ? 'urgent' : ''}`;
+                card.className = `card ${isPast ? 'past' : ''}`;
+                card.setAttribute('data-id', ev.id);
+                
+                // Fallback img
+                const bg = ev.bg || 'https://source.unsplash.com/random/600x400?galaxy';
+
                 card.innerHTML = `
-                    <div class="card-bg" style="background-image: url('${bgImage}')">
-                        <div class="card-badges">
-                            <div style="display:flex; gap:5px;">
-                                <span class="badge"><i class="fas fa-circle" style="font-size:0.6em; color:var(--accent)"></i> ${getCatLabel(ev.cat)}</span>
-                                ${recurIcon ? `<span class="badge" style="background:var(--accent)">${recurIcon}</span>` : ''}
-                            </div>
-                            ${ev.pinned ? '<span class="badge" style="background:var(--warning); color:black"><i class="fas fa-thumbtack"></i></span>' : ''}
+                    <div class="card-bg" style="background-image: url('${bg}')">
+                        <div style="position: absolute; top:10px; left:10px; display:flex; gap:5px;">
+                            <span style="background:rgba(0,0,0,0.6); color:white; padding:4px 10px; border-radius:20px; font-size:0.7rem;">${getCatName(ev.cat)}</span>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="card-header-row">
+                        <div class="card-title-row">
                             <h3 class="card-title">${ev.title}</h3>
-                            <button class="pin-btn ${ev.pinned ? 'active' : ''}" onclick="togglePin(${ev.id})"><i class="fas fa-thumbtack"></i></button>
+                            <button onclick="editEvent(${ev.id})" class="icon-btn" style="width:30px; height:30px;"><i class="fas fa-pen"></i></button>
                         </div>
+
+                        <div class="timer-strip" id="timer-${ev.id}">
+                            <div class="ts-box"><div class="ts-num d">0</div><div class="ts-lbl">يوم</div></div>
+                            <div class="ts-box"><div class="ts-num h">0</div><div class="ts-lbl">ساعة</div></div>
+                            <div class="ts-box"><div class="ts-num m">0</div><div class="ts-lbl">دقيقة</div></div>
+                        </div>
+
+                        ${totalCheck > 0 ? `
+                        <div style="font-size:0.8rem; display:flex; justify-content:space-between; opacity:0.8; margin-bottom:5px;">
+                            <span><i class="fas fa-check-square"></i> المهام ${doneCheck}/${totalCheck}</span>
+                            <span>${Math.round(progress)}%</span>
+                        </div>
+                        <div class="progress-mini"><div class="progress-fill" style="width:${progress}%"></div></div>
+                        ` : ''}
                         
-                        ${ev.notes ? `<div class="notes-indicator"><i class="fas fa-align-right"></i> ملاحظات</div>` : ''}
-
-                        <div class="timer-grid" id="timer-${ev.id}">
-                            <div class="timer-box"><span class="timer-num d">0</span><span class="timer-label">يوم</span></div>
-                            <div class="timer-box"><span class="timer-num h">0</span><span class="timer-label">س</span></div>
-                            <div class="timer-box"><span class="timer-num m">0</span><span class="timer-label">د</span></div>
-                            <div class="timer-box"><span class="timer-num s">0</span><span class="timer-label">ث</span></div>
-                        </div>
-
-                        <div class="progress-container"><div class="progress-track"><div class="progress-fill" id="prog-fill-${ev.id}"></div></div></div>
-
                         <div class="card-footer">
-                            <button class="icon-btn" onclick="speakTime(${ev.id})"><i class="fas fa-volume-up"></i></button>
-                            <button class="icon-btn" onclick="editEvent(${ev.id})"><i class="fas fa-edit"></i></button>
-                            <div class="dropdown">
-                                <button class="icon-btn"><i class="fas fa-ellipsis-v"></i></button>
-                                <div class="dropdown-content">
-                                    <button class="dropdown-btn" onclick="generateShareLink(${ev.id})"><i class="fas fa-share-alt"></i> مشاركة</button>
-                                    <button class="dropdown-btn" onclick="deleteEvent(${ev.id})" style="color: var(--danger)"><i class="fas fa-trash-alt"></i> حذف</button>
-                                </div>
+                            <span style="font-size:0.8rem; opacity:0.6;">${new Date(ev.date).toLocaleDateString('ar-EG')}</span>
+                            <div style="display:flex; gap:5px;">
+                                <button onclick="deleteEvent(${ev.id})" class="icon-btn" style="color:var(--danger)"><i class="fas fa-trash"></i></button>
                             </div>
                         </div>
                     </div>
@@ -512,230 +495,243 @@
             tick();
         }
 
-        // --- Ticking & Logic ---
+        // --- Calendar Logic ---
+        function renderCalendar() {
+            const grid = document.getElementById('calGrid');
+            grid.innerHTML = '';
+            
+            const year = calDate.getFullYear();
+            const month = calDate.getMonth();
+            
+            document.getElementById('calMonthTitle').innerText = calDate.toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' });
 
+            const firstDay = new Date(year, month, 1).getDay(); // 0 = Sun
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            // Adjust for Saturday start if needed (standard is Sun=0)
+            // Let's assume standard layout Sun-Sat. 
+            // Header names
+            const days = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+            days.forEach(d => grid.innerHTML += `<div class="cal-day-name">${d}</div>`);
+
+            // Empty slots
+            for(let i=0; i<firstDay; i++) {
+                grid.innerHTML += `<div></div>`;
+            }
+
+            // Days
+            for(let i=1; i<=daysInMonth; i++) {
+                const dayDate = new Date(year, month, i);
+                const dayStr = dayDate.toISOString().slice(0,10); // YYYY-MM-DD
+                const isToday = new Date().toDateString() === dayDate.toDateString();
+                
+                // Find events for this day
+                const dayEvents = events.filter(e => e.date.startsWith(dayStr));
+                
+                let eventsHtml = dayEvents.map(e => `
+                    <div class="cal-event-tiny" style="background:${getCatColor(e.cat)}">${e.title}</div>
+                `).join('');
+
+                const el = document.createElement('div');
+                el.className = `cal-day ${isToday ? 'today' : ''}`;
+                el.innerHTML = `<span class="cal-num">${i}</span>${eventsHtml}`;
+                el.onclick = () => {
+                   // Filter grid by this day? Or open add modal for this day?
+                   // Let's filter view to this day or open Add
+                   document.getElementById('inpDate').value = `${dayStr}T09:00`;
+                   openModal();
+                };
+                grid.appendChild(el);
+            }
+        }
+
+        function changeMonth(dir) {
+            calDate.setMonth(calDate.getMonth() + dir);
+            renderCalendar();
+        }
+
+        // --- Checklist Logic ---
+        function renderChecklist() {
+            const list = document.getElementById('clList');
+            list.innerHTML = '';
+            tempChecklist.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = `cl-item ${item.done ? 'done' : ''}`;
+                div.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <i class="fas ${item.done ? 'fa-check-circle' : 'fa-circle'} cl-check" onclick="toggleCheckItem(${index})"></i>
+                        <span>${item.text}</span>
+                    </div>
+                    <i class="fas fa-times cl-del" onclick="removeCheckItem(${index})"></i>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function addChecklistItem() {
+            const input = document.getElementById('clInput');
+            const text = input.value.trim();
+            if(text) {
+                tempChecklist.push({ text, done: false });
+                input.value = '';
+                renderChecklist();
+            }
+        }
+
+        function toggleCheckItem(idx) {
+            tempChecklist[idx].done = !tempChecklist[idx].done;
+            renderChecklist();
+        }
+
+        function removeCheckItem(idx) {
+            tempChecklist.splice(idx, 1);
+            renderChecklist();
+        }
+
+        // --- Timer Tick ---
         function tick() {
             const now = new Date().getTime();
-            let needsRerender = false;
-
             events.forEach(ev => {
                 const el = document.getElementById(`timer-${ev.id}`);
                 if(!el) return;
                 
-                let target = new Date(ev.date).getTime();
+                const target = new Date(ev.date).getTime();
                 let diff = target - now;
-
-                // 1. Recurrence Logic
-                if (diff <= 0 && ev.recurrence && ev.recurrence !== 'none' && !ev.isRecycled) {
-                    let d = new Date(ev.date);
-                    if(ev.recurrence === 'annual') d.setFullYear(d.getFullYear() + 1);
-                    if(ev.recurrence === 'monthly') d.setMonth(d.getMonth() + 1);
-                    
-                    ev.date = d.toISOString().slice(0,16);
-                    ev.isRecycled = true; // Prevent loop
-                    ev.notified = false;
-                    save();
-                    needsRerender = true;
-                    showToast(`تم تكرار الحدث: ${ev.title} 🔄`);
-                    return;
-                }
-                // Reset recycle flag
-                if(diff > 0 && ev.isRecycled) ev.isRecycled = false;
-
-                // 2. Notification Logic
-                if (diff <= 0 && diff > -5000 && !ev.notified && (!ev.recurrence || ev.recurrence === 'none')) {
-                    sendNotification(ev.title);
-                    ev.notified = true;
-                    save();
+                
+                if(diff < 0) {
+                    el.style.opacity = '0.5'; // Visual cue for past
+                    diff = 0; 
                 }
 
-                // 3. Timer UI
-                if (diff < 0) diff = Math.abs(diff);
-                const d = Math.floor(diff / (86400000));
-                const h = Math.floor((diff % 86400000) / 3600000);
-                const m = Math.floor((diff % 3600000) / 60000);
-                const s = Math.floor((diff % 60000) / 1000);
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
                 el.querySelector('.d').innerText = d;
-                el.querySelector('.h').innerText = h < 10 ? '0'+h : h;
-                el.querySelector('.m').innerText = m < 10 ? '0'+m : m;
-                el.querySelector('.s').innerText = s < 10 ? '0'+s : s;
-
-                // 4. Progress Bar
-                const start = ev.created || (target - 86400000);
-                let pct = ((now - start) / (target - start)) * 100;
-                if(pct > 100) pct = 100; if(pct < 0) pct = 0;
-                
-                const fill = document.getElementById(`prog-fill-${ev.id}`);
-                if(fill) fill.style.width = `${pct}%`;
+                el.querySelector('.h').innerText = h;
+                el.querySelector('.m').innerText = m;
             });
-
-            if(needsRerender) renderEvents();
+            updateClock();
         }
 
-        // --- Helpers ---
-
-        function editEvent(id) {
-            const ev = events.find(e => e.id === id);
-            editingId = id;
-            
-            document.getElementById('modalTitle').innerText = 'تعديل الحدث';
-            document.getElementById('saveBtn').innerText = 'حفظ التعديلات';
-            document.getElementById('inpTitle').value = ev.title;
-            document.getElementById('inpDate').value = ev.date;
-            document.getElementById('inpRecur').value = ev.recurrence || 'none';
-            document.getElementById('inpNotes').value = ev.notes || '';
-            document.getElementById('inpBg').value = ev.bg || '';
-            
-            // Cat
-            document.querySelectorAll('.cat-option').forEach(o => o.classList.remove('selected'));
-            document.querySelector(`.cat-option[data-val="${ev.cat}"]`).classList.add('selected');
-            
-            // Image toggle state
-            if(ev.bg && !ev.bg.includes('source.unsplash.com')) {
-                document.getElementById('autoImgToggle').classList.remove('toggle-active');
-                document.getElementById('imgInputGroup').style.display = 'block';
-            } else {
-                document.getElementById('autoImgToggle').classList.add('toggle-active');
-                document.getElementById('imgInputGroup').style.display = 'none';
-            }
-
-            document.getElementById('addModal').style.display = 'flex';
+        // --- Utils & UI ---
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clockDisplay').innerText = now.toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'});
         }
 
         function openModal() {
             editingId = null;
-            document.getElementById('modalTitle').innerText = 'حدث جديد';
-            document.getElementById('saveBtn').innerText = 'حفظ';
-            
-            // Reset
+            tempChecklist = [];
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-sparkles"></i> حدث جديد';
             document.getElementById('inpTitle').value = '';
-            // Default date: Now
-            const nowIso = new Date(Date.now() - new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
-            document.getElementById('inpDate').value = nowIso;
+            // Default date: now + 1 hour
+            const d = new Date(); d.setHours(d.getHours()+1); d.setMinutes(0);
+            document.getElementById('inpDate').value = d.toISOString().slice(0,16);
             document.getElementById('inpRecur').value = 'none';
             document.getElementById('inpNotes').value = '';
-            document.getElementById('inpBg').value = '';
+            document.getElementById('clList').innerHTML = '';
+            selectCat('personal');
+            document.getElementById('addModal').style.display = 'flex';
+        }
+
+        function editEvent(id) {
+            const ev = events.find(e => e.id === id);
+            if(!ev) return;
+            editingId = id;
+            tempChecklist = ev.checklist ? [...ev.checklist] : [];
+            
+            document.getElementById('modalTitle').innerHTML = '🖊️ تعديل الحدث';
+            document.getElementById('inpTitle').value = ev.title;
+            document.getElementById('inpDate').value = ev.date;
+            document.getElementById('inpRecur').value = ev.recurrence;
+            document.getElementById('inpNotes').value = ev.notes;
+            selectCat(ev.cat);
+            renderChecklist();
             
             document.getElementById('addModal').style.display = 'flex';
-            
-            // Cat Logic
-            document.querySelectorAll('.cat-option').forEach(opt => {
-                opt.onclick = () => {
-                    document.querySelectorAll('.cat-option').forEach(o => o.classList.remove('selected'));
-                    opt.classList.add('selected');
-                }
-            });
         }
+
         function closeModal() { document.getElementById('addModal').style.display = 'none'; }
         
-        function toggleImgInput() {
-            const isActive = document.getElementById('autoImgToggle').classList.contains('toggle-active');
-            document.getElementById('imgInputGroup').style.display = isActive ? 'none' : 'block';
+        function selectCat(cat) {
+            document.getElementById('inpCat').value = cat;
+            document.querySelectorAll('#addModal .stat-chip').forEach(b => b.classList.remove('active'));
+            document.getElementById(`catBtn-${cat}`).classList.add('active');
+        }
+
+        function filterCategory(cat, btn) {
+            currentFilter = cat;
+            document.querySelectorAll('.stat-chip').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderEvents();
+        }
+
+        function filterSearch() { renderEvents(); }
+
+        function toggleView(view) {
+            currentView = view;
+            document.getElementById('eventsGrid').style.display = view === 'grid' ? 'grid' : 'none';
+            document.getElementById('calendarView').style.display = view === 'calendar' ? 'block' : 'none';
+            document.getElementById('btnViewGrid').classList.toggle('active', view === 'grid');
+            document.getElementById('btnViewCal').classList.toggle('active', view === 'calendar');
+            if(view === 'calendar') renderCalendar();
+        }
+
+        function getCatColor(cat) {
+            if(cat === 'work') return '#a855f7';
+            if(cat === 'holiday') return '#f59e0b';
+            return '#6366f1';
+        }
+        function getCatName(cat) {
+            const names = {personal: 'شخصي', work: 'عمل', holiday: 'عطلة'};
+            return names[cat] || cat;
+        }
+
+        function showToast(msg, error=false) {
+            const t = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            t.style.borderLeft = error ? '5px solid var(--danger)' : '5px solid var(--success)';
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
         }
 
         function toggleTheme() {
             const b = document.body;
-            const newTheme = b.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-            b.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-        }
-        if(localStorage.getItem('theme') === 'light') document.body.setAttribute('data-theme', 'light');
-        
-        function filterEvents(c) {
-            currentFilter = c;
-            document.querySelectorAll('.stat-chip').forEach(s => s.classList.remove('active'));
-            event.target.classList.add('active');
-            renderEvents();
+            b.setAttribute('data-theme', b.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
         }
 
-        function getCatLabel(c) { return {'personal':'شخصي','work':'عمل','holiday':'عطلة'}[c] || 'عام'; }
+        function save() { localStorage.setItem('masterEventsV7', JSON.stringify(events)); }
 
-        function showPresets() {
-            document.getElementById('inpTitle').value = 'رمضان 2025';
-            document.getElementById('inpDate').value = '2025-02-28T18:00';
-            document.getElementById('inpRecur').value = 'annual';
-            openModal();
-            showToast('تم اختيار نموذج جاهز');
-        }
-
-        function requestNotificationPermission() {
-            Notification.requestPermission().then(p => {
-                notifPermission = p;
-                if(p === 'granted') showToast('تم تفعيل التنبيهات 🔔');
-            });
-        }
-
-        function sendNotification(title) {
-            if(notifPermission === 'granted') {
-                new Notification('حان الموعد! 🚀', { body: `الحدث: ${title}` });
-            }
-        }
-
-        // Export/Import
         function exportData() {
-            const a = document.createElement('a');
-            a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(events));
-            a.download = "Events_Backup.json"; a.click();
-        }
-        function importData() {
-            const i = document.createElement('input'); i.type='file';
-            i.onchange=e=>{
-                const r=new FileReader();
-                r.onload=ev=>{ try{events=JSON.parse(ev.target.result);save();renderEvents();showToast('تم الاستعادة');}catch{showToast('ملف خاطئ',true);} };
-                r.readAsText(e.target.files[0]);
-            }; i.click();
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(events));
+            const node = document.createElement('a');
+            node.href = dataStr;
+            node.download = "event_master_v7_backup.json";
+            node.click();
         }
 
-        // Share & QR
-        function generateShareLink(id) {
-            const ev = events.find(e => e.id === id);
-            // Minimal data for short URL
-            const str = JSON.stringify({t:ev.title, d:ev.date, c:ev.cat});
-            const url = window.location.href.split('?')[0] + '?share=' + btoa(unescape(encodeURIComponent(str)));
-            
-            document.getElementById('shareInput').value = url;
-            document.getElementById('qrContainer').innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}">`;
-            document.getElementById('shareModal').style.display = 'flex';
-        }
-
-        function copyShareLink() {
-            const i = document.getElementById('shareInput'); i.select(); i.setSelectionRange(0,99999);
-            document.execCommand('copy'); showToast('تم النسخ');
-        }
-
-        function checkUrlForSharedEvent() {
-            const p = new URLSearchParams(window.location.search);
-            if(p.get('share')) {
-                try {
-                    const d = JSON.parse(decodeURIComponent(escape(atob(p.get('share')))));
-                    if(confirm(`وصلك حدث جديد: ${d.t}\nهل تريد إضافته؟`)) {
-                        events.unshift({id:Date.now(), title:d.t, date:d.d, cat:d.c||'personal', created:Date.now(), pinned:false});
-                        save(); renderEvents(); window.history.replaceState({},document.title, window.location.pathname);
-                        showToast('تمت الإضافة 🎉');
-                    }
-                } catch(e){}
+        // --- Voice Input ---
+        function startVoiceInput(targetId) {
+            if(!('webkitSpeechRecognition' in window)) {
+                alert('متصفحك لا يدعم الإملاء الصوتي'); return;
             }
-        }
+            const recognition = new webkitSpeechRecognition();
+            recognition.lang = 'ar-SA';
+            recognition.interimResults = false;
+            
+            const micIcon = document.querySelector('.mic-btn');
+            micIcon.classList.add('listening');
 
-        function speakTime(id) {
-            const ev = events.find(e => e.id === id);
-            const diff = new Date(ev.date) - new Date();
-            const d = Math.floor(diff/86400000);
-            const msg = new SpeechSynthesisUtterance(diff<0 ? `انتهى الحدث ${ev.title}` : `باقي ${d} يوم على ${ev.title}`);
-            msg.lang='ar-SA'; window.speechSynthesis.speak(msg);
+            recognition.onresult = function(event) {
+                document.getElementById(targetId).value = event.results[0][0].transcript;
+                micIcon.classList.remove('listening');
+            };
+            recognition.onerror = function() { micIcon.classList.remove('listening'); };
+            recognition.onend = function() { micIcon.classList.remove('listening'); };
+            
+            recognition.start();
         }
-
-        function showToast(msg, err=false) {
-            const t = document.getElementById('toast');
-            document.getElementById('toastMsg').innerText = msg;
-            t.style.borderColor = err ? 'var(--danger)' : 'var(--success)';
-            t.classList.add('show'); 
-            clearTimeout(window.toastTimeout);
-            window.toastTimeout = setTimeout(()=>t.classList.remove('show'),3000);
-        }
-
-        window.onclick = function(e) { if(e.target.classList.contains('modal-overlay')) e.target.style.display='none'; }
     </script>
 </body>
 </html>
