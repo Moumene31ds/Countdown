@@ -4,16 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#0f172a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="EventMaster V9">
+    <title>Event Master V10 Global</title>
     
-    <title>Event Master V9 Hypernova</title>
-    
-    <link rel="manifest" href='data:application/manifest+json,{"name":"Event Master V9","short_name":"EventMaster","start_url":".","display":"standalone","background_color":"#0f172a","theme_color":"#0f172a","icons":[{"src":"https://img.icons8.com/fluency/96/saturations.png","sizes":"96x96","type":"image/png"}]}'>
-    <link rel="apple-touch-icon" href="https://img.icons8.com/fluency/180/saturations.png">
-
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;400;500;700;900&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;400;500;700;900&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -21,7 +14,6 @@
             --bg-dark: #0f172a;
             --card-glass: rgba(30, 41, 59, 0.7);
             --accent: #6366f1;
-            --accent-glow: rgba(99, 102, 241, 0.5);
             --text: #f8fafc;
             --danger: #f43f5e;
             --success: #10b981;
@@ -29,10 +21,11 @@
             --high: #ef4444;
             --med: #f97316;
             --low: #3b82f6;
-            --blur: 20px;
             --gradient-1: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
             --safe-top: env(safe-area-inset-top);
             --safe-bottom: env(safe-area-inset-bottom);
+            --font-ar: 'Tajawal', sans-serif;
+            --font-en: 'Poppins', sans-serif;
         }
 
         [data-theme="light"] {
@@ -42,177 +35,152 @@
             --accent: #4f46e5;
         }
 
-        /* --- Global Reset & Typography --- */
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; user-select: none; }
+        /* --- Global Reset --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
         
         body {
-            font-family: 'Tajawal', sans-serif;
+            font-family: var(--font-ar);
             background-color: var(--bg-dark);
-            background-image: 
-                radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.1) 0%, transparent 50%), 
-                radial-gradient(circle at 100% 100%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+            background-image: radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.1) 0%, transparent 50%), 
+                              radial-gradient(circle at 100% 100%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
             background-attachment: fixed;
             color: var(--text);
             min-height: 100vh;
             padding-top: calc(var(--safe-top) + 10px);
             padding-bottom: calc(100px + var(--safe-bottom));
             overflow-x: hidden;
-            transition: background-color 0.5s;
+            transition: 0.3s;
         }
 
-        /* --- Force Latin Numbers Class --- */
-        .num-latin {
-            font-family: 'Roboto', sans-serif;
-            direction: ltr;
-            unicode-bidi: embed;
-            display: inline-block;
-        }
-
-        /* --- Navbar --- */
+        /* LTR Support */
+        html[dir="ltr"] body { font-family: var(--font-en); }
+        
+        /* --- Navbar & Controls --- */
         nav {
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 20px; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px);
             position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05);
-            margin-top: -10px; /* Counteract body padding for sticky */
+            margin-top: -10px;
         }
         .logo { 
             font-size: 1.4rem; font-weight: 900; 
             background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-            display: flex; align-items: center; gap: 8px;
         }
         
-        .nav-actions { display: flex; gap: 8px; }
+        .nav-actions { display: flex; gap: 8px; align-items: center; }
         .icon-btn { 
             background: rgba(255,255,255,0.08); border: none;
             color: var(--text); width: 38px; height: 38px; border-radius: 12px; 
             display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;
-            font-size: 1rem;
         }
         .icon-btn:active { transform: scale(0.92); }
 
-        /* --- Weather Widget (New) --- */
+        /* Language Select */
+        .lang-select {
+            background: rgba(255,255,255,0.08); color: var(--text); border: none;
+            padding: 5px 10px; border-radius: 8px; font-size: 0.8rem; cursor: pointer;
+            height: 38px;
+        }
+        .lang-select option { background: #1e293b; color: #fff; }
+
+        /* --- Weather Widget --- */
         .weather-widget {
-            margin: 15px 20px 5px;
-            padding: 15px;
+            margin: 15px 20px 5px; padding: 15px;
             background: linear-gradient(to right, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2));
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
             display: flex; align-items: center; justify-content: space-between;
             backdrop-filter: blur(10px);
         }
-        .weather-info { display: flex; align-items: center; gap: 15px; }
-        .weather-temp { font-size: 1.8rem; font-weight: bold; }
-        .weather-desc { font-size: 0.8rem; opacity: 0.8; }
 
         /* --- Dashboard Stats --- */
-        .dashboard-row {
-            padding: 10px 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-        }
+        .dashboard-row { padding: 10px 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .stat-card {
-            background: var(--card-glass); padding: 12px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.05);
-            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 5px;
+            background: var(--card-glass); padding: 12px; border-radius: 18px; 
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
         }
-        .stat-icon { font-size: 1.2rem; margin-bottom: 2px; }
-        .stat-val { font-size: 1.2rem; font-weight: bold; }
-        .stat-lbl { font-size: 0.7rem; opacity: 0.6; }
+        .stat-val { font-size: 1.2rem; font-weight: bold; font-family: var(--font-en); }
+        .stat-lbl { font-size: 0.7rem; opacity: 0.6; margin-top: 2px; }
 
-        /* --- Filters & Search --- */
-        .search-box {
-            margin: 10px 20px; position: relative;
-        }
+        /* --- Search & Filters --- */
+        .search-box { margin: 10px 20px; position: relative; }
         .search-input {
-            width: 100%; padding: 12px 40px 12px 15px; border-radius: 14px; border: none;
+            width: 100%; padding: 12px 15px; border-radius: 14px; border: none;
             background: rgba(255,255,255,0.08); color: var(--text); font-size: 0.95rem;
+            padding-inline-end: 40px; /* Logical property for LTR/RTL */
         }
-        .search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
+        .search-icon { 
+            position: absolute; top: 50%; transform: translateY(-50%); opacity: 0.5; 
+            inset-inline-end: 15px; /* RTL Support */
+        }
 
         .stats-bar {
             display: flex; gap: 8px; overflow-x: auto; padding: 5px 20px 15px;
-            scrollbar-width: none; -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
         }
         .stat-chip {
             background: var(--card-glass); padding: 8px 16px; border-radius: 50px;
             font-size: 0.85rem; white-space: nowrap; border: 1px solid rgba(255,255,255,0.05);
-            display: flex; align-items: center; gap: 6px; transition: 0.2s;
+            transition: 0.2s; cursor: pointer;
         }
         .stat-chip.active { background: var(--accent); color: white; border-color: transparent; }
 
-        /* --- Grid & Cards --- */
-        .container-wrapper { padding: 0 20px; }
+        /* --- Cards --- */
         .grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px; padding-bottom: 20px;
+            gap: 20px; padding: 0 20px 20px;
         }
-
         .card {
             background: var(--card-glass); border-radius: 24px; overflow: hidden;
-            position: relative; border: 1px solid rgba(255,255,255,0.05);
-            display: flex; flex-direction: column; 
-            transform: translateZ(0); /* Hardware Accel */
+            display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
         }
-        .card.p-high { border-right: 4px solid var(--high); }
-        .card.p-med { border-right: 4px solid var(--med); }
-        .card.p-low { border-right: 4px solid var(--low); }
+        /* RTL Borders */
+        html[dir="rtl"] .card.p-high { border-right: 4px solid var(--high); }
+        html[dir="rtl"] .card.p-med { border-right: 4px solid var(--med); }
+        html[dir="rtl"] .card.p-low { border-right: 4px solid var(--low); }
+        /* LTR Borders */
+        html[dir="ltr"] .card.p-high { border-left: 4px solid var(--high); }
+        html[dir="ltr"] .card.p-med { border-left: 4px solid var(--med); }
+        html[dir="ltr"] .card.p-low { border-left: 4px solid var(--low); }
 
-        .card-bg { height: 120px; width: 100%; background-size: cover; background-position: center; position: relative; }
+        .card-bg { height: 120px; background-size: cover; position: relative; }
         .card-bg::after {
             content: ''; position: absolute; inset: 0;
             background: linear-gradient(to bottom, rgba(15, 23, 42, 0.1), var(--card-glass));
         }
-
         .card-body { padding: 0 15px 15px; flex-grow: 1; display: flex; flex-direction: column; }
-        
-        .card-header {
-            margin-top: -30px; margin-bottom: 10px; z-index: 2; position: relative; 
-            display: flex; justify-content: space-between; align-items: flex-end;
-        }
-        .card-title { font-size: 1.2rem; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,0.5); line-height: 1.2; flex: 1; }
+        .card-header { margin-top: -30px; margin-bottom: 10px; z-index: 2; display: flex; justify-content: space-between; align-items: flex-end; }
+        .card-title { font-size: 1.2rem; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,0.5); flex: 1; }
         
         .timer-strip { 
             display: flex; justify-content: space-around; background: rgba(0,0,0,0.2); 
-            padding: 8px; border-radius: 12px; margin: 8px 0;
+            padding: 8px; border-radius: 12px; margin: 8px 0; font-family: var(--font-en);
         }
         .ts-num { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
-        .ts-lbl { font-size: 0.6rem; opacity: 0.6; }
-
-        /* Circular Progress */
-        .progress-circle { 
-            width: 36px; height: 36px; border-radius: 50%; 
-            background: conic-gradient(var(--success) var(--pct), rgba(255,255,255,0.1) 0deg); 
-            display: flex; align-items: center; justify-content: center; position: relative; 
-            flex-shrink: 0; margin-right: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        .progress-circle::before { content: ''; position: absolute; width: 30px; height: 30px; background: #1e293b; border-radius: 50%; }
-        .progress-text { position: absolute; font-size: 0.65rem; font-weight: bold; z-index: 2; }
-
-        .card-footer {
-            margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);
-            display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem;
-        }
+        .ts-lbl { font-size: 0.6rem; opacity: 0.6; font-family: inherit; }
 
         /* --- Calendar --- */
-        #calendarView { display: none; background: var(--card-glass); border-radius: 24px; padding: 15px; }
+        #calendarView { display: none; padding: 0 20px; }
+        .cal-box { background: var(--card-glass); border-radius: 24px; padding: 15px; }
         .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 15px; text-align: center; }
         .cal-day { 
             aspect-ratio: 1; background: rgba(255,255,255,0.03); border-radius: 10px; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            font-size: 0.9rem; position: relative;
+            font-size: 0.9rem; font-family: var(--font-en); position: relative; cursor: pointer;
         }
-        .cal-day.today { border: 1px solid var(--accent); background: rgba(99, 102, 241, 0.1); color: var(--accent); font-weight: bold; }
+        .cal-day.today { border: 1px solid var(--accent); background: rgba(99, 102, 241, 0.1); color: var(--accent); }
         .cal-day.has-event::after { content: ''; width: 5px; height: 5px; background: var(--warning); border-radius: 50%; position: absolute; bottom: 5px; }
 
-        /* --- Modal & Forms --- */
+        /* --- Modal --- */
         .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
-            z-index: 200; display: none; align-items: flex-end; /* Bottom sheet on mobile */
-            justify-content: center;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            z-index: 200; display: none; align-items: flex-end; justify-content: center;
         }
         .modal {
             background: #1e293b; width: 100%; max-width: 600px; padding: 25px 20px calc(20px + var(--safe-bottom));
             border-radius: 30px 30px 0 0; border-top: 1px solid rgba(255,255,255,0.1);
-            max-height: 90vh; overflow-y: auto;
-            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s;
         }
         @media(min-width: 768px) {
             .modal-overlay { align-items: center; }
@@ -226,108 +194,104 @@
         }
         
         .mic-btn {
-            position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+            position: absolute; top: 50%; transform: translateY(-50%);
             color: var(--accent); cursor: pointer; padding: 5px;
+            inset-inline-end: 10px; /* Logical Position */
         }
         .mic-active { color: var(--danger); animation: pulse 1s infinite; }
-        @keyframes pulse { 0% { transform: translateY(-50%) scale(1); } 50% { transform: translateY(-50%) scale(1.2); } 100% { transform: translateY(-50%) scale(1); } }
 
-        .priority-selector { display: flex; gap: 8px; margin-bottom: 15px; }
-        .p-btn { flex: 1; padding: 12px; border-radius: 14px; background: rgba(255,255,255,0.05); color: var(--text); border: none; font-size: 0.9rem; }
-        .p-btn.active { color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-        .p-btn[data-val="high"].active { background: var(--high); }
-        .p-btn[data-val="med"].active { background: var(--med); }
-        .p-btn[data-val="low"].active { background: var(--low); }
-
+        /* --- Pomodoro Modal --- */
+        .pomo-timer { font-size: 4rem; font-weight: bold; font-family: var(--font-en); margin: 20px 0; text-align: center; }
+        .pomo-controls { display: flex; gap: 10px; justify-content: center; }
+        
         /* FAB */
         .fab {
-            position: fixed; bottom: calc(20px + var(--safe-bottom)); left: 20px; width: 60px; height: 60px;
+            position: fixed; bottom: calc(20px + var(--safe-bottom)); 
+            width: 60px; height: 60px;
             background: var(--gradient-1); border-radius: 20px; color: white; display: flex;
             align-items: center; justify-content: center; font-size: 1.5rem;
             box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4); z-index: 90;
-            transition: 0.2s;
+            inset-inline-start: 20px; /* Logical */
+            cursor: pointer;
         }
-        .fab:active { transform: scale(0.9) rotate(90deg); }
 
-        /* Toast */
         .toast {
             position: fixed; top: 20px; left: 50%; transform: translate(-50%, -100px);
             background: rgba(16, 185, 129, 0.9); padding: 12px 25px; border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 300; display: flex; align-items: center; gap: 10px;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: white; font-weight: bold;
+            z-index: 300; display: flex; align-items: center; gap: 10px; color: white;
+            transition: 0.4s;
         }
         .toast.show { transform: translate(-50%, 0); }
-        .toast.error { background: var(--danger); }
-
-        /* AI Tag */
-        .ai-badge { font-size: 0.7rem; background: linear-gradient(90deg, #ff00cc, #333399); padding: 2px 8px; border-radius: 4px; color: white; margin-right: 5px; display:inline-block; }
-
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo"><i class="fas fa-meteor fa-spin" style="--fa-animation-duration: 4s;"></i> EM<span style="color:var(--accent)">V9</span></div>
+        <div class="logo"><i class="fas fa-meteor fa-spin" style="--fa-animation-duration: 4s;"></i> EM<span style="color:var(--accent)">10</span></div>
         <div class="nav-actions">
+            <select class="lang-select" onchange="changeLanguage(this.value)">
+                <option value="ar">🇺 (AR)</option>
+                <option value="en">🇬🇧 (EN)</option>
+                <option value="fr">🇫🇷 (FR)</option>
+            </select>
+            <button class="icon-btn" onclick="openPomodoro()" title="Focus Mode"><i class="fas fa-stopwatch"></i></button>
             <button class="icon-btn" onclick="toggleView()" id="viewToggleBtn"><i class="fas fa-calendar-alt"></i></button>
-            <button class="icon-btn" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
-            <button class="icon-btn" onclick="togglePrivacy()" id="privacyBtn"><i class="fas fa-eye"></i></button>
             <button class="icon-btn" onclick="exportData()"><i class="fas fa-download"></i></button>
             <input type="file" id="fileImport" style="display:none" onchange="importData(this)" accept=".json">
             <button class="icon-btn" onclick="document.getElementById('fileImport').click()"><i class="fas fa-upload"></i></button>
         </div>
     </nav>
 
-    <div class="weather-widget" id="weatherWidget" onclick="fetchWeather()">
-        <div class="weather-info">
+    <div class="weather-widget" onclick="fetchWeather()">
+        <div style="display: flex; align-items: center; gap: 15px;">
             <i class="fas fa-cloud-sun" style="font-size: 2rem; color: #fff;"></i>
             <div>
-                <div class="weather-temp num-latin" id="wTemp">--°</div>
-                <div class="weather-desc" id="wDesc">اضغط للتحديث</div>
+                <div class="stat-val" id="wTemp">--°</div>
+                <div style="font-size: 0.8rem; opacity: 0.8;" data-i18n="weather_desc">Loading...</div>
             </div>
         </div>
-        <div style="text-align: left; font-size: 0.8rem; opacity: 0.7;" class="num-latin" id="clockDisplay">00:00</div>
+        <div class="stat-val" style="font-size:0.9rem; opacity:0.7;" id="clockDisplay">00:00</div>
     </div>
 
     <div class="dashboard-row">
         <div class="stat-card">
-            <i class="fas fa-flag stat-icon" style="color: var(--accent)"></i>
-            <div class="stat-val num-latin" id="statTotal">0</div>
-            <div class="stat-lbl">الكل</div>
+            <i class="fas fa-flag" style="color: var(--accent); margin-bottom:5px;"></i>
+            <div class="stat-val" id="statTotal">0</div>
+            <div class="stat-lbl" data-i18n="stat_total">All</div>
         </div>
         <div class="stat-card">
-            <i class="fas fa-check-circle stat-icon" style="color: var(--success)"></i>
-            <div class="stat-val num-latin" id="statDone">0</div>
-            <div class="stat-lbl">منجز</div>
+            <i class="fas fa-check-circle" style="color: var(--success); margin-bottom:5px;"></i>
+            <div class="stat-val" id="statDone">0</div>
+            <div class="stat-lbl" data-i18n="stat_done">Done</div>
         </div>
         <div class="stat-card">
-            <i class="fas fa-hourglass-half stat-icon" style="color: var(--warning)"></i>
-            <div class="stat-val num-latin" id="statPending">0</div>
-            <div class="stat-lbl">انتظار</div>
+            <i class="fas fa-hourglass-half" style="color: var(--warning); margin-bottom:5px;"></i>
+            <div class="stat-val" id="statPending">0</div>
+            <div class="stat-lbl" data-i18n="stat_wait">Pending</div>
         </div>
     </div>
 
     <div class="search-box">
-        <input type="text" class="search-input" id="searchInput" placeholder="بحث..." onkeyup="filterSearch()">
+        <input type="text" class="search-input" id="searchInput" placeholder="..." onkeyup="filterSearch()">
         <i class="fas fa-search search-icon"></i>
     </div>
 
     <div class="stats-bar">
-        <div class="stat-chip active" onclick="filterCategory('all', this)">الكل</div>
-        <div class="stat-chip" onclick="filterCategory('personal', this)">👤 شخصي</div>
-        <div class="stat-chip" onclick="filterCategory('work', this)">💼 عمل</div>
-        <div class="stat-chip" onclick="filterCategory('holiday', this)">✈️ سفر</div>
-        <div class="stat-chip" onclick="filterCategory('health', this)">❤️ صحة</div>
+        <div class="stat-chip active" onclick="filterCategory('all', this)" data-i18n="cat_all">All</div>
+        <div class="stat-chip" onclick="filterCategory('personal', this)" data-i18n="cat_personal">👤 Personal</div>
+        <div class="stat-chip" onclick="filterCategory('work', this)" data-i18n="cat_work">💼 Work</div>
+        <div class="stat-chip" onclick="filterCategory('holiday', this)" data-i18n="cat_travel">✈️ Travel</div>
+        <div class="stat-chip" onclick="filterCategory('health', this)" data-i18n="cat_health">❤️ Health</div>
     </div>
 
-    <div class="container-wrapper">
-        <div class="grid" id="eventsGrid"></div>
-        
-        <div id="calendarView">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <button class="icon-btn" onclick="changeMonth(-1)"><i class="fas fa-chevron-right"></i></button>
-                <h3 id="calMonthTitle" style="margin:0;"></h3>
-                <button class="icon-btn" onclick="changeMonth(1)"><i class="fas fa-chevron-left"></i></button>
+    <div class="grid" id="eventsGrid"></div>
+    
+    <div id="calendarView">
+        <div class="cal-box">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <button class="icon-btn" onclick="changeMonth(-1)"><i class="fas fa-chevron-left" id="calPrevBtn"></i></button>
+                <h3 id="calMonthTitle" style="font-family: var(--font-en);"></h3>
+                <button class="icon-btn" onclick="changeMonth(1)"><i class="fas fa-chevron-right" id="calNextBtn"></i></button>
             </div>
             <div class="cal-grid" id="calGrid"></div>
         </div>
@@ -338,174 +302,180 @@
     <div class="modal-overlay" id="addModal">
         <div class="modal">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 id="modalTitle" style="font-size: 1.3rem;">حدث جديد</h2>
-                <button class="icon-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+                <h2 id="modalTitle" data-i18n="new_event">New Event</h2>
+                <button class="icon-btn" onclick="closeModal('addModal')"><i class="fas fa-times"></i></button>
             </div>
             
             <div style="position: relative;">
-                <input type="text" class="form-input" id="inpTitle" placeholder="عنوان المهمة (مثال: اجتماع عمل)" onblur="aiAnalyze()">
+                <input type="text" class="form-input" id="inpTitle" placeholder="..." onblur="aiAnalyze()">
                 <i class="fas fa-microphone mic-btn" id="voiceBtn" onclick="startDictation('inpTitle')"></i>
             </div>
             <div id="aiSuggestion" style="font-size: 0.8rem; color: var(--accent); margin-bottom: 10px; display:none;">
-                <i class="fas fa-robot"></i> تم اقتراح التصنيف: <span id="aiCatText"></span>
+                <i class="fas fa-robot"></i> <span data-i18n="ai_suggest">AI Suggestion:</span> <span id="aiCatText"></span>
             </div>
 
             <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 10px;">
-                <input type="datetime-local" class="form-input num-latin" id="inpDate" style="font-family: 'Roboto';">
+                <input type="datetime-local" class="form-input" id="inpDate" style="font-family: var(--font-en);">
                 <select class="form-select" id="inpCat">
-                    <option value="personal">شخصي</option>
-                    <option value="work">عمل</option>
-                    <option value="holiday">سفر</option>
-                    <option value="health">صحة</option>
+                    <option value="personal" data-i18n="cat_personal">Personal</option>
+                    <option value="work" data-i18n="cat_work">Work</option>
+                    <option value="holiday" data-i18n="cat_travel">Travel</option>
+                    <option value="health" data-i18n="cat_health">Health</option>
                 </select>
             </div>
 
-            <div class="priority-selector">
-                <button type="button" class="p-btn" data-val="low" onclick="setPriority('low')">عادي</button>
-                <button type="button" class="p-btn" data-val="med" onclick="setPriority('med')">متوسط</button>
-                <button type="button" class="p-btn" data-val="high" onclick="setPriority('high')">هام</button>
+            <div style="display: flex; gap: 8px; margin-bottom: 15px;">
+                <button type="button" class="form-input" style="flex:1; text-align:center; padding:10px;" id="prioLow" onclick="setPriority('low')" data-i18n="prio_low">Low</button>
+                <button type="button" class="form-input" style="flex:1; text-align:center; padding:10px;" id="prioMed" onclick="setPriority('med')" data-i18n="prio_med">Med</button>
+                <button type="button" class="form-input" style="flex:1; text-align:center; padding:10px;" id="prioHigh" onclick="setPriority('high')" data-i18n="prio_high">High</button>
             </div>
             <input type="hidden" id="inpPriority" value="low">
 
             <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 16px; margin-bottom: 15px;">
                 <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                    <input type="text" class="form-input" id="clInput" placeholder="مهمة فرعية..." style="margin: 0;">
+                    <input type="text" class="form-input" id="clInput" placeholder="Sub-task..." style="margin: 0;">
                     <button class="icon-btn" style="background: var(--accent);" onclick="addChecklistItem()"><i class="fas fa-plus"></i></button>
                 </div>
                 <div id="clList"></div>
             </div>
 
-            <textarea class="form-textarea" id="inpNotes" rows="2" placeholder="ملاحظات..."></textarea>
-
-            <button onclick="saveEvent()" style="width: 100%; padding: 16px; background: var(--gradient-1); color: white; border: none; border-radius: 16px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-bottom: 15px;">حفظ</button>
+            <button onclick="saveEvent()" id="btnSave" style="width: 100%; padding: 16px; background: var(--gradient-1); color: white; border: none; border-radius: 16px; font-size: 1.1rem; font-weight: bold; cursor: pointer;" data-i18n="btn_save">Save</button>
         </div>
     </div>
 
-    <div class="toast" id="toast"><i class="fas fa-check"></i> <span id="toastMsg">تم</span></div>
+    <div class="modal-overlay" id="pomoModal">
+        <div class="modal" style="text-align: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 data-i18n="focus_mode">Focus Mode</h2>
+                <button class="icon-btn" onclick="closeModal('pomoModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="pomo-timer" id="pomoDisplay">25:00</div>
+            <div class="pomo-controls">
+                <button class="icon-btn" style="width:60px; height:60px; background:var(--success); font-size:1.5rem;" onclick="startPomo()"><i class="fas fa-play"></i></button>
+                <button class="icon-btn" style="width:60px; height:60px; background:var(--warning); font-size:1.5rem;" onclick="pausePomo()"><i class="fas fa-pause"></i></button>
+                <button class="icon-btn" style="width:60px; height:60px; background:var(--danger); font-size:1.5rem;" onclick="resetPomo()"><i class="fas fa-redo"></i></button>
+            </div>
+            <p style="margin-top:20px; opacity:0.7;" data-i18n="pomo_desc">Stay focused for 25 minutes.</p>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"><i class="fas fa-check"></i> <span id="toastMsg"></span></div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
     <script>
-        // --- Core State ---
-        let events = JSON.parse(localStorage.getItem('masterEventsV9')) || [];
+        // --- Translation & Config ---
+        const dictionary = {
+            ar: {
+                dir: "rtl", font: "'Tajawal', sans-serif",
+                appTitle: "EventMaster", search: "بحث...",
+                stat_total: "الكل", stat_done: "منجز", stat_wait: "انتظار",
+                cat_all: "الكل", cat_personal: "شخصي", cat_work: "عمل", cat_travel: "سفر", cat_health: "صحة",
+                new_event: "حدث جديد", edit_event: "تعديل", ai_suggest: "اقتراح ذكي:",
+                prio_low: "عادي", prio_med: "متوسط", prio_high: "هام",
+                btn_save: "حفظ", weather_desc: "الطقس الآن",
+                time_d: "يوم", time_h: "ساعة", time_m: "دقيقة",
+                focus_mode: "وضع التركيز", pomo_desc: "استمر في التركيز لمدة 25 دقيقة.",
+                msg_saved: "تم الحفظ بنجاح", msg_error: "أدخل البيانات",
+                months: ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"],
+                days: ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت']
+            },
+            en: {
+                dir: "ltr", font: "'Poppins', sans-serif",
+                appTitle: "EventMaster", search: "Search...",
+                stat_total: "Total", stat_done: "Done", stat_wait: "Pending",
+                cat_all: "All", cat_personal: "Personal", cat_work: "Work", cat_travel: "Travel", cat_health: "Health",
+                new_event: "New Event", edit_event: "Edit Event", ai_suggest: "AI Suggestion:",
+                prio_low: "Low", prio_med: "Med", prio_high: "High",
+                btn_save: "Save", weather_desc: "Current Weather",
+                time_d: "Day", time_h: "Hr", time_m: "Min",
+                focus_mode: "Focus Mode", pomo_desc: "Stay focused for 25 minutes.",
+                msg_saved: "Saved Successfully", msg_error: "Missing Data",
+                months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+            },
+            fr: {
+                dir: "ltr", font: "'Poppins', sans-serif",
+                appTitle: "EventMaster", search: "Recherche...",
+                stat_total: "Total", stat_done: "Fait", stat_wait: "Attente",
+                cat_all: "Tout", cat_personal: "Perso", cat_work: "Travail", cat_travel: "Voyage", cat_health: "Santé",
+                new_event: "Nouvel Événement", edit_event: "Modifier", ai_suggest: "Suggestion IA:",
+                prio_low: "Bas", prio_med: "Moyen", prio_high: "Haut",
+                btn_save: "Enregistrer", weather_desc: "Météo Actuelle",
+                time_d: "Jour", time_h: "H", time_m: "Min",
+                focus_mode: "Mode Focus", pomo_desc: "Restez concentré pendant 25 minutes.",
+                msg_saved: "Enregistré", msg_error: "Données manquantes",
+                months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
+                days: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
+            }
+        };
+
+        let currentLang = localStorage.getItem('em_lang') || 'ar';
+        let events = JSON.parse(localStorage.getItem('masterEventsV10')) || [];
         let currentFilter = 'all';
         let currentView = 'grid';
         let editingId = null;
         let tempChecklist = [];
         let calDate = new Date();
-        let isPrivateMode = false;
-
-        // Vibrate helper
-        const haptic = (pattern = 10) => {
-            if (navigator.vibrate) navigator.vibrate(pattern);
-        };
+        
+        // Pomodoro State
+        let pomoInterval;
+        let pomoTime = 25 * 60;
+        let isPomoRunning = false;
 
         document.addEventListener('DOMContentLoaded', () => {
+            changeLanguage(currentLang);
+            document.querySelector('.lang-select').value = currentLang;
             renderEvents();
             renderCalendar();
             updateStats();
             updateClock();
             setInterval(tick, 1000);
-            fetchWeather(); // Try fetching weather
+            fetchWeather();
+            
+            if ("Notification" in window) Notification.requestPermission();
         });
 
-        // --- AI & High Tech Features ---
-
-        // 1. Voice Dictation
-        function startDictation(fieldId) {
-            if ('webkitSpeechRecognition' in window) {
-                const recognition = new webkitSpeechRecognition();
-                recognition.lang = 'ar-EG';
-                recognition.interimResults = false;
-                
-                const btn = document.getElementById('voiceBtn');
-                btn.classList.add('mic-active');
-
-                recognition.onresult = function(event) {
-                    document.getElementById(fieldId).value = event.results[0][0].transcript;
-                    btn.classList.remove('mic-active');
-                    aiAnalyze(); // Auto analyze after voice
-                    haptic([50, 50]);
-                };
-                recognition.onerror = () => btn.classList.remove('mic-active');
-                recognition.onend = () => btn.classList.remove('mic-active');
-                
-                recognition.start();
-            } else {
-                alert('المتصفح لا يدعم الإملاء الصوتي');
-            }
-        }
-
-        // 2. Simple "AI" Categorization
-        function aiAnalyze() {
-            const title = document.getElementById('inpTitle').value.toLowerCase();
-            const catSelect = document.getElementById('inpCat');
-            const suggestionBox = document.getElementById('aiSuggestion');
+        // --- Localization Engine ---
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('em_lang', lang);
+            const t = dictionary[lang];
             
-            // Keywords
-            const map = {
-                work: ['اجتماع', 'مشروع', 'تقرير', 'مدير', 'meeting', 'call', 'email'],
-                holiday: ['سفر', 'حجز', 'طائرة', 'فندق', 'رحلة', 'fly', 'trip'],
-                health: ['دكتور', 'جيم', 'رياضة', 'دواء', 'تمرين', 'gym', 'doctor'],
-                personal: ['عيد', 'شراء', 'منزل', 'عائل']
-            };
-
-            let detected = null;
-            for (const [cat, keywords] of Object.entries(map)) {
-                if (keywords.some(k => title.includes(k))) detected = cat;
-            }
-
-            if (detected) {
-                catSelect.value = detected;
-                document.getElementById('aiCatText').innerText = getCatName(detected);
-                suggestionBox.style.display = 'block';
-                haptic(20);
-            } else {
-                suggestionBox.style.display = 'none';
-            }
-        }
-
-        // 3. Weather Widget
-        async function fetchWeather() {
-            const elTemp = document.getElementById('wTemp');
-            const elDesc = document.getElementById('wDesc');
+            // Set Direction & Font
+            document.documentElement.lang = lang;
+            document.documentElement.dir = t.dir;
+            document.documentElement.style.setProperty('--font-ar', t.font);
             
-            if (!navigator.geolocation) {
-                elDesc.innerText = "الموقع غير مدعوم";
-                return;
+            // Mirror Calendar Arrows for RTL/LTR
+            if(t.dir === 'rtl') {
+                document.getElementById('calPrevBtn').className = "fas fa-chevron-right";
+                document.getElementById('calNextBtn').className = "fas fa-chevron-left";
+            } else {
+                document.getElementById('calPrevBtn').className = "fas fa-chevron-left";
+                document.getElementById('calNextBtn').className = "fas fa-chevron-right";
             }
 
-            navigator.geolocation.getCurrentPosition(async (pos) => {
-                const lat = pos.coords.latitude;
-                const lon = pos.coords.longitude;
-                try {
-                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
-                    const data = await res.json();
-                    const temp = Math.round(data.current_weather.temperature);
-                    elTemp.innerText = `${temp}°C`;
-                    elDesc.innerText = "الجو الآن";
-                } catch (e) {
-                    elDesc.innerText = "خطأ في الشبكة";
-                }
-            }, () => {
-                elDesc.innerText = "إذن الموقع مطلوب";
+            // Update Text Content
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if(t[key]) el.innerText = t[key];
             });
+
+            // Update Placeholders
+            document.getElementById('searchInput').placeholder = t.search;
+            
+            renderEvents(); // Re-render to update dynamic text
+            renderCalendar();
         }
 
-        // 4. Privacy Mode
-        function togglePrivacy() {
-            isPrivateMode = !isPrivateMode;
-            document.getElementById('eventsGrid').style.filter = isPrivateMode ? 'blur(8px)' : 'none';
-            document.getElementById('privacyBtn').innerHTML = isPrivateMode ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
-            haptic(50);
-        }
+        function getTranslation(key) { return dictionary[currentLang][key] || key; }
 
-        // --- Core CRUD ---
+        // --- Core Functions ---
         function saveEvent() {
             const title = document.getElementById('inpTitle').value.trim();
             const date = document.getElementById('inpDate').value;
             
-            if(!title || !date) return showToast('اكتب العنوان والتاريخ', true);
+            if(!title || !date) return showToast(getTranslation('msg_error'), true);
 
             const eventData = {
                 id: editingId || Date.now(),
@@ -513,10 +483,9 @@
                 date,
                 cat: document.getElementById('inpCat').value,
                 priority: document.getElementById('inpPriority').value,
-                notes: document.getElementById('inpNotes').value,
                 checklist: tempChecklist,
                 bg: `https://source.unsplash.com/600x400/?${encodeURIComponent(title)},abstract`,
-                created: Date.now()
+                notified: false // Notification flag
             };
 
             if(editingId) {
@@ -527,18 +496,18 @@
                 confetti({ origin: { y: 0.8 }, zIndex: 500 });
             }
 
-            localStorage.setItem('masterEventsV9', JSON.stringify(events));
-            closeModal();
+            localStorage.setItem('masterEventsV10', JSON.stringify(events));
+            closeModal('addModal');
             renderEvents();
             renderCalendar();
             updateStats();
-            haptic(100);
-            showToast('تم الحفظ 🚀');
+            showToast(getTranslation('msg_saved'));
         }
 
         function renderEvents() {
             const grid = document.getElementById('eventsGrid');
             const term = document.getElementById('searchInput').value.toLowerCase();
+            const t = dictionary[currentLang];
             grid.innerHTML = '';
 
             let filtered = events.filter(e => {
@@ -546,13 +515,7 @@
                        e.title.toLowerCase().includes(term);
             });
             
-            // Sort by Date then Priority
             filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-            if(filtered.length === 0) {
-                grid.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text); opacity:0.5; grid-column:1/-1;">لا توجد أحداث</div>`;
-                return;
-            }
 
             filtered.forEach(ev => {
                 const total = ev.checklist ? ev.checklist.length : 0;
@@ -567,25 +530,22 @@
                     <div class="card-body">
                         <div class="card-header">
                             <h3 class="card-title">${ev.title}</h3>
-                            ${total > 0 ? `
-                            <div class="progress-circle" style="--pct: ${pct}deg ${pct*3.6}deg">
-                                <span class="progress-text num-latin">${pct}%</span>
-                            </div>` : ''}
+                            ${total > 0 ? `<span style="font-size:0.8rem; font-weight:bold; color:var(--accent)">${pct}%</span>` : ''}
                         </div>
                         
-                        <div class="timer-strip num-latin" id="timer-${ev.id}">
-                            <div><div class="ts-num d">0</div><div class="ts-lbl">يوم</div></div>
-                            <div><div class="ts-num h">0</div><div class="ts-lbl">ساعة</div></div>
-                            <div><div class="ts-num m">0</div><div class="ts-lbl">دقيقة</div></div>
+                        <div class="timer-strip" id="timer-${ev.id}">
+                            <div><div class="ts-num d">0</div><div class="ts-lbl">${t.time_d}</div></div>
+                            <div><div class="ts-num h">0</div><div class="ts-lbl">${t.time_h}</div></div>
+                            <div><div class="ts-num m">0</div><div class="ts-lbl">${t.time_m}</div></div>
                         </div>
 
-                        <div style="font-size:0.85rem; opacity:0.8; margin:5px 0;" class="num-latin">
+                        <div style="font-size:0.85rem; opacity:0.8; margin:5px 0;">
                             <i class="far fa-clock"></i> 
-                            ${dateObj.toLocaleDateString('en-GB')} • ${dateObj.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:false})}
+                            ${dateObj.toLocaleDateString(currentLang === 'ar' ? 'ar-EG' : 'en-GB')}
                         </div>
                         
-                        <div class="card-footer">
-                            <span class="stat-chip" style="font-size:0.75rem; padding: 4px 10px;">${getCatName(ev.cat)}</span>
+                        <div style="margin-top:auto; padding-top:10px; border-top:1px solid rgba(255,255,255,0.05); display:flex; justify-content:space-between; align-items:center;">
+                            <span class="stat-chip" style="font-size:0.75rem; padding: 4px 10px;">${getTranslation('cat_'+ev.cat)}</span>
                             <div>
                                 <button class="icon-btn" onclick="editEvent(${ev.id})"><i class="fas fa-pen"></i></button>
                                 <button class="icon-btn" style="color:var(--danger)" onclick="deleteEvent(${ev.id})"><i class="fas fa-trash"></i></button>
@@ -598,7 +558,7 @@
             tick();
         }
 
-        // --- Logic Helpers ---
+        // --- Logic & Notifications ---
         function tick() {
             const now = new Date().getTime();
             events.forEach(ev => {
@@ -606,17 +566,221 @@
                 if(!el) return;
                 const target = new Date(ev.date).getTime();
                 let diff = target - now;
+                
+                // Notification Logic
+                if(diff <= 0 && diff > -60000 && !ev.notified) {
+                    if(Notification.permission === "granted") {
+                        new Notification(dictionary[currentLang].appTitle, { body: ev.title });
+                    }
+                    ev.notified = true;
+                    localStorage.setItem('masterEventsV10', JSON.stringify(events));
+                }
+
                 if(diff < 0) {
                     el.style.opacity = '0.4';
+                    el.querySelector('.d').innerText = "0";
                     return;
                 }
-                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                el.querySelector('.d').innerText = d;
-                el.querySelector('.h').innerText = h;
-                el.querySelector('.m').innerText = m;
+                
+                el.querySelector('.d').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+                el.querySelector('.h').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                el.querySelector('.m').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             });
+        }
+
+        // --- Pomodoro Logic ---
+        function openPomodoro() { document.getElementById('pomoModal').style.display = 'flex'; }
+        function startPomo() {
+            if(isPomoRunning) return;
+            isPomoRunning = true;
+            pomoInterval = setInterval(() => {
+                pomoTime--;
+                updatePomoDisplay();
+                if(pomoTime <= 0) {
+                    clearInterval(pomoInterval);
+                    isPomoRunning = false;
+                    new Notification("EventMaster", { body: "Pomodoro Finished! Take a break." });
+                    showToast("Focus Session Done!");
+                }
+            }, 1000);
+        }
+        function pausePomo() { clearInterval(pomoInterval); isPomoRunning = false; }
+        function resetPomo() { pausePomo(); pomoTime = 25 * 60; updatePomoDisplay(); }
+        function updatePomoDisplay() {
+            const m = Math.floor(pomoTime / 60).toString().padStart(2, '0');
+            const s = (pomoTime % 60).toString().padStart(2, '0');
+            document.getElementById('pomoDisplay').innerText = `${m}:${s}`;
+        }
+
+        // --- Shared UI Helpers ---
+        function openModal() {
+            editingId = null;
+            tempChecklist = [];
+            document.getElementById('modalTitle').innerText = getTranslation('new_event');
+            document.getElementById('inpTitle').value = '';
+            // Local ISO Time fix
+            const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+            document.getElementById('inpDate').value = d.toISOString().slice(0,16);
+            document.getElementById('aiSuggestion').style.display = 'none';
+            setPriority('low');
+            renderChecklist();
+            document.getElementById('addModal').style.display = 'flex';
+        }
+
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        
+        function editEvent(id) {
+            const e = events.find(x => x.id === id);
+            editingId = id;
+            tempChecklist = [...(e.checklist || [])];
+            document.getElementById('modalTitle').innerText = getTranslation('edit_event');
+            document.getElementById('inpTitle').value = e.title;
+            document.getElementById('inpDate').value = e.date;
+            document.getElementById('inpCat').value = e.cat;
+            setPriority(e.priority);
+            renderChecklist();
+            document.getElementById('addModal').style.display = 'flex';
+        }
+
+        function deleteEvent(id) {
+            if(confirm('?')) {
+                events = events.filter(e => e.id !== id);
+                localStorage.setItem('masterEventsV10', JSON.stringify(events));
+                renderEvents();
+                updateStats();
+            }
+        }
+
+        function setPriority(p) {
+            document.getElementById('inpPriority').value = p;
+            document.querySelectorAll('#prioLow, #prioMed, #prioHigh').forEach(b => 
+                b.style.background = 'rgba(0,0,0,0.2)'
+            );
+            const map = { low: 'var(--low)', med: 'var(--med)', high: 'var(--high)' };
+            const idMap = { low: 'prioLow', med: 'prioMed', high: 'prioHigh' };
+            document.getElementById(idMap[p]).style.background = map[p];
+        }
+
+        function addChecklistItem() {
+            const val = document.getElementById('clInput').value.trim();
+            if(val) {
+                tempChecklist.push({text: val, done: false});
+                document.getElementById('clInput').value = '';
+                renderChecklist();
+            }
+        }
+
+        function renderChecklist() {
+            const list = document.getElementById('clList');
+            list.innerHTML = '';
+            tempChecklist.forEach((item, idx) => {
+                list.innerHTML += `
+                    <div style="display:flex; justify-content:space-between; padding:8px; background:rgba(255,255,255,0.05); margin-bottom:5px; border-radius:8px; align-items:center;">
+                        <span style="opacity:${item.done?0.5:1}; text-decoration:${item.done?'line-through':''}" onclick="tempChecklist[${idx}].done = !tempChecklist[${idx}].done; renderChecklist()">${item.text}</span>
+                        <i class="fas fa-times" style="color:var(--danger)" onclick="tempChecklist.splice(${idx},1); renderChecklist()"></i>
+                    </div>`;
+            });
+        }
+
+        function renderCalendar() {
+            const grid = document.getElementById('calGrid');
+            grid.innerHTML = '';
+            const t = dictionary[currentLang];
+            const mTitle = document.getElementById('calMonthTitle');
+            
+            mTitle.innerHTML = `${t.months[calDate.getMonth()]} <span style="font-family:var(--font-en)">${calDate.getFullYear()}</span>`;
+
+            t.days.forEach(d => grid.innerHTML += `<div style="font-size:0.8rem; opacity:0.7">${d}</div>`);
+            
+            const firstDay = new Date(calDate.getFullYear(), calDate.getMonth(), 1).getDay();
+            // Adjust start day if Sun=0 but local week starts different? Standardizing on Sun=0
+            
+            for(let i=0; i<firstDay; i++) grid.innerHTML += `<div></div>`;
+
+            const daysInMonth = new Date(calDate.getFullYear(), calDate.getMonth() + 1, 0).getDate();
+
+            for(let i=1; i<=daysInMonth; i++) {
+                const dayStr = `${calDate.getFullYear()}-${String(calDate.getMonth()+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+                const hasEvent = events.some(e => e.date.startsWith(dayStr));
+                const isToday = new Date().toDateString() === new Date(calDate.getFullYear(), calDate.getMonth(), i).toDateString();
+                
+                const el = document.createElement('div');
+                el.className = `cal-day ${isToday?'today':''} ${hasEvent?'has-event':''}`;
+                el.innerText = i;
+                el.onclick = () => {
+                    document.getElementById('inpDate').value = `${dayStr}T09:00`;
+                    openModal();
+                };
+                grid.appendChild(el);
+            }
+        }
+        
+        function changeMonth(d) { calDate.setMonth(calDate.getMonth() + d); renderCalendar(); }
+        function toggleView() {
+            currentView = currentView === 'grid' ? 'calendar' : 'grid';
+            document.getElementById('eventsGrid').style.display = currentView === 'grid' ? 'grid' : 'none';
+            document.getElementById('calendarView').style.display = currentView === 'calendar' ? 'block' : 'none';
+        }
+
+        // --- AI & Tools ---
+        function startDictation(id) {
+            if ('webkitSpeechRecognition' in window) {
+                const r = new webkitSpeechRecognition();
+                r.lang = currentLang === 'ar' ? 'ar-EG' : (currentLang === 'fr' ? 'fr-FR' : 'en-US');
+                const btn = document.getElementById('voiceBtn');
+                btn.classList.add('mic-active');
+                r.onresult = (e) => {
+                    document.getElementById(id).value = e.results[0][0].transcript;
+                    btn.classList.remove('mic-active');
+                    aiAnalyze();
+                };
+                r.start();
+            } else alert("Not Supported");
+        }
+
+        function aiAnalyze() {
+            const title = document.getElementById('inpTitle').value.toLowerCase();
+            const box = document.getElementById('aiSuggestion');
+            const map = {
+                work: ['meeting', 'call', 'report', 'boss', 'اجتماع', 'مدير', 'travail', 'réunion'],
+                holiday: ['fly', 'trip', 'hotel', 'سفر', 'فندق', 'voyage', 'vol'],
+                health: ['gym', 'doctor', 'med', 'دكتور', 'رياضة', 'sport', 'médecin']
+            };
+            
+            let detected = null;
+            for(const [k, v] of Object.entries(map)) if(v.some(x => title.includes(x))) detected = k;
+
+            if(detected) {
+                document.getElementById('inpCat').value = detected;
+                document.getElementById('aiCatText').innerText = getTranslation('cat_'+detected);
+                box.style.display = 'block';
+            }
+        }
+
+        async function fetchWeather() {
+            // Basic Open-Meteo impl
+            if(!navigator.geolocation) return;
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                try {
+                    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true`);
+                    const d = await r.json();
+                    document.getElementById('wTemp').innerText = `${Math.round(d.current_weather.temperature)}°C`;
+                } catch(e) {}
+            });
+        }
+
+        function filterCategory(c, el) {
+            currentFilter = c;
+            document.querySelectorAll('.stat-chip').forEach(x => x.classList.remove('active'));
+            el.classList.add('active');
+            renderEvents();
+        }
+
+        function updateStats() {
+            document.getElementById('statTotal').innerText = events.length;
+            const done = events.filter(e => e.checklist && e.checklist.length && e.checklist.every(x=>x.done)).length;
+            document.getElementById('statDone').innerText = done;
+            document.getElementById('statPending').innerText = events.length - done;
         }
 
         function updateClock() {
@@ -626,193 +790,34 @@
             setTimeout(updateClock, 10000);
         }
 
-        function renderCalendar() {
-            const grid = document.getElementById('calGrid');
-            grid.innerHTML = '';
-            const mTitle = document.getElementById('calMonthTitle');
-            
-            // Format title using Latin Numbers via Font
-            const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
-            mTitle.innerHTML = `${monthNames[calDate.getMonth()]} <span class="num-latin">${calDate.getFullYear()}</span>`;
-
-            const year = calDate.getFullYear();
-            const month = calDate.getMonth();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const firstDay = new Date(year, month, 1).getDay();
-
-            // Arabic days mapping adjustment (Sun=0)
-            const weekDays = ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
-            weekDays.forEach(d => grid.innerHTML += `<div style="font-size:0.8rem; opacity:0.7">${d}</div>`);
-            
-            for(let i=0; i<firstDay; i++) grid.innerHTML += `<div></div>`;
-
-            for(let i=1; i<=daysInMonth; i++) {
-                const dayStr = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-                const hasEvent = events.some(e => e.date.startsWith(dayStr));
-                const isToday = new Date().toDateString() === new Date(year, month, i).toDateString();
-                
-                const el = document.createElement('div');
-                el.className = `cal-day num-latin ${isToday?'today':''} ${hasEvent?'has-event':''}`;
-                el.innerText = i;
-                el.onclick = () => {
-                    document.getElementById('inpDate').value = `${dayStr}T09:00`;
-                    openModal();
-                };
-                grid.appendChild(el);
-            }
-        }
-
-        function changeMonth(d) {
-            calDate.setMonth(calDate.getMonth() + d);
-            renderCalendar();
-            haptic();
-        }
-
-        // --- Checklist ---
-        function addChecklistItem() {
-            const val = document.getElementById('clInput').value.trim();
-            if(val) {
-                tempChecklist.push({text: val, done: false});
-                document.getElementById('clInput').value = '';
-                renderChecklist();
-            }
-        }
-        function renderChecklist() {
-            const list = document.getElementById('clList');
-            list.innerHTML = '';
-            tempChecklist.forEach((item, idx) => {
-                list.innerHTML += `
-                    <div style="display:flex; justify-content:space-between; padding:8px; background:rgba(255,255,255,0.05); margin-bottom:5px; border-radius:8px; align-items:center;">
-                        <div onclick="toggleCL(${idx})" style="flex:1; cursor:pointer; text-decoration:${item.done?'line-through':''}; opacity:${item.done?0.5:1}">
-                            <i class="fas ${item.done?'fa-check-square':'fa-square'}"></i> ${item.text}
-                        </div>
-                        <i class="fas fa-times" style="color:var(--danger); padding:5px;" onclick="tempChecklist.splice(${idx},1); renderChecklist()"></i>
-                    </div>
-                `;
-            });
-        }
-        function toggleCL(idx) {
-            tempChecklist[idx].done = !tempChecklist[idx].done;
-            renderChecklist();
-            haptic();
-        }
-
-        // --- Modal & Shared ---
-        function openModal() {
-            editingId = null;
-            tempChecklist = [];
-            document.getElementById('modalTitle').innerText = 'حدث جديد';
-            document.getElementById('inpTitle').value = '';
-            document.getElementById('inpNotes').value = '';
-            const d = new Date(); d.setHours(d.getHours()+1);
-            // ISO string adjustment for local time
-            const localISO = new Date(d.getTime() - (d.getTimezoneOffset() * 60000)).toISOString().slice(0,16);
-            document.getElementById('inpDate').value = localISO;
-            document.getElementById('aiSuggestion').style.display = 'none';
-            setPriority('low');
-            renderChecklist();
-            document.getElementById('addModal').style.display = 'flex';
-        }
-
-        function editEvent(id) {
-            const e = events.find(x => x.id === id);
-            editingId = id;
-            tempChecklist = [...(e.checklist || [])];
-            document.getElementById('modalTitle').innerText = 'تعديل';
-            document.getElementById('inpTitle').value = e.title;
-            document.getElementById('inpDate').value = e.date;
-            document.getElementById('inpNotes').value = e.notes || '';
-            document.getElementById('inpCat').value = e.cat;
-            setPriority(e.priority);
-            renderChecklist();
-            document.getElementById('addModal').style.display = 'flex';
-        }
-
-        function closeModal() { document.getElementById('addModal').style.display = 'none'; }
-        
-        function deleteEvent(id) {
-            if(confirm('حذف؟')) {
-                events = events.filter(e => e.id !== id);
-                localStorage.setItem('masterEventsV9', JSON.stringify(events));
-                renderEvents();
-                updateStats();
-                haptic([50, 50]);
-            }
-        }
-
-        function setPriority(p) {
-            document.getElementById('inpPriority').value = p;
-            document.querySelectorAll('.p-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector(`.p-btn[data-val="${p}"]`).classList.add('active');
-            haptic();
-        }
-
-        function filterCategory(c, el) {
-            currentFilter = c;
-            document.querySelectorAll('.stat-chip').forEach(x => x.classList.remove('active'));
-            el.classList.add('active');
-            renderEvents();
-            haptic();
-        }
-
-        function toggleView() {
-            currentView = currentView === 'grid' ? 'calendar' : 'grid';
-            document.getElementById('eventsGrid').style.display = currentView === 'grid' ? 'grid' : 'none';
-            document.getElementById('calendarView').style.display = currentView === 'calendar' ? 'block' : 'none';
-            document.getElementById('viewToggleBtn').innerHTML = currentView === 'grid' ? '<i class="fas fa-calendar-alt"></i>' : '<i class="fas fa-th-large"></i>';
-        }
-
-        function toggleTheme() {
-            const b = document.body;
-            b.setAttribute('data-theme', b.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
-        }
-
-        function updateStats() {
-            document.getElementById('statTotal').innerText = events.length;
-            const done = events.filter(e => e.checklist && e.checklist.length > 0 && e.checklist.every(x=>x.done)).length;
-            document.getElementById('statDone').innerText = done;
-            document.getElementById('statPending').innerText = events.length - done;
-        }
-
-        function getCatName(c) {
-            const n = {personal:'شخصي', work:'عمل', holiday:'سفر', health:'صحة'};
-            return n[c] || c;
-        }
-
         function showToast(msg, err=false) {
             const t = document.getElementById('toast');
             document.getElementById('toastMsg').innerText = msg;
-            if(err) t.classList.add('error'); else t.classList.remove('error');
+            t.style.background = err ? 'var(--danger)' : 'var(--success)';
             t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 3000);
         }
-
-        // --- Import/Export ---
+        
         function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(events));
-            const n = document.createElement('a');
-            n.href = dataStr;
-            n.download = "master_v9_backup.json";
-            n.click();
+            const a = document.createElement('a');
+            a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(events));
+            a.download = "master_v10_backup.json";
+            a.click();
         }
+        
         function importData(inp) {
-            const file = inp.files[0];
-            if(!file) return;
+            const f = inp.files[0];
+            if(!f) return;
             const r = new FileReader();
             r.onload = (e) => {
                 try {
-                    const d = JSON.parse(e.target.result);
-                    if(Array.isArray(d)) {
-                        events = [...d, ...events];
-                        // Remove dupes by ID
-                        events = Array.from(new Map(events.map(item => [item['id'], item])).values());
-                        localStorage.setItem('masterEventsV9', JSON.stringify(events));
-                        renderEvents();
-                        showToast('تم الاستيراد');
-                    }
-                } catch(x) { showToast('ملف غير صالح', true); }
+                    events = [...JSON.parse(e.target.result), ...events];
+                    localStorage.setItem('masterEventsV10', JSON.stringify(events));
+                    renderEvents();
+                    showToast(getTranslation('msg_saved'));
+                } catch(x){ showToast("Error", true); }
             };
-            r.readAsText(file);
+            r.readAsText(f);
         }
     </script>
 </body>
