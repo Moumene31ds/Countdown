@@ -2,11 +2,18 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Event Master V8 Supernova</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪐</text></svg>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="EventMaster V9">
     
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;400;500;700;900&display=swap" rel="stylesheet">
+    <title>Event Master V9 Hypernova</title>
+    
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Event Master V9","short_name":"EventMaster","start_url":".","display":"standalone","background_color":"#0f172a","theme_color":"#0f172a","icons":[{"src":"https://img.icons8.com/fluency/96/saturations.png","sizes":"96x96","type":"image/png"}]}'>
+    <link rel="apple-touch-icon" href="https://img.icons8.com/fluency/180/saturations.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;400;500;700;900&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -24,281 +31,302 @@
             --low: #3b82f6;
             --blur: 20px;
             --gradient-1: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --safe-top: env(safe-area-inset-top);
+            --safe-bottom: env(safe-area-inset-bottom);
         }
 
         [data-theme="light"] {
-            --bg-dark: #f8fafc;
-            --card-glass: rgba(255, 255, 255, 0.85);
+            --bg-dark: #f1f5f9;
+            --card-glass: rgba(255, 255, 255, 0.9);
             --text: #0f172a;
             --accent: #4f46e5;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; -webkit-tap-highlight-color: transparent; }
+        /* --- Global Reset & Typography --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; user-select: none; }
         
         body {
+            font-family: 'Tajawal', sans-serif;
             background-color: var(--bg-dark);
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%), 
-                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 40%);
+                radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.1) 0%, transparent 50%), 
+                radial-gradient(circle at 100% 100%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+            background-attachment: fixed;
             color: var(--text);
             min-height: 100vh;
-            padding-bottom: 120px;
+            padding-top: calc(var(--safe-top) + 10px);
+            padding-bottom: calc(100px + var(--safe-bottom));
             overflow-x: hidden;
-            transition: 0.5s;
+            transition: background-color 0.5s;
+        }
+
+        /* --- Force Latin Numbers Class --- */
+        .num-latin {
+            font-family: 'Roboto', sans-serif;
+            direction: ltr;
+            unicode-bidi: embed;
+            display: inline-block;
         }
 
         /* --- Navbar --- */
         nav {
-            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px;
-            padding: 1rem 2rem; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(20px);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 20px; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px);
             position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            margin-top: -10px; /* Counteract body padding for sticky */
         }
         .logo { 
-            font-size: 1.6rem; font-weight: 900; 
+            font-size: 1.4rem; font-weight: 900; 
             background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-            display: flex; align-items: center; gap: 10px;
+            display: flex; align-items: center; gap: 8px;
         }
         
-        .search-container { flex-grow: 1; max-width: 500px; position: relative; margin: 0 20px; }
-        .search-input {
-            width: 100%; padding: 12px 45px 12px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1);
-            background: rgba(0,0,0,0.2); color: var(--text); outline: none; transition: 0.3s;
-        }
-        .search-input:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); background: rgba(0,0,0,0.4); }
-        .search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
-
         .nav-actions { display: flex; gap: 8px; }
         .icon-btn { 
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); 
-            color: var(--text); width: 40px; height: 40px; border-radius: 12px; 
+            background: rgba(255,255,255,0.08); border: none;
+            color: var(--text); width: 38px; height: 38px; border-radius: 12px; 
             display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;
+            font-size: 1rem;
         }
-        .icon-btn:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 5px 15px var(--accent-glow); }
+        .icon-btn:active { transform: scale(0.92); }
+
+        /* --- Weather Widget (New) --- */
+        .weather-widget {
+            margin: 15px 20px 5px;
+            padding: 15px;
+            background: linear-gradient(to right, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2));
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; justify-content: space-between;
+            backdrop-filter: blur(10px);
+        }
+        .weather-info { display: flex; align-items: center; gap: 15px; }
+        .weather-temp { font-size: 1.8rem; font-weight: bold; }
+        .weather-desc { font-size: 0.8rem; opacity: 0.8; }
 
         /* --- Dashboard Stats --- */
         .dashboard-row {
-            padding: 1rem 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;
-            margin-bottom: 10px;
+            padding: 10px 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
         }
         .stat-card {
-            background: var(--card-glass); padding: 15px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);
-            display: flex; align-items: center; gap: 15px;
+            background: var(--card-glass); padding: 12px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.05);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 5px;
         }
-        .stat-icon {
-            width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; background: rgba(255,255,255,0.05);
-        }
-        .stat-info div:first-child { font-size: 0.8rem; opacity: 0.6; }
-        .stat-info div:last-child { font-size: 1.4rem; font-weight: bold; }
+        .stat-icon { font-size: 1.2rem; margin-bottom: 2px; }
+        .stat-val { font-size: 1.2rem; font-weight: bold; }
+        .stat-lbl { font-size: 0.7rem; opacity: 0.6; }
 
-        /* --- Filters --- */
-        .controls-bar {
-            display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 2rem 1.5rem;
-            flex-wrap: wrap; gap: 15px;
+        /* --- Filters & Search --- */
+        .search-box {
+            margin: 10px 20px; position: relative;
         }
+        .search-input {
+            width: 100%; padding: 12px 40px 12px 15px; border-radius: 14px; border: none;
+            background: rgba(255,255,255,0.08); color: var(--text); font-size: 0.95rem;
+        }
+        .search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
+
         .stats-bar {
-            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;
-            scrollbar-width: none;
+            display: flex; gap: 8px; overflow-x: auto; padding: 5px 20px 15px;
+            scrollbar-width: none; -webkit-overflow-scrolling: touch;
         }
         .stat-chip {
             background: var(--card-glass); padding: 8px 16px; border-radius: 50px;
             font-size: 0.85rem; white-space: nowrap; border: 1px solid rgba(255,255,255,0.05);
-            display: flex; align-items: center; gap: 8px; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 6px; transition: 0.2s;
         }
-        .stat-chip:hover, .stat-chip.active { background: var(--accent); border-color: transparent; color: white; }
+        .stat-chip.active { background: var(--accent); color: white; border-color: transparent; }
 
-        /* --- Grid & Card --- */
-        .container-wrapper { padding: 0 2rem; max-width: 1600px; margin: 0 auto; }
+        /* --- Grid & Cards --- */
+        .container-wrapper { padding: 0 20px; }
         .grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 25px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px; padding-bottom: 20px;
         }
 
         .card {
             background: var(--card-glass); border-radius: 24px; overflow: hidden;
             position: relative; border: 1px solid rgba(255,255,255,0.05);
-            backdrop-filter: blur(var(--blur)); 
-            display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s;
+            display: flex; flex-direction: column; 
+            transform: translateZ(0); /* Hardware Accel */
         }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.4); }
-        
-        /* Priority Borders */
         .card.p-high { border-right: 4px solid var(--high); }
         .card.p-med { border-right: 4px solid var(--med); }
         .card.p-low { border-right: 4px solid var(--low); }
 
-        .card-bg {
-            height: 140px; width: 100%; background-size: cover; background-position: center; position: relative;
-        }
+        .card-bg { height: 120px; width: 100%; background-size: cover; background-position: center; position: relative; }
         .card-bg::after {
             content: ''; position: absolute; inset: 0;
-            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2), var(--card-glass));
+            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.1), var(--card-glass));
         }
 
-        .card-body { padding: 0 20px 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-body { padding: 0 15px 15px; flex-grow: 1; display: flex; flex-direction: column; }
         
         .card-header {
-            margin-top: -25px; margin-bottom: 15px; z-index: 2; position: relative; 
-            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-top: -30px; margin-bottom: 10px; z-index: 2; position: relative; 
+            display: flex; justify-content: space-between; align-items: flex-end;
         }
-        .card-title { font-size: 1.3rem; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.8); line-height: 1.3; }
+        .card-title { font-size: 1.2rem; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,0.5); line-height: 1.2; flex: 1; }
         
         .timer-strip { 
             display: flex; justify-content: space-around; background: rgba(0,0,0,0.2); 
-            padding: 8px; border-radius: 14px; margin: 10px 0; border: 1px solid rgba(255,255,255,0.05);
+            padding: 8px; border-radius: 12px; margin: 8px 0;
         }
-        .ts-box { text-align: center; }
         .ts-num { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
         .ts-lbl { font-size: 0.6rem; opacity: 0.6; }
 
         /* Circular Progress */
-        .progress-circle { width: 40px; height: 40px; border-radius: 50%; background: conic-gradient(var(--success) var(--pct), rgba(255,255,255,0.1) 0deg); display: flex; align-items: center; justify-content: center; position: relative; }
-        .progress-circle::before { content: ''; position: absolute; width: 34px; height: 34px; background: #1e293b; border-radius: 50%; }
-        .progress-text { position: absolute; font-size: 0.7rem; font-weight: bold; z-index: 2; }
+        .progress-circle { 
+            width: 36px; height: 36px; border-radius: 50%; 
+            background: conic-gradient(var(--success) var(--pct), rgba(255,255,255,0.1) 0deg); 
+            display: flex; align-items: center; justify-content: center; position: relative; 
+            flex-shrink: 0; margin-right: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .progress-circle::before { content: ''; position: absolute; width: 30px; height: 30px; background: #1e293b; border-radius: 50%; }
+        .progress-text { position: absolute; font-size: 0.65rem; font-weight: bold; z-index: 2; }
 
         .card-footer {
-            margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05);
-            display: flex; justify-content: space-between; align-items: center;
+            margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem;
         }
 
         /* --- Calendar --- */
-        #calendarView { display: none; background: var(--card-glass); border-radius: 24px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); }
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-top: 20px; text-align: center; }
-        .cal-day-name { font-weight: bold; color: var(--accent); margin-bottom: 10px; }
+        #calendarView { display: none; background: var(--card-glass); border-radius: 24px; padding: 15px; }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 15px; text-align: center; }
         .cal-day { 
-            aspect-ratio: 1; background: rgba(255,255,255,0.03); border-radius: 12px; 
+            aspect-ratio: 1; background: rgba(255,255,255,0.03); border-radius: 10px; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            cursor: pointer; position: relative; border: 1px solid transparent; transition: 0.2s;
+            font-size: 0.9rem; position: relative;
         }
-        .cal-day:hover { background: rgba(255,255,255,0.1); transform: scale(1.05); }
-        .cal-day.has-event::after { content: ''; width: 6px; height: 6px; background: var(--warning); border-radius: 50%; margin-top: 4px; }
-        .cal-day.today { border-color: var(--accent); background: rgba(99, 102, 241, 0.15); font-weight: bold; }
+        .cal-day.today { border: 1px solid var(--accent); background: rgba(99, 102, 241, 0.1); color: var(--accent); font-weight: bold; }
+        .cal-day.has-event::after { content: ''; width: 5px; height: 5px; background: var(--warning); border-radius: 50%; position: absolute; bottom: 5px; }
 
-        /* --- Modal --- */
+        /* --- Modal & Forms --- */
         .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
-            z-index: 200; display: none; align-items: center; justify-content: center; padding: 15px;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+            z-index: 200; display: none; align-items: flex-end; /* Bottom sheet on mobile */
+            justify-content: center;
         }
         .modal {
-            background: #0f172a; width: 100%; max-width: 650px; padding: 2.5rem;
-            border-radius: 30px; border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            max-height: 95vh; overflow-y: auto;
-            animation: slideUp 0.3s ease-out;
+            background: #1e293b; width: 100%; max-width: 600px; padding: 25px 20px calc(20px + var(--safe-bottom));
+            border-radius: 30px 30px 0 0; border-top: 1px solid rgba(255,255,255,0.1);
+            max-height: 90vh; overflow-y: auto;
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @media(min-width: 768px) {
+            .modal-overlay { align-items: center; }
+            .modal { border-radius: 30px; padding: 30px; }
+        }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
         .form-input, .form-textarea, .form-select {
-            width: 100%; padding: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px; color: var(--text); outline: none; margin-bottom: 15px; transition: 0.3s;
+            width: 100%; padding: 16px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px; color: var(--text); margin-bottom: 12px; font-size: 1rem;
         }
-        .form-input:focus { border-color: var(--accent); background: rgba(0,0,0,0.3); }
+        
+        .mic-btn {
+            position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+            color: var(--accent); cursor: pointer; padding: 5px;
+        }
+        .mic-active { color: var(--danger); animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { transform: translateY(-50%) scale(1); } 50% { transform: translateY(-50%) scale(1.2); } 100% { transform: translateY(-50%) scale(1); } }
 
-        .priority-selector { display: flex; gap: 10px; margin-bottom: 15px; }
-        .p-btn { flex: 1; padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; opacity: 0.6; transition: 0.3s; }
-        .p-btn:hover { opacity: 1; }
-        .p-btn.active { opacity: 1; border: none; color: white; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .priority-selector { display: flex; gap: 8px; margin-bottom: 15px; }
+        .p-btn { flex: 1; padding: 12px; border-radius: 14px; background: rgba(255,255,255,0.05); color: var(--text); border: none; font-size: 0.9rem; }
+        .p-btn.active { color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         .p-btn[data-val="high"].active { background: var(--high); }
         .p-btn[data-val="med"].active { background: var(--med); }
         .p-btn[data-val="low"].active { background: var(--low); }
 
-        .checklist-container { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 18px; margin-bottom: 15px; }
-        .cl-item { display: flex; align-items: center; justify-content: space-between; padding: 10px; background: rgba(255,255,255,0.05); margin-bottom: 6px; border-radius: 10px; transition: 0.2s; }
-        .cl-item:hover { background: rgba(255,255,255,0.1); }
-        .cl-item.done span { text-decoration: line-through; opacity: 0.5; }
-
         /* FAB */
         .fab {
-            position: fixed; bottom: 30px; left: 30px; width: 65px; height: 65px;
-            background: var(--gradient-1); border-radius: 24px; color: white; display: flex;
-            align-items: center; justify-content: center; font-size: 1.8rem;
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4); cursor: pointer; z-index: 90;
-            transition: 0.3s; animation: float 3s ease-in-out infinite;
+            position: fixed; bottom: calc(20px + var(--safe-bottom)); left: 20px; width: 60px; height: 60px;
+            background: var(--gradient-1); border-radius: 20px; color: white; display: flex;
+            align-items: center; justify-content: center; font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4); z-index: 90;
+            transition: 0.2s;
         }
-        .fab:hover { transform: scale(1.1); animation: none; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .fab:active { transform: scale(0.9) rotate(90deg); }
 
         /* Toast */
         .toast {
-            position: fixed; bottom: 30px; left: 50%; transform: translate(-50%, 100px);
-            background: rgba(15, 23, 42, 0.95); padding: 12px 30px; border-radius: 50px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 300; display: flex; align-items: center; gap: 10px;
-            border: 1px solid rgba(255,255,255,0.1); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            opacity: 0; pointer-events: none;
+            position: fixed; top: 20px; left: 50%; transform: translate(-50%, -100px);
+            background: rgba(16, 185, 129, 0.9); padding: 12px 25px; border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 300; display: flex; align-items: center; gap: 10px;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: white; font-weight: bold;
         }
-        .toast.show { transform: translate(-50%, 0); opacity: 1; }
+        .toast.show { transform: translate(-50%, 0); }
+        .toast.error { background: var(--danger); }
 
-        @media (max-width: 768px) {
-            .grid { grid-template-columns: 1fr; }
-            .dashboard-row { grid-template-columns: 1fr 1fr; }
-            .search-container { display: none; }
-        }
+        /* AI Tag */
+        .ai-badge { font-size: 0.7rem; background: linear-gradient(90deg, #ff00cc, #333399); padding: 2px 8px; border-radius: 4px; color: white; margin-right: 5px; display:inline-block; }
+
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo"><i class="fas fa-meteor fa-spin" style="--fa-animation-duration: 3s;"></i> EventMaster <span style="font-size:0.5em; background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:6px; margin-right:5px; color: var(--accent);">V8</span></div>
-        
-        <div class="search-container">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" class="search-input" id="searchInput" placeholder="ابحث في مهامك وأحداثك..." onkeyup="filterSearch()">
-        </div>
-
+        <div class="logo"><i class="fas fa-meteor fa-spin" style="--fa-animation-duration: 4s;"></i> EM<span style="color:var(--accent)">V9</span></div>
         <div class="nav-actions">
-            <button class="icon-btn" onclick="toggleView('grid')" id="btnViewGrid"><i class="fas fa-th-large"></i></button>
-            <button class="icon-btn" onclick="toggleView('calendar')" id="btnViewCal"><i class="fas fa-calendar-day"></i></button>
+            <button class="icon-btn" onclick="toggleView()" id="viewToggleBtn"><i class="fas fa-calendar-alt"></i></button>
             <button class="icon-btn" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
-            <button class="icon-btn" onclick="document.getElementById('fileImport').click()" title="استيراد"><i class="fas fa-file-import"></i></button>
-            <button class="icon-btn" onclick="exportData()" title="تصدير"><i class="fas fa-file-export"></i></button>
+            <button class="icon-btn" onclick="togglePrivacy()" id="privacyBtn"><i class="fas fa-eye"></i></button>
+            <button class="icon-btn" onclick="exportData()"><i class="fas fa-download"></i></button>
+            <input type="file" id="fileImport" style="display:none" onchange="importData(this)" accept=".json">
+            <button class="icon-btn" onclick="document.getElementById('fileImport').click()"><i class="fas fa-upload"></i></button>
         </div>
-        <input type="file" id="fileImport" style="display:none" onchange="importData(this)" accept=".json">
     </nav>
+
+    <div class="weather-widget" id="weatherWidget" onclick="fetchWeather()">
+        <div class="weather-info">
+            <i class="fas fa-cloud-sun" style="font-size: 2rem; color: #fff;"></i>
+            <div>
+                <div class="weather-temp num-latin" id="wTemp">--°</div>
+                <div class="weather-desc" id="wDesc">اضغط للتحديث</div>
+            </div>
+        </div>
+        <div style="text-align: left; font-size: 0.8rem; opacity: 0.7;" class="num-latin" id="clockDisplay">00:00</div>
+    </div>
 
     <div class="dashboard-row">
         <div class="stat-card">
-            <div class="stat-icon" style="color: var(--accent)"><i class="fas fa-flag"></i></div>
-            <div class="stat-info">
-                <div>الأحداث</div>
-                <div id="statTotal">0</div>
-            </div>
+            <i class="fas fa-flag stat-icon" style="color: var(--accent)"></i>
+            <div class="stat-val num-latin" id="statTotal">0</div>
+            <div class="stat-lbl">الكل</div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon" style="color: var(--success)"><i class="fas fa-check-circle"></i></div>
-            <div class="stat-info">
-                <div>مكتملة</div>
-                <div id="statDone">0</div>
-            </div>
+            <i class="fas fa-check-circle stat-icon" style="color: var(--success)"></i>
+            <div class="stat-val num-latin" id="statDone">0</div>
+            <div class="stat-lbl">منجز</div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon" style="color: var(--warning)"><i class="fas fa-hourglass-half"></i></div>
-            <div class="stat-info">
-                <div>قيد الانتظار</div>
-                <div id="statPending">0</div>
-            </div>
+            <i class="fas fa-hourglass-half stat-icon" style="color: var(--warning)"></i>
+            <div class="stat-val num-latin" id="statPending">0</div>
+            <div class="stat-lbl">انتظار</div>
         </div>
     </div>
 
-    <div class="controls-bar">
-        <div class="stats-bar">
-            <div class="stat-chip active" onclick="filterCategory('all', this)">الكل</div>
-            <div class="stat-chip" onclick="filterCategory('personal', this)"><i class="fas fa-user-astronaut"></i> شخصي</div>
-            <div class="stat-chip" onclick="filterCategory('work', this)"><i class="fas fa-briefcase"></i> عمل</div>
-            <div class="stat-chip" onclick="filterCategory('holiday', this)"><i class="fas fa-plane"></i> عطلة</div>
-        </div>
-        <div style="font-size: 0.9rem; opacity: 0.7; font-family: monospace;">
-            <i class="fas fa-clock"></i> <span id="clockDisplay">00:00</span>
-        </div>
+    <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" placeholder="بحث..." onkeyup="filterSearch()">
+        <i class="fas fa-search search-icon"></i>
+    </div>
+
+    <div class="stats-bar">
+        <div class="stat-chip active" onclick="filterCategory('all', this)">الكل</div>
+        <div class="stat-chip" onclick="filterCategory('personal', this)">👤 شخصي</div>
+        <div class="stat-chip" onclick="filterCategory('work', this)">💼 عمل</div>
+        <div class="stat-chip" onclick="filterCategory('holiday', this)">✈️ سفر</div>
+        <div class="stat-chip" onclick="filterCategory('health', this)">❤️ صحة</div>
     </div>
 
     <div class="container-wrapper">
         <div class="grid" id="eventsGrid"></div>
         
         <div id="calendarView">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                 <button class="icon-btn" onclick="changeMonth(-1)"><i class="fas fa-chevron-right"></i></button>
-                <h2 id="calMonthTitle" style="margin:0; font-size: 1.5rem; width: 200px; text-align: center;"></h2>
+                <h3 id="calMonthTitle" style="margin:0;"></h3>
                 <button class="icon-btn" onclick="changeMonth(1)"><i class="fas fa-chevron-left"></i></button>
             </div>
             <div class="cal-grid" id="calGrid"></div>
@@ -309,114 +337,175 @@
 
     <div class="modal-overlay" id="addModal">
         <div class="modal">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                <h2 id="modalTitle" style="display: flex; align-items: center; gap: 10px;"><i class="fas fa-bolt" style="color: var(--warning)"></i> حدث جديد</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 id="modalTitle" style="font-size: 1.3rem;">حدث جديد</h2>
                 <button class="icon-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
             </div>
             
-            <input type="text" class="form-input" id="inpTitle" placeholder="عنوان المهمة أو الحدث" style="font-weight: bold; font-size: 1.1rem;">
+            <div style="position: relative;">
+                <input type="text" class="form-input" id="inpTitle" placeholder="عنوان المهمة (مثال: اجتماع عمل)" onblur="aiAnalyze()">
+                <i class="fas fa-microphone mic-btn" id="voiceBtn" onclick="startDictation('inpTitle')"></i>
+            </div>
+            <div id="aiSuggestion" style="font-size: 0.8rem; color: var(--accent); margin-bottom: 10px; display:none;">
+                <i class="fas fa-robot"></i> تم اقتراح التصنيف: <span id="aiCatText"></span>
+            </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <input type="datetime-local" class="form-input" id="inpDate">
+            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 10px;">
+                <input type="datetime-local" class="form-input num-latin" id="inpDate" style="font-family: 'Roboto';">
                 <select class="form-select" id="inpCat">
-                    <option value="personal">شخصي 👤</option>
-                    <option value="work">عمل 💼</option>
-                    <option value="holiday">عطلة 🏖️</option>
+                    <option value="personal">شخصي</option>
+                    <option value="work">عمل</option>
+                    <option value="holiday">سفر</option>
+                    <option value="health">صحة</option>
                 </select>
             </div>
 
             <div class="priority-selector">
-                <button type="button" class="p-btn" data-val="low" onclick="setPriority('low')"><i class="fas fa-arrow-down"></i> عادي</button>
-                <button type="button" class="p-btn" data-val="med" onclick="setPriority('med')"><i class="fas fa-minus"></i> متوسط</button>
-                <button type="button" class="p-btn" data-val="high" onclick="setPriority('high')"><i class="fas fa-arrow-up"></i> هام جداً</button>
+                <button type="button" class="p-btn" data-val="low" onclick="setPriority('low')">عادي</button>
+                <button type="button" class="p-btn" data-val="med" onclick="setPriority('med')">متوسط</button>
+                <button type="button" class="p-btn" data-val="high" onclick="setPriority('high')">هام</button>
             </div>
             <input type="hidden" id="inpPriority" value="low">
 
-            <div class="checklist-container">
-                <div style="font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
-                    <span><i class="fas fa-tasks"></i> المهام الفرعية</span>
-                    <button class="icon-btn" style="width: 30px; height: 30px;" onclick="addChecklistItem()"><i class="fas fa-plus"></i></button>
-                </div>
+            <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 16px; margin-bottom: 15px;">
                 <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                    <input type="text" class="form-input" id="clInput" placeholder="أضف خطوة جديدة..." style="margin: 0;">
+                    <input type="text" class="form-input" id="clInput" placeholder="مهمة فرعية..." style="margin: 0;">
+                    <button class="icon-btn" style="background: var(--accent);" onclick="addChecklistItem()"><i class="fas fa-plus"></i></button>
                 </div>
-                <div class="cl-list" id="clList"></div>
+                <div id="clList"></div>
             </div>
 
-            <textarea class="form-textarea" id="inpNotes" rows="3" placeholder="ملاحظات وتفاصيل إضافية..."></textarea>
+            <textarea class="form-textarea" id="inpNotes" rows="2" placeholder="ملاحظات..."></textarea>
 
-            <button onclick="saveEvent()" style="width: 100%; padding: 16px; background: var(--gradient-1); color: white; border: none; border-radius: 16px; font-size: 1.1rem; font-weight: bold; cursor: pointer; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3); transition: 0.3s;">حفظ التغييرات</button>
+            <button onclick="saveEvent()" style="width: 100%; padding: 16px; background: var(--gradient-1); color: white; border: none; border-radius: 16px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-bottom: 15px;">حفظ</button>
         </div>
     </div>
 
-    <div class="toast" id="toast"><i class="fas fa-check"></i> <span id="toastMsg">تم الحفظ</span></div>
+    <div class="toast" id="toast"><i class="fas fa-check"></i> <span id="toastMsg">تم</span></div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 
     <script>
-        // --- State Management ---
-        let events = JSON.parse(localStorage.getItem('masterEventsV8')) || [];
-        
-        // Migration V7 -> V8 (Adding Priority)
-        if(localStorage.getItem('masterEventsV7')) {
-            const old = JSON.parse(localStorage.getItem('masterEventsV7'));
-            events = old.map(e => ({...e, priority: 'low'})).concat(events);
-            localStorage.removeItem('masterEventsV7');
-            save();
-        }
-
+        // --- Core State ---
+        let events = JSON.parse(localStorage.getItem('masterEventsV9')) || [];
         let currentFilter = 'all';
         let currentView = 'grid';
         let editingId = null;
         let tempChecklist = [];
         let calDate = new Date();
-        
-        // Sound FX
-        const sounds = {
-            success: () => playTone(800, 'sine', 0.1),
-            pop: () => playTone(600, 'triangle', 0.05),
-            del: () => playTone(300, 'sawtooth', 0.1)
-        };
-        
-        function playTone(freq, type, dur) {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.frequency.value = freq;
-            osc.type = type;
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start();
-            gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + dur);
-            osc.stop(ctx.currentTime + dur);
-        }
+        let isPrivateMode = false;
 
-        // --- Init ---
+        // Vibrate helper
+        const haptic = (pattern = 10) => {
+            if (navigator.vibrate) navigator.vibrate(pattern);
+        };
+
         document.addEventListener('DOMContentLoaded', () => {
             renderEvents();
             renderCalendar();
             updateStats();
-            setInterval(tick, 1000);
             updateClock();
-            
-            new Sortable(document.getElementById('eventsGrid'), {
-                animation: 200,
-                ghostClass: 'sortable-ghost',
-                delay: 200,
-                delayOnTouchOnly: true,
-                onEnd: function (evt) {
-                    // Logic to reorder array could be added here
-                }
-            });
+            setInterval(tick, 1000);
+            fetchWeather(); // Try fetching weather
         });
 
-        // --- Core Logic ---
+        // --- AI & High Tech Features ---
 
+        // 1. Voice Dictation
+        function startDictation(fieldId) {
+            if ('webkitSpeechRecognition' in window) {
+                const recognition = new webkitSpeechRecognition();
+                recognition.lang = 'ar-EG';
+                recognition.interimResults = false;
+                
+                const btn = document.getElementById('voiceBtn');
+                btn.classList.add('mic-active');
+
+                recognition.onresult = function(event) {
+                    document.getElementById(fieldId).value = event.results[0][0].transcript;
+                    btn.classList.remove('mic-active');
+                    aiAnalyze(); // Auto analyze after voice
+                    haptic([50, 50]);
+                };
+                recognition.onerror = () => btn.classList.remove('mic-active');
+                recognition.onend = () => btn.classList.remove('mic-active');
+                
+                recognition.start();
+            } else {
+                alert('المتصفح لا يدعم الإملاء الصوتي');
+            }
+        }
+
+        // 2. Simple "AI" Categorization
+        function aiAnalyze() {
+            const title = document.getElementById('inpTitle').value.toLowerCase();
+            const catSelect = document.getElementById('inpCat');
+            const suggestionBox = document.getElementById('aiSuggestion');
+            
+            // Keywords
+            const map = {
+                work: ['اجتماع', 'مشروع', 'تقرير', 'مدير', 'meeting', 'call', 'email'],
+                holiday: ['سفر', 'حجز', 'طائرة', 'فندق', 'رحلة', 'fly', 'trip'],
+                health: ['دكتور', 'جيم', 'رياضة', 'دواء', 'تمرين', 'gym', 'doctor'],
+                personal: ['عيد', 'شراء', 'منزل', 'عائل']
+            };
+
+            let detected = null;
+            for (const [cat, keywords] of Object.entries(map)) {
+                if (keywords.some(k => title.includes(k))) detected = cat;
+            }
+
+            if (detected) {
+                catSelect.value = detected;
+                document.getElementById('aiCatText').innerText = getCatName(detected);
+                suggestionBox.style.display = 'block';
+                haptic(20);
+            } else {
+                suggestionBox.style.display = 'none';
+            }
+        }
+
+        // 3. Weather Widget
+        async function fetchWeather() {
+            const elTemp = document.getElementById('wTemp');
+            const elDesc = document.getElementById('wDesc');
+            
+            if (!navigator.geolocation) {
+                elDesc.innerText = "الموقع غير مدعوم";
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                const lat = pos.coords.latitude;
+                const lon = pos.coords.longitude;
+                try {
+                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+                    const data = await res.json();
+                    const temp = Math.round(data.current_weather.temperature);
+                    elTemp.innerText = `${temp}°C`;
+                    elDesc.innerText = "الجو الآن";
+                } catch (e) {
+                    elDesc.innerText = "خطأ في الشبكة";
+                }
+            }, () => {
+                elDesc.innerText = "إذن الموقع مطلوب";
+            });
+        }
+
+        // 4. Privacy Mode
+        function togglePrivacy() {
+            isPrivateMode = !isPrivateMode;
+            document.getElementById('eventsGrid').style.filter = isPrivateMode ? 'blur(8px)' : 'none';
+            document.getElementById('privacyBtn').innerHTML = isPrivateMode ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+            haptic(50);
+        }
+
+        // --- Core CRUD ---
         function saveEvent() {
             const title = document.getElementById('inpTitle').value.trim();
             const date = document.getElementById('inpDate').value;
-            if(!title || !date) return showToast('⚠️ يرجى كتابة العنوان والتاريخ', true);
+            
+            if(!title || !date) return showToast('اكتب العنوان والتاريخ', true);
 
             const eventData = {
                 id: editingId || Date.now(),
@@ -427,7 +516,7 @@
                 notes: document.getElementById('inpNotes').value,
                 checklist: tempChecklist,
                 bg: `https://source.unsplash.com/600x400/?${encodeURIComponent(title)},abstract`,
-                created: editingId ? events.find(e=>e.id === editingId).created : Date.now()
+                created: Date.now()
             };
 
             if(editingId) {
@@ -435,97 +524,71 @@
                 events[idx] = { ...events[idx], ...eventData };
             } else {
                 events.unshift(eventData);
-                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-                sounds.success();
+                confetti({ origin: { y: 0.8 }, zIndex: 500 });
             }
 
-            save();
+            localStorage.setItem('masterEventsV9', JSON.stringify(events));
             closeModal();
             renderEvents();
             renderCalendar();
             updateStats();
-            showToast('تم الحفظ بنجاح 🚀');
+            haptic(100);
+            showToast('تم الحفظ 🚀');
         }
-
-        function deleteEvent(id) {
-            if(confirm('هل أنت متأكد من الحذف؟')) {
-                events = events.filter(e => e.id !== id);
-                sounds.del();
-                save();
-                renderEvents();
-                renderCalendar();
-                updateStats();
-            }
-        }
-
-        // --- Rendering ---
 
         function renderEvents() {
             const grid = document.getElementById('eventsGrid');
             const term = document.getElementById('searchInput').value.toLowerCase();
-            
             grid.innerHTML = '';
-            
-            let filtered = events.filter(e => {
-                const matchCat = currentFilter === 'all' || e.cat === currentFilter;
-                const matchSearch = e.title.toLowerCase().includes(term);
-                return matchCat && matchSearch;
-            });
 
-            // Sort: Priority High first
-            const priorityOrder = { high: 1, med: 2, low: 3 };
-            filtered.sort((a,b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+            let filtered = events.filter(e => {
+                return (currentFilter === 'all' || e.cat === currentFilter) && 
+                       e.title.toLowerCase().includes(term);
+            });
+            
+            // Sort by Date then Priority
+            filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
 
             if(filtered.length === 0) {
-                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px; opacity:0.5; font-size:1.2rem;">لا توجد أحداث هنا 🌑</div>';
+                grid.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text); opacity:0.5; grid-column:1/-1;">لا توجد أحداث</div>`;
                 return;
             }
 
             filtered.forEach(ev => {
-                const now = new Date();
-                const target = new Date(ev.date);
-                const isPast = target < now;
-                const totalCheck = ev.checklist ? ev.checklist.length : 0;
-                const doneCheck = ev.checklist ? ev.checklist.filter(i=>i.done).length : 0;
-                const progress = totalCheck > 0 ? Math.round((doneCheck/totalCheck)*100) : 0;
-                
-                // Get Priority Icon
-                let pIcon = '';
-                if(ev.priority === 'high') pIcon = '<i class="fas fa-exclamation-circle" style="color:var(--high)"></i>';
-                if(ev.priority === 'med') pIcon = '<i class="fas fa-dot-circle" style="color:var(--med)"></i>';
+                const total = ev.checklist ? ev.checklist.length : 0;
+                const done = ev.checklist ? ev.checklist.filter(i=>i.done).length : 0;
+                const pct = total > 0 ? Math.round((done/total)*100) : 0;
+                const dateObj = new Date(ev.date);
 
                 const card = document.createElement('div');
                 card.className = `card p-${ev.priority}`;
-                card.style.opacity = isPast ? '0.7' : '1';
-                
                 card.innerHTML = `
                     <div class="card-bg" style="background-image: url('${ev.bg}')"></div>
                     <div class="card-body">
                         <div class="card-header">
-                            <h3 class="card-title">${pIcon} ${ev.title}</h3>
-                            ${totalCheck > 0 ? `
-                                <div class="progress-circle" style="--pct: ${progress}deg ${progress*3.6}deg">
-                                    <span class="progress-text">${progress}%</span>
-                                </div>` : ''
-                            }
+                            <h3 class="card-title">${ev.title}</h3>
+                            ${total > 0 ? `
+                            <div class="progress-circle" style="--pct: ${pct}deg ${pct*3.6}deg">
+                                <span class="progress-text num-latin">${pct}%</span>
+                            </div>` : ''}
+                        </div>
+                        
+                        <div class="timer-strip num-latin" id="timer-${ev.id}">
+                            <div><div class="ts-num d">0</div><div class="ts-lbl">يوم</div></div>
+                            <div><div class="ts-num h">0</div><div class="ts-lbl">ساعة</div></div>
+                            <div><div class="ts-num m">0</div><div class="ts-lbl">دقيقة</div></div>
                         </div>
 
-                        <div class="timer-strip" id="timer-${ev.id}">
-                            <div class="ts-box"><div class="ts-num d">0</div><div class="ts-lbl">يوم</div></div>
-                            <div class="ts-box"><div class="ts-num h">0</div><div class="ts-lbl">ساعة</div></div>
-                            <div class="ts-box"><div class="ts-num m">0</div><div class="ts-lbl">دقيقة</div></div>
-                        </div>
-
-                        <div style="font-size:0.85rem; opacity:0.7; margin: 10px 0;">
-                             <i class="far fa-calendar"></i> ${new Date(ev.date).toLocaleDateString('ar-EG')} 
-                             ${new Date(ev.date).toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})}
+                        <div style="font-size:0.85rem; opacity:0.8; margin:5px 0;" class="num-latin">
+                            <i class="far fa-clock"></i> 
+                            ${dateObj.toLocaleDateString('en-GB')} • ${dateObj.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:false})}
                         </div>
                         
                         <div class="card-footer">
-                             <span class="stat-chip" style="font-size:0.7rem; padding: 5px 10px;">${getCatName(ev.cat)}</span>
-                            <div style="display:flex; gap:10px;">
-                                <button onclick="editEvent(${ev.id})" class="icon-btn"><i class="fas fa-pen"></i></button>
-                                <button onclick="deleteEvent(${ev.id})" class="icon-btn" style="color:var(--danger)"><i class="fas fa-trash"></i></button>
+                            <span class="stat-chip" style="font-size:0.75rem; padding: 4px 10px;">${getCatName(ev.cat)}</span>
+                            <div>
+                                <button class="icon-btn" onclick="editEvent(${ev.id})"><i class="fas fa-pen"></i></button>
+                                <button class="icon-btn" style="color:var(--danger)" onclick="deleteEvent(${ev.id})"><i class="fas fa-trash"></i></button>
                             </div>
                         </div>
                     </div>
@@ -535,191 +598,168 @@
             tick();
         }
 
-        // --- Stats & Dashboard ---
-        function updateStats() {
-            document.getElementById('statTotal').innerText = events.length;
-            const done = events.filter(e => {
-                if(!e.checklist || e.checklist.length === 0) return new Date(e.date) < new Date();
-                return e.checklist.every(x => x.done);
-            }).length;
-            document.getElementById('statDone').innerText = done;
-            document.getElementById('statPending').innerText = events.length - done;
-        }
-
-        // --- Calendar Logic ---
-        function renderCalendar() {
-            const grid = document.getElementById('calGrid');
-            grid.innerHTML = '';
-            
-            const year = calDate.getFullYear();
-            const month = calDate.getMonth();
-            
-            document.getElementById('calMonthTitle').innerText = calDate.toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' });
-
-            const days = ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
-            days.forEach(d => grid.innerHTML += `<div class="cal-day-name">${d}</div>`);
-
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            
-            for(let i=0; i<firstDay; i++) grid.innerHTML += `<div></div>`;
-
-            for(let i=1; i<=daysInMonth; i++) {
-                const dayDate = new Date(year, month, i);
-                const dayStr = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-                
-                const hasEvent = events.some(e => e.date.startsWith(dayStr));
-                const isToday = new Date().toDateString() === dayDate.toDateString();
-
-                const el = document.createElement('div');
-                el.className = `cal-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''}`;
-                el.innerHTML = `<span>${i}</span>`;
-                el.onclick = () => {
-                   document.getElementById('inpDate').value = `${dayStr}T09:00`;
-                   openModal();
-                };
-                grid.appendChild(el);
-            }
-        }
-
-        function changeMonth(dir) {
-            calDate.setMonth(calDate.getMonth() + dir);
-            renderCalendar();
-        }
-
-        // --- Checklist Logic ---
-        function renderChecklist() {
-            const list = document.getElementById('clList');
-            list.innerHTML = '';
-            tempChecklist.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.className = `cl-item ${item.done ? 'done' : ''}`;
-                div.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:10px; cursor:pointer;" onclick="toggleCheckItem(${index})">
-                        <i class="fas ${item.done ? 'fa-check-square' : 'fa-square'}" style="color:${item.done ? 'var(--success)' : 'var(--text)'}"></i>
-                        <span>${item.text}</span>
-                    </div>
-                    <i class="fas fa-times" style="color:var(--danger); cursor:pointer;" onclick="removeCheckItem(${index})"></i>
-                `;
-                list.appendChild(div);
-            });
-        }
-
-        function addChecklistItem() {
-            const input = document.getElementById('clInput');
-            const text = input.value.trim();
-            if(text) {
-                tempChecklist.push({ text, done: false });
-                input.value = '';
-                sounds.pop();
-                renderChecklist();
-            }
-        }
-
-        function toggleCheckItem(idx) {
-            tempChecklist[idx].done = !tempChecklist[idx].done;
-            sounds.pop();
-            renderChecklist();
-        }
-
-        function removeCheckItem(idx) {
-            tempChecklist.splice(idx, 1);
-            renderChecklist();
-        }
-
-        // --- Timer Tick ---
+        // --- Logic Helpers ---
         function tick() {
             const now = new Date().getTime();
             events.forEach(ev => {
                 const el = document.getElementById(`timer-${ev.id}`);
                 if(!el) return;
-                
                 const target = new Date(ev.date).getTime();
                 let diff = target - now;
-                if(diff < 0) diff = 0;
-
+                if(diff < 0) {
+                    el.style.opacity = '0.4';
+                    return;
+                }
                 const d = Math.floor(diff / (1000 * 60 * 60 * 24));
                 const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
                 el.querySelector('.d').innerText = d;
                 el.querySelector('.h').innerText = h;
                 el.querySelector('.m').innerText = m;
             });
         }
 
-        // --- Utils & UI ---
         function updateClock() {
-            document.getElementById('clockDisplay').innerText = new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'});
+            const d = new Date();
+            document.getElementById('clockDisplay').innerText = 
+                `${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+            setTimeout(updateClock, 10000);
         }
 
+        function renderCalendar() {
+            const grid = document.getElementById('calGrid');
+            grid.innerHTML = '';
+            const mTitle = document.getElementById('calMonthTitle');
+            
+            // Format title using Latin Numbers via Font
+            const monthNames = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+            mTitle.innerHTML = `${monthNames[calDate.getMonth()]} <span class="num-latin">${calDate.getFullYear()}</span>`;
+
+            const year = calDate.getFullYear();
+            const month = calDate.getMonth();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const firstDay = new Date(year, month, 1).getDay();
+
+            // Arabic days mapping adjustment (Sun=0)
+            const weekDays = ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
+            weekDays.forEach(d => grid.innerHTML += `<div style="font-size:0.8rem; opacity:0.7">${d}</div>`);
+            
+            for(let i=0; i<firstDay; i++) grid.innerHTML += `<div></div>`;
+
+            for(let i=1; i<=daysInMonth; i++) {
+                const dayStr = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+                const hasEvent = events.some(e => e.date.startsWith(dayStr));
+                const isToday = new Date().toDateString() === new Date(year, month, i).toDateString();
+                
+                const el = document.createElement('div');
+                el.className = `cal-day num-latin ${isToday?'today':''} ${hasEvent?'has-event':''}`;
+                el.innerText = i;
+                el.onclick = () => {
+                    document.getElementById('inpDate').value = `${dayStr}T09:00`;
+                    openModal();
+                };
+                grid.appendChild(el);
+            }
+        }
+
+        function changeMonth(d) {
+            calDate.setMonth(calDate.getMonth() + d);
+            renderCalendar();
+            haptic();
+        }
+
+        // --- Checklist ---
+        function addChecklistItem() {
+            const val = document.getElementById('clInput').value.trim();
+            if(val) {
+                tempChecklist.push({text: val, done: false});
+                document.getElementById('clInput').value = '';
+                renderChecklist();
+            }
+        }
+        function renderChecklist() {
+            const list = document.getElementById('clList');
+            list.innerHTML = '';
+            tempChecklist.forEach((item, idx) => {
+                list.innerHTML += `
+                    <div style="display:flex; justify-content:space-between; padding:8px; background:rgba(255,255,255,0.05); margin-bottom:5px; border-radius:8px; align-items:center;">
+                        <div onclick="toggleCL(${idx})" style="flex:1; cursor:pointer; text-decoration:${item.done?'line-through':''}; opacity:${item.done?0.5:1}">
+                            <i class="fas ${item.done?'fa-check-square':'fa-square'}"></i> ${item.text}
+                        </div>
+                        <i class="fas fa-times" style="color:var(--danger); padding:5px;" onclick="tempChecklist.splice(${idx},1); renderChecklist()"></i>
+                    </div>
+                `;
+            });
+        }
+        function toggleCL(idx) {
+            tempChecklist[idx].done = !tempChecklist[idx].done;
+            renderChecklist();
+            haptic();
+        }
+
+        // --- Modal & Shared ---
         function openModal() {
             editingId = null;
             tempChecklist = [];
-            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-bolt" style="color: var(--warning)"></i> حدث جديد';
+            document.getElementById('modalTitle').innerText = 'حدث جديد';
             document.getElementById('inpTitle').value = '';
-            const d = new Date(); d.setHours(d.getHours()+1); d.setMinutes(0);
-            document.getElementById('inpDate').value = new Date(d.getTime() - (d.getTimezoneOffset() * 60000)).toISOString().slice(0,16);
             document.getElementById('inpNotes').value = '';
+            const d = new Date(); d.setHours(d.getHours()+1);
+            // ISO string adjustment for local time
+            const localISO = new Date(d.getTime() - (d.getTimezoneOffset() * 60000)).toISOString().slice(0,16);
+            document.getElementById('inpDate').value = localISO;
+            document.getElementById('aiSuggestion').style.display = 'none';
             setPriority('low');
             renderChecklist();
             document.getElementById('addModal').style.display = 'flex';
         }
 
         function editEvent(id) {
-            const ev = events.find(e => e.id === id);
-            if(!ev) return;
+            const e = events.find(x => x.id === id);
             editingId = id;
-            tempChecklist = ev.checklist ? [...ev.checklist] : [];
-            
-            document.getElementById('modalTitle').innerHTML = '🖊️ تعديل البيانات';
-            document.getElementById('inpTitle').value = ev.title;
-            document.getElementById('inpDate').value = ev.date;
-            document.getElementById('inpNotes').value = ev.notes;
-            document.getElementById('inpCat').value = ev.cat;
-            setPriority(ev.priority || 'low');
+            tempChecklist = [...(e.checklist || [])];
+            document.getElementById('modalTitle').innerText = 'تعديل';
+            document.getElementById('inpTitle').value = e.title;
+            document.getElementById('inpDate').value = e.date;
+            document.getElementById('inpNotes').value = e.notes || '';
+            document.getElementById('inpCat').value = e.cat;
+            setPriority(e.priority);
             renderChecklist();
-            
             document.getElementById('addModal').style.display = 'flex';
         }
 
         function closeModal() { document.getElementById('addModal').style.display = 'none'; }
         
-        function setPriority(val) {
-            document.getElementById('inpPriority').value = val;
+        function deleteEvent(id) {
+            if(confirm('حذف؟')) {
+                events = events.filter(e => e.id !== id);
+                localStorage.setItem('masterEventsV9', JSON.stringify(events));
+                renderEvents();
+                updateStats();
+                haptic([50, 50]);
+            }
+        }
+
+        function setPriority(p) {
+            document.getElementById('inpPriority').value = p;
             document.querySelectorAll('.p-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector(`.p-btn[data-val="${val}"]`).classList.add('active');
+            document.querySelector(`.p-btn[data-val="${p}"]`).classList.add('active');
+            haptic();
         }
 
-        function filterCategory(cat, btn) {
-            currentFilter = cat;
-            document.querySelectorAll('.stat-chip').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+        function filterCategory(c, el) {
+            currentFilter = c;
+            document.querySelectorAll('.stat-chip').forEach(x => x.classList.remove('active'));
+            el.classList.add('active');
             renderEvents();
+            haptic();
         }
 
-        function filterSearch() { renderEvents(); }
-
-        function toggleView(view) {
-            document.getElementById('eventsGrid').style.display = view === 'grid' ? 'grid' : 'none';
-            document.getElementById('calendarView').style.display = view === 'calendar' ? 'block' : 'none';
-            document.getElementById('btnViewGrid').style.background = view === 'grid' ? 'var(--accent)' : '';
-            document.getElementById('btnViewCal').style.background = view === 'calendar' ? 'var(--accent)' : '';
-            if(view === 'calendar') renderCalendar();
-        }
-
-        function getCatName(cat) {
-            const names = {personal: 'شخصي', work: 'عمل', holiday: 'عطلة'};
-            return names[cat] || cat;
-        }
-
-        function showToast(msg, error=false) {
-            const t = document.getElementById('toast');
-            document.getElementById('toastMsg').innerText = msg;
-            t.style.borderRight = error ? '5px solid var(--danger)' : '5px solid var(--success)';
-            t.classList.add('show');
-            if(!error) sounds.pop();
-            setTimeout(() => t.classList.remove('show'), 3000);
+        function toggleView() {
+            currentView = currentView === 'grid' ? 'calendar' : 'grid';
+            document.getElementById('eventsGrid').style.display = currentView === 'grid' ? 'grid' : 'none';
+            document.getElementById('calendarView').style.display = currentView === 'calendar' ? 'block' : 'none';
+            document.getElementById('viewToggleBtn').innerHTML = currentView === 'grid' ? '<i class="fas fa-calendar-alt"></i>' : '<i class="fas fa-th-large"></i>';
         }
 
         function toggleTheme() {
@@ -727,39 +767,52 @@
             b.setAttribute('data-theme', b.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
         }
 
-        function save() { localStorage.setItem('masterEventsV8', JSON.stringify(events)); }
-
-        function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(events));
-            const node = document.createElement('a');
-            node.href = dataStr;
-            node.download = "event_master_v8_backup.json";
-            node.click();
+        function updateStats() {
+            document.getElementById('statTotal').innerText = events.length;
+            const done = events.filter(e => e.checklist && e.checklist.length > 0 && e.checklist.every(x=>x.done)).length;
+            document.getElementById('statDone').innerText = done;
+            document.getElementById('statPending').innerText = events.length - done;
         }
 
-        function importData(input) {
-            const file = input.files[0];
+        function getCatName(c) {
+            const n = {personal:'شخصي', work:'عمل', holiday:'سفر', health:'صحة'};
+            return n[c] || c;
+        }
+
+        function showToast(msg, err=false) {
+            const t = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            if(err) t.classList.add('error'); else t.classList.remove('error');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // --- Import/Export ---
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(events));
+            const n = document.createElement('a');
+            n.href = dataStr;
+            n.download = "master_v9_backup.json";
+            n.click();
+        }
+        function importData(inp) {
+            const file = inp.files[0];
             if(!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
+            const r = new FileReader();
+            r.onload = (e) => {
                 try {
-                    const imported = JSON.parse(e.target.result);
-                    if(Array.isArray(imported)) {
-                        if(confirm(`هل تريد استيراد ${imported.length} حدث؟ سيتم دمجها مع الحالية.`)) {
-                            events = [...imported, ...events];
-                            // Remove duplicates by ID
-                            events = Array.from(new Map(events.map(item => [item['id'], item])).values());
-                            save();
-                            renderEvents();
-                            updateStats();
-                            showToast('تم الاستيراد بنجاح');
-                        }
+                    const d = JSON.parse(e.target.result);
+                    if(Array.isArray(d)) {
+                        events = [...d, ...events];
+                        // Remove dupes by ID
+                        events = Array.from(new Map(events.map(item => [item['id'], item])).values());
+                        localStorage.setItem('masterEventsV9', JSON.stringify(events));
+                        renderEvents();
+                        showToast('تم الاستيراد');
                     }
-                } catch(err) {
-                    showToast('ملف غير صالح', true);
-                }
+                } catch(x) { showToast('ملف غير صالح', true); }
             };
-            reader.readAsText(file);
+            r.readAsText(file);
         }
     </script>
 </body>
